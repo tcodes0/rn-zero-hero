@@ -7,10 +7,12 @@
     "test": "jest"
   },
   "dependencies": {
+    "@babel/runtime": "^7.0.0",
     "react": "16.5.0",
     "react-native": "0.57.1"
   },
   "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.1.0",
     "babel-jest": "23.6.0",
     "jest": "23.6.0",
     "metro-react-native-babel-preset": "0.46.0",
