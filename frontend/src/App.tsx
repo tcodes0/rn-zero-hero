@@ -12,11 +12,14 @@ import List from "./pages/List";
 
 const customLogger = createLogger({ collapsed: true });
 const rootReducer = () => {};
-const middleware = [thunkMiddleware];
-middleware.push(customLogger);
 
-export const createHydratedStore = preloadedState =>
-  createStore(rootReducer, preloadedState, applyMiddleware(...middleware));
+/**
+ * Wrapper around createStore to mock store for testing.
+ * Call with no params to get an empty store.
+ * @param preloadedState Object to use as store.
+ */
+export const createHydratedStore = (preloadedState?: any) =>
+  createStore(rootReducer, preloadedState, applyMiddleware(thunkMiddleware, customLogger));
 
 export const store = createHydratedStore();
 
