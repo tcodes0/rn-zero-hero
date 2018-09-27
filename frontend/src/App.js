@@ -4,8 +4,15 @@
  * @flow
  */
 
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  TextInput
+} from "react-native";
 import React, { Component } from "react";
-import { Platform, StyleSheet, Text, View, Button } from "react-native";
 import { createStore, applyMiddleware } from "redux";
 import { createStackNavigator } from "react-navigation";
 import { Provider } from "react-redux";
@@ -44,31 +51,45 @@ const styles = StyleSheet.create({
     marginBottom: 5
   },
   button: {
-    padding: 20
+    backgroundColor: "red"
   }
 });
 
-const Home = props => (
-  <Provider store={store}>
-    <View style={styles.container}>
-      <Text style={styles.welcome}>Hello React Native!</Text>
-      <Button
-        style={styles.button}
-        title="Auth"
-        onPress={() => props.navigation.navigate("Auth")}
-      >
-        Auth
-      </Button>
-      <Button
-        style={styles.button}
-        title="Back"
-        onPress={() => props.navigation.goBack()}
-      >
-        go back!
-      </Button>
-    </View>
-  </Provider>
-);
+class Home extends Component {
+  state = { text: undefined };
+
+  render() {
+    return (
+      <Provider store={store}>
+        <View style={styles.container}>
+          <Text style={styles.welcome}>Hello React Native!</Text>
+          <TextInput
+            placeholder="what do you liek?"
+            value={this.state.text}
+            onChangeText={text => this.setState({ text })}
+          />
+          <Button
+            style={styles.button}
+            title="Auth"
+            onPress={() => {
+              const params = this.state.text || {};
+              this.props.navigation.navigate("Auth", params);
+            }}
+          >
+            Auth
+          </Button>
+          <Button
+            style={styles.button}
+            title="Back"
+            onPress={() => this.props.navigation.goBack()}
+          >
+            go back!
+          </Button>
+        </View>
+      </Provider>
+    );
+  }
+}
 
 const NavigationWrapper = createStackNavigator(
   {

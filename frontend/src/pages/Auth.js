@@ -10,24 +10,29 @@ const styles = StyleSheet.create({
   }
 });
 
-const Auth = props => (
-  <View style={styles.container} {...props}>
-    <Text>Type user and password please</Text>
-    <Button
-      style={styles.button}
-      title="Back"
-      onPress={() => props.navigation.goBack()}
-    >
-      go back!
-    </Button>
-    <Button
-      style={styles.button}
-      title="Push"
-      onPress={() => props.navigation.push("Auth")}
-    >
-      push Auth
-    </Button>
-  </View>
-);
+const Auth = props => {
+  const param = props.navigation.getParam("text", "it's null");
+
+  return (
+    <View style={styles.container} {...props}>
+      <Text>Type user and password please</Text>
+      <Text>BTW param is {param}</Text>
+      <Button
+        style={styles.button}
+        title="Back"
+        onPress={() => props.navigation.goBack()}
+      >
+        go back!
+      </Button>
+      <Button
+        style={styles.button}
+        title="Push"
+        onPress={() => props.navigation.push("Auth")}
+      >
+        push Auth
+      </Button>
+    </View>
+  );
+};
 
 export default Auth;
