@@ -1,7 +1,7 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Button } from "react-native";
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
@@ -10,10 +10,35 @@ const style = StyleSheet.create({
   }
 });
 
-const Detail = props => (
-  <View style={style.container} {...props}>
-    <Text>Type user and password please</Text>
-  </View>
-);
+const Detail = props => {
+  const param = props.navigation.getParam("text", "null");
+
+  return (
+    <View style={styles.container} {...props}>
+      <Text>Details of the product kids</Text>
+      <Button
+        style={styles.button}
+        title="Auth"
+        onPress={() => props.navigation.navigate("Auth")}
+      >
+        Auth
+      </Button>
+      <Button
+        style={styles.button}
+        title="Create"
+        onPress={() => props.navigation.navigate("Create")}
+      >
+        Create
+      </Button>
+      <Button
+        style={styles.button}
+        title="List"
+        onPress={() => props.navigation.navigate("List")}
+      >
+        List
+      </Button>
+    </View>
+  );
+};
 
 export default Detail;

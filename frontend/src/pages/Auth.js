@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
 });
 
 const Auth = props => {
-  const param = props.navigation.getParam("text", "it's null");
+  const param = props.navigation.getParam("text", "null");
 
   return (
     <View style={styles.container} {...props}>
@@ -19,17 +19,24 @@ const Auth = props => {
       <Text>BTW param is {param}</Text>
       <Button
         style={styles.button}
-        title="Back"
-        onPress={() => props.navigation.goBack()}
+        title="Create"
+        onPress={() => props.navigation.navigate("Create")}
       >
-        go back!
+        Create
       </Button>
       <Button
         style={styles.button}
-        title="Push"
-        onPress={() => props.navigation.push("Auth")}
+        title="Detail"
+        onPress={() => props.navigation.navigate("Detail")}
       >
-        push Auth
+        Detail
+      </Button>
+      <Button
+        style={styles.button}
+        title="List"
+        onPress={() => props.navigation.navigate("List")}
+      >
+        List
       </Button>
     </View>
   );
