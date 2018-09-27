@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 
 const styles = StyleSheet.create({
@@ -10,19 +10,18 @@ const styles = StyleSheet.create({
   }
 });
 
-const Auth = props => {
+const Create = props => {
   const param = props.navigation.getParam("text", "null");
 
   return (
     <View style={styles.container} {...props}>
-      <Text>Type user and password please</Text>
-      <Text>BTW param is {param}</Text>
+      <Text>Create a NEW PRODUCT YOLO</Text>
       <Button
         style={styles.button}
-        title="Create"
-        onPress={() => props.navigation.navigate("Create")}
+        title="Auth"
+        onPress={() => props.navigation.navigate("Auth")}
       >
-        Create
+        Auth
       </Button>
       <Button
         style={styles.button}
@@ -42,4 +41,4 @@ const Auth = props => {
   );
 };
 
-export default Auth;
+export default Create;

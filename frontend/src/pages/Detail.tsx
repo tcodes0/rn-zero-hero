@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 
 const styles = StyleSheet.create({
@@ -10,12 +10,12 @@ const styles = StyleSheet.create({
   }
 });
 
-const Create = props => {
+const Detail = props => {
   const param = props.navigation.getParam("text", "null");
 
   return (
     <View style={styles.container} {...props}>
-      <Text>Create a NEW PRODUCT YOLO</Text>
+      <Text>Details of the product kids</Text>
       <Button
         style={styles.button}
         title="Auth"
@@ -25,10 +25,10 @@ const Create = props => {
       </Button>
       <Button
         style={styles.button}
-        title="Detail"
-        onPress={() => props.navigation.navigate("Detail")}
+        title="Create"
+        onPress={() => props.navigation.navigate("Create")}
       >
-        Detail
+        Create
       </Button>
       <Button
         style={styles.button}
@@ -41,4 +41,4 @@ const Create = props => {
   );
 };
 
-export default Create;
+export default Detail;

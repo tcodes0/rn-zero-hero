@@ -1,10 +1,5 @@
-/**
- * @format
- * @flow
- */
-
 // import { StyleSheet } from "react-native";
-import React from "react";
+import * as React from "react";
 import { createStore, applyMiddleware } from "redux";
 import { createStackNavigator } from "react-navigation";
 import { Provider } from "react-redux";
