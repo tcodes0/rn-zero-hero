@@ -2,6 +2,13 @@
   "name": "frontend",
   "version": "0.0.1",
   "private": true,
+  "description": "Become a Foton developer",
+  "license": "MIT",
+  "author": {
+    "name": "Raphael Thomazella",
+    "email": "thomazella9@gmail.com",
+    "url": "https://github.com/thomazella"
+  },
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest"
@@ -43,8 +50,5 @@
     "metro-react-native-babel-preset": "0.46.0",
     "prettier": "^1.14.3",
     "react-test-renderer": "16.5.0"
-  },
-  "jest": {
-    "preset": "react-native"
   }
 }

@@ -1,0 +1,15 @@
+{
+  "env": {
+    "es6": true,
+    "jest": true
+  },
+  "extends": ["eslint:recommended", "prettier", "airbnb", "plugin:prettier/recommended"],
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "rules": {
+    "linebreak-style": ["error", "unix"],
+    "react/jsx-filename-extension": "off"
+  },
+  "parser": "babel-eslint"
+}
