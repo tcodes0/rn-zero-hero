@@ -1,6 +1,6 @@
 import * as React from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
-import UserInput from "../components/UserInput";
+import ButtonInput from "../components/ButtonInput";
 
 const styles = StyleSheet.create({
   container: {
@@ -17,7 +17,7 @@ const Auth = props => {
   return (
     <View style={styles.container} {...props}>
       <Text>Type user and password please</Text>
-      <UserInput onPress={input => console.log(input)} />
+      <ButtonInput onPress={input => console.log(input)} />
       <Button
         style={styles.button}
         title="Create"

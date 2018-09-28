@@ -1,29 +1,30 @@
 import * as React from "react";
 import { SectionList, Text, StyleSheet, View } from "react-native";
 import { State } from "react-powerplug";
-import UserInput from "../components/UserInput";
+import ButtonInput from "../components/ButtonInput";
+import { log } from "../utils";
 
-const sections = [
-  {
-    id: 0,
-    title: "Basic Components",
-    data: [
-      { id: 0, text: "View" },
-      { id: 1, text: "Text" },
-      { id: 2, text: "Image" }
-    ]
-  },
-  {
-    id: 1,
-    title: "List Components",
-    data: [{ id: 3, text: "ScrollView" }, { id: 4, text: "ListView" }]
-  },
-  {
-    id: 2,
-    title: "Basic Food",
-    data: [{ id: 5, text: "Maccaroni" }, { id: 6, text: "Apparitas" }]
-  }
-];
+// const sections = [
+//   {
+//     id: 0,
+//     title: "Basic Components",
+//     data: [
+//       { id: 0, text: "View" },
+//       { id: 1, text: "Text" },
+//       { id: 2, text: "Image" }
+//     ]
+//   },
+//   {
+//     id: 1,
+//     title: "List Components",
+//     data: [{ id: 3, text: "ScrollView" }, { id: 4, text: "ListView" }]
+//   },
+//   {
+//     id: 2,
+//     title: "Basic Food",
+//     data: [{ id: 5, text: "Maccaroni" }, { id: 6, text: "Apparitas" }]
+//   }
+// ];
 
 const styles = StyleSheet.create({
   container: {
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const extractKey = ({ id }: any): number => id;
+const extractKey = ({ id }: number): string => id;
 
 const renderItem = ({ item }) => <Text style={styles.row}>{item.text}</Text>;
 
@@ -53,7 +54,6 @@ const renderSectionHeader = ({ section }) => (
   <Text style={styles.header}>{section.title}</Text>
 );
 
-const log = x => console.log(x);
 const byTitle = (section, string) => section.title.includes(string);
 const filterFactory = selector => (sections, query) =>
   sections.filter(section => selector(section, query));
@@ -61,19 +61,20 @@ const filterFactory = selector => (sections, query) =>
 const filterSectionsByTitle = filterFactory(byTitle);
 
 const List = props => {
-  const { navigate } = props.navigation;
+  const sections = props.navigation.state.params;
+  console.log(sections);
 
   return (
     <State initial={{ sections, filter: "" }}>
       {({ state, setState }) => (
         <View style={styles.container}>
-          <UserInput
+          <ButtonInput
             onPress={log}
             placeholder="filter by typing..."
             title="Go"
             onChangeText={(text: string) => {
               if (!text) return setState({ sections });
-              return setState(({ sections }) => ({sections: filterSectionsByTitle(sections, text)}))
+              setState(({ sections }) => ({sections: filterSectionsByTitle(sections, text)}))
             }}
           />
           <SectionList

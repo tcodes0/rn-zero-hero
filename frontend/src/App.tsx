@@ -18,10 +18,13 @@ const rootReducer = () => {};
  * @param preloadedState Object to use as store.
  */
 export const createHydratedStore = (preloadedState?: any) =>
-  createStore(rootReducer, preloadedState, applyMiddleware(thunkMiddleware, customLogger));
+  createStore(
+    rootReducer,
+    preloadedState,
+    applyMiddleware(thunkMiddleware, customLogger)
+  );
 
 export const store = createHydratedStore();
-
 
 const NavigationWrapper = createStackNavigator(
   {
@@ -30,7 +33,7 @@ const NavigationWrapper = createStackNavigator(
     List: { screen: List },
     Auth: { screen: Auth }
   },
-  { initialRouteName: "List" }
+  { initialRouteName: "Create" }
 );
 
 const App = () => (
