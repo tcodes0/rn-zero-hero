@@ -1,5 +1,6 @@
 import * as React from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
+import UserInput from "../components/UserInput";
 
 const styles = StyleSheet.create({
   container: {
@@ -11,30 +12,30 @@ const styles = StyleSheet.create({
 });
 
 const Auth = props => {
-  const param = props.navigation.getParam("text", "null");
+  const { navigate } = props.navigation;
 
   return (
     <View style={styles.container} {...props}>
       <Text>Type user and password please</Text>
-      <Text>BTW param is {param}</Text>
+      <UserInput onPress={input => console.log(input)} />
       <Button
         style={styles.button}
         title="Create"
-        onPress={() => props.navigation.navigate("Create")}
+        onPress={() => navigate("Create")}
       >
         Create
       </Button>
       <Button
         style={styles.button}
         title="Detail"
-        onPress={() => props.navigation.navigate("Detail")}
+        onPress={() => navigate("Detail")}
       >
         Detail
       </Button>
       <Button
         style={styles.button}
         title="List"
-        onPress={() => props.navigation.navigate("List")}
+        onPress={() => navigate("List")}
       >
         List
       </Button>

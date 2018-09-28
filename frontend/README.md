@@ -1,20 +1,20 @@
-Input - Auth, login
-  controlled by a container
+V Input - Auth, login
+  V controlled by a container
   possibly a group of Inputs with a single container
 
-StateContainer
+V StateContainer
 Button
 
 NewProduct
   controlled Input
-  Buttonn
+  Button
   radii ?
 
-ListView
+VListView
   Item
   must have scroll
 
-Search
+VSearch
   Filters the List
 
 Image

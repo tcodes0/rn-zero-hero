@@ -1,4 +1,3 @@
-// import { StyleSheet } from "react-native";
 import * as React from "react";
 import { createStore, applyMiddleware } from "redux";
 import { createStackNavigator } from "react-navigation";
@@ -23,7 +22,6 @@ export const createHydratedStore = (preloadedState?: any) =>
 
 export const store = createHydratedStore();
 
-// const styles = StyleSheet.create({});
 
 const NavigationWrapper = createStackNavigator(
   {
@@ -32,7 +30,7 @@ const NavigationWrapper = createStackNavigator(
     List: { screen: List },
     Auth: { screen: Auth }
   },
-  { initialRouteName: "Auth" }
+  { initialRouteName: "List" }
 );
 
 const App = () => (
