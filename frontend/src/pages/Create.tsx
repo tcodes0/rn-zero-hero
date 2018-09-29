@@ -1,8 +1,9 @@
 import * as React from "react";
 import { StyleSheet, Text, View, Button, TextInput } from "react-native";
-import ControlledInput from "../components/ControlledInput";
 import { Value } from "react-powerplug";
-import { log, getNumericId } from "../utils";
+import { ApolloConsumer } from "react-apollo";
+import { log } from "../utils";
+import { ADDBOOK } from "../mutations";
 
 const styles = StyleSheet.create({
   container: {
@@ -23,19 +24,13 @@ const styles = StyleSheet.create({
 
 interface Author {
   name: string;
-  age: string;
+  age?: number;
+}
+interface Book extends Author {
+  title: string;
 }
 
-const initialState = { name: "", age: "" };
-const authorToDataArray = (author: Author) => {
-  const { name, age } = author;
-  return [{ id: getNumericId(), text: `${name}, ${age} years old.` }];
-};
-const makeSection = (title: string, data) => [{
-  id: getNumericId(),
-  title,
-  data
-}];
+const initialState: Book = { name: "", title: "", age: undefined };
 
 const Create = props => {
   const { navigate } = props.navigation;
@@ -44,9 +39,17 @@ const Create = props => {
     <Value initial={initialState}>
       {({ value, set }) => (
         <View style={styles.container} {...props}>
-          <Text style={styles.title}>Create Author</Text>
+          <Text style={styles.title}>Create a book</Text>
           <View style={styles.wrapper}>
-            <Text>Enter name</Text>
+            <Text>Enter book title</Text>
+            <TextInput
+              value={value.title}
+              placeholder="title..."
+              onChangeText={input => set(state => ({ ...state, title: input }))}
+            />
+          </View>
+          <View style={styles.wrapper}>
+            <Text>Enter author name</Text>
             <TextInput
               value={value.name}
               placeholder="name..."
@@ -54,20 +57,30 @@ const Create = props => {
             />
           </View>
           <View style={styles.wrapper}>
-            <Text>How old?</Text>
+            <Text>How old is the author?</Text>
             <TextInput
-              value={value.age}
+              value={value.age && String(value.age)}
               placeholder="age..."
-              onChangeText={input => set(state => ({ ...state, age: input }))}
+              onChangeText={input => set(state => ({ ...state, age: Number(input) }))}
             />
           </View>
           <Button title="Reset" onPress={() => set(initialState)} />
-          <Button
-            title="OK"
-            onPress={() =>
-              navigate("List", makeSection("Authors", authorToDataArray(value)))
-            }
-          />
+          <ApolloConsumer>
+            {client => (
+              <Button
+                title="OK"
+                onPress={() => {
+                  client
+                    .mutate({
+                      mutation: ADDBOOK,
+                      variables: value
+                    })
+                    .then(log, log)
+                    .then(() => navigate("List"));
+                }}
+              />
+            )}
+          </ApolloConsumer>
         </View>
       )}
     </Value>

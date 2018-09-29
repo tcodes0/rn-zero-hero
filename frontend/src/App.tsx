@@ -1,30 +1,15 @@
 import * as React from "react";
-import { createStore, applyMiddleware } from "redux";
 import { createStackNavigator } from "react-navigation";
-import { Provider } from "react-redux";
-import { createLogger } from "redux-logger";
-import thunkMiddleware from "redux-thunk";
+import { Provider as ReduxProvider } from "react-redux";
+import { ApolloProvider } from "react-apollo";
+import client from "./client";
+import store from "./store";
 import Auth from "./pages/Auth";
 import Create from "./pages/Create";
 import Detail from "./pages/Detail";
 import List from "./pages/List";
 
-const customLogger = createLogger({ collapsed: true });
-const rootReducer = () => {};
-
-/**
- * Wrapper around createStore to mock store for testing.
- * Call with no params to get an empty store.
- * @param preloadedState Object to use as store.
- */
-export const createHydratedStore = (preloadedState?: any) =>
-  createStore(
-    rootReducer,
-    preloadedState,
-    applyMiddleware(thunkMiddleware, customLogger)
-  );
-
-export const store = createHydratedStore();
+export const env = "development";
 
 const NavigationWrapper = createStackNavigator(
   {
@@ -37,9 +22,11 @@ const NavigationWrapper = createStackNavigator(
 );
 
 const App = () => (
-  <Provider store={store}>
-    <NavigationWrapper />
-  </Provider>
+  <ApolloProvider client={client}>
+    <ReduxProvider store={store}>
+      <NavigationWrapper />
+    </ReduxProvider>
+  </ApolloProvider>
 );
 
 export default App;
