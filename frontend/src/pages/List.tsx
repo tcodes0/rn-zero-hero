@@ -1,8 +1,10 @@
 import * as React from "react";
 import { SectionList, Text, StyleSheet, View } from "react-native";
 import { State } from "react-powerplug";
+import { Query } from "react-apollo";
 import ButtonInput from "../components/ButtonInput";
 import { log } from "../utils";
+import { GET_BOOKS_WITH_AUTHORS } from "../queries";
 
 // const sections = [
 //   {
@@ -13,16 +15,6 @@ import { log } from "../utils";
 //       { id: 1, text: "Text" },
 //       { id: 2, text: "Image" }
 //     ]
-//   },
-//   {
-//     id: 1,
-//     title: "List Components",
-//     data: [{ id: 3, text: "ScrollView" }, { id: 4, text: "ListView" }]
-//   },
-//   {
-//     id: 2,
-//     title: "Basic Food",
-//     data: [{ id: 5, text: "Maccaroni" }, { id: 6, text: "Apparitas" }]
 //   }
 // ];
 
@@ -61,7 +53,7 @@ const filterFactory = selector => (sections, query) =>
 const filterSectionsByTitle = filterFactory(byTitle);
 
 const List = props => {
-  const sections = props.navigation.state.params;
+  const sections = props.navigation.state.params || [];
   console.log(sections);
 
   return (
@@ -74,16 +66,29 @@ const List = props => {
             title="Go"
             onChangeText={(text: string) => {
               if (!text) return setState({ sections });
-              setState(({ sections }) => ({sections: filterSectionsByTitle(sections, text)}))
+              setState(({ sections }) => ({
+                sections: filterSectionsByTitle(sections, text)
+              }));
             }}
           />
-          <SectionList
-            style={styles.container}
-            sections={state.sections || []}
-            renderItem={renderItem}
-            renderSectionHeader={renderSectionHeader}
-            keyExtractor={extractKey}
-          />
+          <Query query={GET_BOOKS_WITH_AUTHORS}>
+            {({ loading, error, data }) => {
+              if (loading) return <Text>Loading...</Text>;
+              if (error) return <Text>{`Error! ${error.message}`}</Text>;
+              console.log(data);
+              // setState({sections: data})
+
+              return (
+                <SectionList
+                  style={styles.container}
+                  sections={state.sections || []}
+                  renderItem={renderItem}
+                  renderSectionHeader={renderSectionHeader}
+                  keyExtractor={extractKey}
+                />
+              );
+            }}
+          </Query>
         </View>
       )}
     </State>

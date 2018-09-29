@@ -18,7 +18,7 @@ const NavigationWrapper = createStackNavigator(
     List: { screen: List },
     Auth: { screen: Auth }
   },
-  { initialRouteName: "Create" }
+  { initialRouteName: "List" }
 );
 
 const App = () => (
