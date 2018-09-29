@@ -1,4 +1,6 @@
-import * as BookLoader from './BookLoader';
+import * as BookLoader from "./BookLoader";
+
+const { addBook, newBook } = BookLoader;
 
 export const typeDefs = `
   type Book {
@@ -8,5 +10,10 @@ export const typeDefs = `
 `;
 
 export const resolvers = {
-  books: () => BookLoader.loadAllBooks(),
+  books: () => BookLoader.loadAllBooks()
+};
+
+export const mutations = {
+  addBook,
+  newBook
 };

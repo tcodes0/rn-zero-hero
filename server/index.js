@@ -18,7 +18,7 @@ const SchemaDefinition = `
     authors: [Author]
   }
   type Mutation {
-    addBook(title: String!, author: AuthorInput): Book
+    addBook(title: String, author: AuthorInput): Book
   }
 `;
 
@@ -31,10 +31,12 @@ const resolvers = {
   },
   Mutation: {
     addBook: (root, args, context) => {
-      return {
-        title: args.title,
-        author: { name: args.author.name, age: args.author.age }
-      };
+      const book = BookType.mutations.newBook(
+        args.title,
+        args.author.name,
+        args.author.age
+      );
+      return BookType.mutations.addBook(book);
     }
   }
 };
