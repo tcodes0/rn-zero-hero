@@ -49,13 +49,13 @@ const unpack = gqlData => {
   const [title] = Object.keys(gqlData);
   const data = gqlData[title].map(obj => ({...obj, id: getNumericId()}))
   const result = { id: getNumericId(), title, data };
-  console.log([result])
   return [result]
 };
 
 const List = props => {
+  const { navigate } = props.navigation;
   const extractKey = ({ id }: number): string => id;
-  const renderItem = ({ item }) => <Text style={styles.row}>{`"${item.title}"\nby ${item.author.name}, ${item.author.age} years old `}</Text>;
+  const renderItem = ({ item }) => <Text onPress={() => navigate("Detail", item)} style={styles.row}>{`"${item.title}"\nby ${item.author.name}`}</Text>;
   const renderSectionHeader = ({ section }) => (
     <Text style={styles.header}>{section.title}</Text>
   );
