@@ -1,5 +1,6 @@
 import * as React from "react";
 import { StyleSheet, Text, View, Button, Image } from "react-native";
+import Layout from "../layouts/DefaultLayout";
 
 const styles = StyleSheet.create({
   container: {
@@ -34,24 +35,23 @@ const Detail = props => {
   const { navigate } = props.navigation;
 
   return (
-    <View style={styles.container} {...props}>
-      <Text style={styles.heading}>{item.title}</Text>
-      <Image
-        style={{ width: 220, height: 220, margin: 25 }}
-        source={{
-          uri: "https://placekitten.com/220/220"
-        }}
-      />
-      <Text style={styles.body}>
-        By {item.author.name}, {item.author.age} years old.
-      </Text>
-      <Button
-        title="Back"
-        onPress={() => navigate("List")}
-      >
-        Auth
-      </Button>
-    </View>
+    <Layout>
+      <View style={styles.container} {...props}>
+        <Text style={styles.heading}>{item.title}</Text>
+        <Image
+          style={{ width: 220, height: 220, margin: 25 }}
+          source={{
+            uri: "https://placekitten.com/220/220"
+          }}
+        />
+        <Text style={styles.body}>
+          By {item.author.name}, {item.author.age} years old.
+        </Text>
+        <Button title="Back" onPress={() => navigate("List")}>
+          Auth
+        </Button>
+      </View>
+    </Layout>
   );
 };
 

@@ -4,6 +4,7 @@ import { Value } from "react-powerplug";
 import { ApolloConsumer } from "react-apollo";
 import { log } from "../utils";
 import { ADDBOOK } from "../mutations";
+import Layout from "../layouts/DefaultLayout";
 
 const styles = StyleSheet.create({
   container: {
@@ -36,54 +37,62 @@ const Create = props => {
   const { navigate } = props.navigation;
 
   return (
-    <Value initial={initialState}>
-      {({ value, set }) => (
-        <View style={styles.container} {...props}>
-          <Text style={styles.title}>Create a book</Text>
-          <View style={styles.wrapper}>
-            <Text>Enter book title</Text>
-            <TextInput
-              value={value.title}
-              placeholder="title..."
-              onChangeText={input => set(state => ({ ...state, title: input }))}
-            />
-          </View>
-          <View style={styles.wrapper}>
-            <Text>Enter author name</Text>
-            <TextInput
-              value={value.name}
-              placeholder="name..."
-              onChangeText={input => set(state => ({ ...state, name: input }))}
-            />
-          </View>
-          <View style={styles.wrapper}>
-            <Text>How old is the author?</Text>
-            <TextInput
-              value={value.age && String(value.age)}
-              placeholder="age..."
-              onChangeText={input => set(state => ({ ...state, age: Number(input) }))}
-            />
-          </View>
-          <Button title="Reset" onPress={() => set(initialState)} />
-          <ApolloConsumer>
-            {client => (
-              <Button
-                title="OK"
-                onPress={() => {
-                  client
-                    .mutate({
-                      mutation: ADDBOOK,
-                      variables: value
-                    })
-                    .then(log, log)
-                    .then(() => navigate("List"));
-                }}
+    <Layout>
+      <Value initial={initialState}>
+        {({ value, set }) => (
+          <View style={styles.container} {...props}>
+            <Text style={styles.title}>Create a book</Text>
+            <View style={styles.wrapper}>
+              <Text>Enter book title</Text>
+              <TextInput
+                value={value.title}
+                placeholder="title..."
+                onChangeText={input =>
+                  set(state => ({ ...state, title: input }))
+                }
               />
-            )}
-          </ApolloConsumer>
-        </View>
-      )}
-    </Value>
+            </View>
+            <View style={styles.wrapper}>
+              <Text>Enter author name</Text>
+              <TextInput
+                value={value.name}
+                placeholder="name..."
+                onChangeText={input =>
+                  set(state => ({ ...state, name: input }))
+                }
+              />
+            </View>
+            <View style={styles.wrapper}>
+              <Text>How old is the author?</Text>
+              <TextInput
+                value={value.age && String(value.age)}
+                placeholder="age..."
+                onChangeText={input =>
+                  set(state => ({ ...state, age: Number(input) }))
+                }
+              />
+            </View>
+            <Button title="Reset" onPress={() => set(initialState)} />
+            <ApolloConsumer>
+              {client => (
+                <Button
+                  title="OK"
+                  onPress={() => {
+                    client
+                      .mutate({
+                        mutation: ADDBOOK,
+                        variables: value
+                      })
+                      .then(log, log)
+                      .then(() => navigate("List"));
+                  }}
+                />
+              )}
+            </ApolloConsumer>
+          </View>
+        )}
+      </Value>
+    </Layout>
   );
 };
 

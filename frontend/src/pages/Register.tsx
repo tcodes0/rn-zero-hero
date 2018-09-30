@@ -2,6 +2,7 @@ import * as React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import ButtonInput from "../components/ButtonInput";
 import { log } from "../utils";
+import Layout from "../layouts/DefaultLayout";
 
 const styles = StyleSheet.create({
   container: {
@@ -20,10 +21,16 @@ const Detail = props => {
   const param = props.navigation.getParam("text", "null");
 
   return (
-    <View style={styles.container} {...props}>
-      <Text style={styles.title}>Please type your name to register</Text>
-      <ButtonInput title="register" placeholder="Your name..." onPress={text => log(`send request with ${text}`)} />
-    </View>
+    <Layout>
+      <View style={styles.container} {...props}>
+        <Text style={styles.title}>Please type your name to register</Text>
+        <ButtonInput
+          title="register"
+          placeholder="Your name..."
+          onPress={text => log(`send request with ${text}`)}
+        />
+      </View>
+    </Layout>
   );
 };
 
