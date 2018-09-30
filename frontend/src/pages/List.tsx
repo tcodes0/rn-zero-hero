@@ -3,8 +3,8 @@ import { SectionList, Text, StyleSheet, View } from "react-native";
 import { State } from "react-powerplug";
 import { Query } from "react-apollo";
 import ButtonInput from "../components/ButtonInput";
-import { log } from "../utils";
-import { GET_BOOKS_WITH_AUTHORS } from "../queries";
+import { log, getNumericId } from "../utils";
+import { BOOKS_WITH_AUTHORS } from "../queries";
 
 // const sections = [
 //   {
@@ -38,26 +38,30 @@ const styles = StyleSheet.create({
   }
 });
 
-const extractKey = ({ id }: number): string => id;
-
-const renderItem = ({ item }) => <Text style={styles.row}>{item.text}</Text>;
-
-const renderSectionHeader = ({ section }) => (
-  <Text style={styles.header}>{section.title}</Text>
-);
+const filterFactory = selector => (sections, query) =>
+sections.filter(section => selector(section, query));
 
 const byTitle = (section, string) => section.title.includes(string);
-const filterFactory = selector => (sections, query) =>
-  sections.filter(section => selector(section, query));
 
 const filterSectionsByTitle = filterFactory(byTitle);
 
+const unpack = gqlData => {
+  const [title] = Object.keys(gqlData);
+  const data = gqlData[title].map(obj => ({...obj, id: getNumericId()}))
+  const result = { id: getNumericId(), title, data };
+  console.log([result])
+  return [result]
+};
+
 const List = props => {
-  const sections = props.navigation.state.params || [];
-  console.log(sections);
+  const extractKey = ({ id }: number): string => id;
+  const renderItem = ({ item }) => <Text style={styles.row}>{`"${item.title}"\nby ${item.author.name}, ${item.author.age} years old `}</Text>;
+  const renderSectionHeader = ({ section }) => (
+    <Text style={styles.header}>{section.title}</Text>
+  );
 
   return (
-    <State initial={{ sections, filter: "" }}>
+    <State initial={{ sections: [], filter: "" }}>
       {({ state, setState }) => (
         <View style={styles.container}>
           <ButtonInput
@@ -71,17 +75,15 @@ const List = props => {
               }));
             }}
           />
-          <Query query={GET_BOOKS_WITH_AUTHORS}>
+          <Query query={BOOKS_WITH_AUTHORS}>
             {({ loading, error, data }) => {
               if (loading) return <Text>Loading...</Text>;
               if (error) return <Text>{`Error! ${error.message}`}</Text>;
-              console.log(data);
-              // setState({sections: data})
 
               return (
                 <SectionList
                   style={styles.container}
-                  sections={state.sections || []}
+                  sections={unpack(data) || []}
                   renderItem={renderItem}
                   renderSectionHeader={renderSectionHeader}
                   keyExtractor={extractKey}
