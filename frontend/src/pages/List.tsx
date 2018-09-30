@@ -4,7 +4,7 @@ import { State } from "react-powerplug";
 import { Query } from "react-apollo";
 import ButtonInput from "../components/ButtonInput";
 import { log, getNumericId } from "../utils";
-import { BOOKS_WITH_AUTHORS } from "../queries";
+import { booksWithAuthors } from "../queries";
 import Layout from "../layouts/DefaultLayout";
 
 // const sections = [
@@ -81,7 +81,7 @@ const List = props => {
                 }));
               }}
             />
-            <Query query={BOOKS_WITH_AUTHORS}>
+            <Query query={booksWithAuthors}>
               {({ loading, error, data }) => {
                 if (loading) return <Text>Loading...</Text>;
                 if (error) return <Text>{`Error! ${error.message}`}</Text>;

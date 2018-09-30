@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import ButtonInput from "../components/ButtonInput";
 import { log } from "../utils";
 import Layout from "../layouts/DefaultLayout";
+import { ApolloConsumer } from "react-apollo";
 
 const styles = StyleSheet.create({
   container: {
@@ -24,11 +25,15 @@ const Detail = props => {
     <Layout>
       <View style={styles.container} {...props}>
         <Text style={styles.title}>Please type your name to register</Text>
-        <ButtonInput
-          title="register"
-          placeholder="Your name..."
-          onPress={text => log(`send request with ${text}`)}
-        />
+        <ApolloConsumer>
+          {client => (
+            <ButtonInput
+              title="register"
+              placeholder="Your name..."
+              onPress={(text: string) => log(`send request with ${text}`)}
+            />
+          )}
+        </ApolloConsumer>
       </View>
     </Layout>
   );

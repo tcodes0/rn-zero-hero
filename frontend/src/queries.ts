@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-export const BOOKS_WITH_AUTHORS = gql`
+export const booksWithAuthors = gql`
   {
     books {
       title
@@ -8,6 +8,14 @@ export const BOOKS_WITH_AUTHORS = gql`
         name
         age
       }
+    }
+  }
+`;
+
+export const users = gql`
+  {
+    users {
+      name
     }
   }
 `;

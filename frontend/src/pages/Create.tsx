@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Button, TextInput } from "react-native";
 import { Value } from "react-powerplug";
 import { ApolloConsumer } from "react-apollo";
 import { log } from "../utils";
-import { ADDBOOK } from "../mutations";
+import { addBook } from "../mutations";
 import Layout from "../layouts/DefaultLayout";
 
 const styles = StyleSheet.create({
@@ -80,7 +80,7 @@ const Create = props => {
                   onPress={() => {
                     client
                       .mutate({
-                        mutation: ADDBOOK,
+                        mutation: addBook,
                         variables: value
                       })
                       .then(log, log)

@@ -7,7 +7,7 @@ import Layout from "../layouts/DefaultLayout";
 const styles = StyleSheet.create({
   title: {
     marginBottom: 70,
-    fontSize: 18
+  fontSize: 18
   },
   container: {
     flex: 1,
