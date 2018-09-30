@@ -4,10 +4,7 @@ import { Provider as ReduxProvider } from "react-redux";
 import { ApolloProvider } from "react-apollo";
 import client from "./client";
 import store from "./store";
-import Auth from "./pages/Auth";
-import Create from "./pages/Create";
-import Detail from "./pages/Detail";
-import List from "./pages/List";
+import { Create, Detail, Login, Register, List } from "./pages";
 
 export const env = "development";
 
@@ -16,9 +13,10 @@ const NavigationWrapper = createStackNavigator(
     Create: { screen: Create },
     Detail: { screen: Detail },
     List: { screen: List },
-    Auth: { screen: Auth }
+    Login: { screen: Login },
+    Register: { screen: Register }
   },
-  { initialRouteName: "List" }
+  { initialRouteName: "Login" }
 );
 
 const App = () => (
