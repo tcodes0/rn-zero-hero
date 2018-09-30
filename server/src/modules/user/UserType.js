@@ -2,6 +2,8 @@ import * as UserLoader from "./UserLoader";
 
 const { addUser, newUser } = UserLoader;
 
+const lowerCase = input => String.prototype.toLowerCase.call(input);
+
 export const typeDefs = `
   type User {
     name: String
@@ -9,12 +11,15 @@ export const typeDefs = `
 `;
 
 export const resolvers = {
-  users: () => UserLoader.loadAllUsers()
+  isUser: (root, args, context) => {
+    const users = UserLoader.loadAllUsers();
+    return users.some(({ name }) => name === lowerCase(args.name));
+  }
 };
 
 export const mutations = {
   addUser: (root, args, context) => {
-    const user = newUser(args.name);
+    const user = newUser(lowerCase(args.name));
     return addUser(user);
   }
 };
