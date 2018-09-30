@@ -1,6 +1,17 @@
 import * as React from "react";
-import { TextInput, Button, View } from "react-native";
+import { TextInput, Button, View, StyleSheet } from "react-native";
 import { Value } from "react-powerplug";
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 10
+  },
+  input: {
+    fontSize: 17,
+    marginBottom: 10
+  },
+  button: {}
+});
 
 const UserInput = props => {
   const {
@@ -14,8 +25,9 @@ const UserInput = props => {
   return (
     <Value initial={initial}>
       {({ value, set }) => (
-        <View>
+        <View style={styles.container}>
           <TextInput
+            style={styles.input}
             placeholder="Type something..."
             value={value}
             onChangeText={text => {

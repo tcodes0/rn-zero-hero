@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5FCFF"
   },
   title: {
-    marginBottom: 30,
+    marginBottom: 70,
     fontSize: 18
   }
 });
@@ -22,7 +22,7 @@ const Detail = props => {
   return (
     <View style={styles.container} {...props}>
       <Text style={styles.title}>Please type your name to login</Text>
-      <ButtonInput title="login" placeholder="Your name..." onPress={text => log(`send request with ${text}`)}/>
+      <ButtonInput title="login" placeholder="Your name..." onPress={(text: string) => log(`send request with ${text}`)}/>
     </View>
   );
 };
