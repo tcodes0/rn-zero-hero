@@ -3,6 +3,7 @@ import { makeExecutableSchema } from "graphql-tools";
 
 import * as BookType from "./src/modules/book/BookType";
 import * as AuthorType from "./src/modules/author/AuthorType";
+import * as UserType from "./src/modules/user/UserType";
 
 const SchemaDefinition = `
   schema {
@@ -16,28 +17,25 @@ const SchemaDefinition = `
   type Query {
     books: [Book]
     authors: [Author]
+    users: [User]
   }
   type Mutation {
     addBook(title: String, author: AuthorInput): Book
+    addUser(name: String): User
   }
 `;
 
-const typeDefs = [BookType.typeDefs, AuthorType.typeDefs];
+const typeDefs = [BookType.typeDefs, AuthorType.typeDefs, UserType.typeDefs];
 
 const resolvers = {
   Query: {
     ...BookType.resolvers,
-    ...AuthorType.resolvers
+    ...AuthorType.resolvers,
+    ...UserType.resolvers
   },
   Mutation: {
-    addBook: (root, args, context) => {
-      const book = BookType.mutations.newBook(
-        args.title,
-        args.author.name,
-        args.author.age
-      );
-      return BookType.mutations.addBook(book);
-    }
+    ...BookType.mutations,
+    ...UserType.mutations
   }
 };
 
