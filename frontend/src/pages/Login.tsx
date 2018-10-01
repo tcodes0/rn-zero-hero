@@ -46,16 +46,6 @@ const initialState: {
   lastQuery: undefined
 };
 
-// function named<T extends StyleSheet.NamedStyles<T>>(
-//   Component: React.Component,
-//   name: string,
-//   style?: T
-// ) {
-//   return React.createElement(name, { style }, Component);
-// }
-
-// const Login = named(View, "Login");
-
 const Detail = () => (
   <Layout>
     <View style={styles.container}>

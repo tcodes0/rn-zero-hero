@@ -13,9 +13,9 @@ export const addBook = gql`
 `;
 
 export const addUser = gql`
-  mutation($name: String) {
-    addUser(name: $name) {
-      name
+  mutation($name: String, $password: String) {
+    addUser(name: $name, password: $password) {
+      token
     }
   }
 `;
