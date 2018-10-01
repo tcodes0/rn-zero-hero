@@ -20,3 +20,5 @@ V Search
 Image
 Paragraph
 Heading
+
+refactor value containers into state

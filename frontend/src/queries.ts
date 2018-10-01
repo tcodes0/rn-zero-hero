@@ -12,10 +12,8 @@ export const booksWithAuthors = gql`
   }
 `;
 
-export const users = gql`
-  {
-    users {
-      name
-    }
+export const isUser = gql`
+  query($name: String){
+    isUser(name: $name)
   }
 `;

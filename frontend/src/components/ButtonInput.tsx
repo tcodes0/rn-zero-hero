@@ -8,7 +8,8 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 17,
-    marginBottom: 10
+    marginBottom: 10,
+    textAlign: "left"
   },
   button: {}
 });
