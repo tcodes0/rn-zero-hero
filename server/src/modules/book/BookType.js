@@ -14,12 +14,8 @@ export const resolvers = {
 };
 
 export const mutations = {
-  addBook: (root, args, context) => {
-    const book = newBook(
-      args.title,
-      args.author.name,
-      args.author.age
-    );
+  addBook: (root, args) => {
+    const book = newBook(args.title, args.author.name, args.author.age);
     return addBook(book);
   }
 };
