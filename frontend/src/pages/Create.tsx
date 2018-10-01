@@ -74,15 +74,14 @@ const Create = props => {
             </View>
             <Button title="Reset" onPress={() => set(initialState)} />
             <ApolloConsumer>
-              {client => (
+              {({ mutate }) => (
                 <Button
                   title="OK"
                   onPress={() => {
-                    client
-                      .mutate({
-                        mutation: addBook,
-                        variables: value
-                      })
+                    mutate({
+                      mutation: addBook,
+                      variables: value
+                    })
                       .then(log, log)
                       .then(() => navigate("List"));
                   }}

@@ -4,6 +4,7 @@ import ButtonInput from "../components/ButtonInput";
 import { log } from "../utils";
 import Layout from "../layouts/DefaultLayout";
 import { ApolloConsumer } from "react-apollo";
+import { addUser } from "../mutations";
 
 const styles = StyleSheet.create({
   container: {
@@ -26,11 +27,17 @@ const Detail = props => {
       <View style={styles.container} {...props}>
         <Text style={styles.title}>Please type your name to register</Text>
         <ApolloConsumer>
-          {client => (
+          {({ mutate }) => (
             <ButtonInput
               title="register"
               placeholder="Your name..."
-              onPress={(text: string) => log(`send request with ${text}`)}
+              onPress={(name: string) =>
+                mutate({
+                  mutation: addUser,
+                  variables: { name }
+                })
+                  .then(log, log)
+              }
             />
           )}
         </ApolloConsumer>
