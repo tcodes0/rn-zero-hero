@@ -13,7 +13,7 @@ export const typeDefs = `
 export const resolvers = {
   isUser: (root, args, context) => {
     const users = UserLoader.loadAllUsers();
-    return users.some(({ name }) => name === lowerCase(args.name));
+    return args.name && users.some(({ name }) => name === lowerCase(args.name));
   }
 };
 
