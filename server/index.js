@@ -1,4 +1,5 @@
-import { ApolloServer, gql } from "apollo-server";
+/* eslint-disable no-console */
+import { ApolloServer } from "apollo-server";
 import { makeExecutableSchema } from "graphql-tools";
 
 import * as BookType from "./src/modules/book/BookType";
@@ -14,6 +15,9 @@ const SchemaDefinition = `
     name: String
     age: Int
   }
+  type Token {
+    token: String
+  }
   type Query {
     books: [Book]
     authors: [Author]
@@ -21,7 +25,7 @@ const SchemaDefinition = `
   }
   type Mutation {
     addBook(title: String, author: AuthorInput): Book
-    addUser(name: String): User
+    addUser(name: String, password: String): Token
   }
 `;
 

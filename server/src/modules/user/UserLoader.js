@@ -14,34 +14,27 @@ const users = [
 const secret = "ABB15D42-3BCD-498B-9095-416F24C4E821";
 
 /**
+ * Get a new JWT token.
+ * @param {User} user object to get token for.
+ * @returns {String} Token.
+ */
+export const newToken = user => jwt.sign(user, secret, { expiresIn: "1800s" });
+
+/**
  * Pushes a user to database.
  * @param {User} user User type, see schema
- * @returns User.
+ * @returns {String} Token.
  */
 export const addUser = user => {
   if (!users.some(({ name }) => name === user.name)) users.push(user);
-  return user;
+  return { token: newToken(user) };
 };
-
-/**
- * Create a user object.
- * @param {String} name User name
- * @returns User.
- */
-export const newUser = name => ({ name });
-
-/**
- * Get a new JWT token.
- * @param {User} user object to get token for.
- * @returns Token.
- */
-export const newToken = user => jwt.sign(user, secret, { expiresIn: "1800s" });
 
 /**
  * Checks if a provided password matches a user's hash.
  * @param {String} password Plain text string to be validated.
  * @param {User} user User object to validate against.
- * @returns Promise to be fulfilled with the user argument.
+ * @returns {Promise} Promise to be fulfilled with the user argument.
  */
 export const validatePassword = (password, user) =>
   new Promise((res, rej) => {
@@ -59,7 +52,7 @@ export const validatePassword = (password, user) =>
 /**
  * Verify a token isn't expired
  * @param {String} token Token to verify.
- * @returns Promise to be fulfilled with token argument.
+ * @returns {Promise} Promise to be fulfilled with token argument.
  */
 export const validateToken = token =>
   new Promise((res, rej) => {

@@ -1,6 +1,7 @@
+import bcrypt from "bcrypt";
 import * as UserLoader from "./UserLoader";
 
-const { addUser, newUser, newToken } = UserLoader;
+const { addUser, newToken } = UserLoader;
 
 const lowerCase = input => String.prototype.toLowerCase.call(input);
 
@@ -20,7 +21,11 @@ export const resolvers = {
 
 export const mutations = {
   addUser: (root, args) => {
-    const user = newUser(lowerCase(args.name));
+    const { name, password } = args;
+    const user = {
+      name: lowerCase(name),
+      password: bcrypt.hashSync(password, 8)
+    };
     return addUser(user);
   }
 };
