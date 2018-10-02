@@ -5,12 +5,12 @@ import {
   StyleSheet,
   View,
   AsyncStorage,
-  TextInput
+  TextInput,
+  FlatListProps
 } from "react-native";
 import { State } from "react-powerplug";
 import { ApolloConsumer } from "react-apollo";
-import ButtonInput from "../components/ButtonInput";
-import { log, getNumericId, getNavParams } from "../utils";
+import { log, getNumericId, getNavParams, filterFactory } from "../utils";
 import { booksWithAuthors } from "../queries";
 import Layout from "../layouts/DefaultLayout";
 
@@ -39,42 +39,58 @@ const styles = StyleSheet.create({
   }
 });
 
-const filterFactory = selector => (sections, query) =>
-  sections.filter(section => selector(section, query));
+const Filter = props => <TextInput style={styles.input} {...props} />;
 
-const byTitle = (section, string) => section.title.includes(string);
+class BookList<ItemT> extends React.Component<FlatListProps<ItemT>> {
+  extractKey = ({ id }: { id: number }) => String(id);
 
-const filterSectionsByTitle = filterFactory(byTitle);
-
-const unpack = gqlData => {
-  const { books } = gqlData.data;
-  const booksWithId = books.map(book => ({ ...book, id: getNumericId() }));
-  return booksWithId;
-};
-
-const List = props => {
-  const { navigate } = props.navigation;
-  const user = getNavParams(props, "user");
-  const extractKey = ({ id }: { id: number }) => String(id);
-  const renderItem = ({ item }) => (
+  renderItem = ({ item }) => (
     <Text onPress={() => navigate("Detail", { item, user })} style={styles.row}>
       {`"${item.title}"\nby ${item.author && item.author.name}`}
     </Text>
   );
 
+  render() {
+    return (
+      <FlatList
+        style={styles.container}
+        renderItem={this.renderItem}
+        keyExtractor={this.extractKey}
+        {...this.props}
+      />
+    );
+  }
+}
+
+const List = props => {
+  const user = getNavParams(props, "user");
+
+  const byTitle = (section, string) => section.title.includes(string);
+  const filterSectionsByTitle = filterFactory(byTitle);
+
+  const unpack = gqlData => {
+    const { books } = gqlData.data;
+    const booksWithId = books.map(book => ({ ...book, id: getNumericId() }));
+    return booksWithId;
+  };
+
   return (
     <Layout user={user}>
       <State
-        initial={{ sections: [], filter: "", unfilteredSections: undefined, text: "" }}
+        initial={{
+          sections: [],
+          filter: "",
+          unfilteredSections: undefined,
+          text: ""
+        }}
       >
         {({ state, setState }) => (
           <View style={styles.container}>
-            <TextInput
-              style={styles.input}
+            <Filter
               value={state.text}
               placeholder="filter by typing..."
               onChangeText={(text: string) => {
-                setState({ text })
+                setState({ text });
                 if (!text) {
                   return setState(({ unfilteredSections }) => ({
                     sections: unfilteredSections
@@ -103,14 +119,7 @@ const List = props => {
                   });
                 }
                 if (!state.sections) return <Text> Loading </Text>;
-                return (
-                  <FlatList
-                    style={styles.container}
-                    data={state.sections}
-                    renderItem={renderItem}
-                    keyExtractor={extractKey}
-                  />
-                );
+                return <BookList data={state.sections} />;
               }}
             </ApolloConsumer>
           </View>

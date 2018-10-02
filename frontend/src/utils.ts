@@ -41,3 +41,6 @@ export const getNavParams = (props: any, key?: string) => {
   if (result == undefined) return undefined;
   return result.length ? result : undefined;
 };
+
+export const filterFactory = selector => (sections, query) =>
+  sections.filter(section => selector(section, query));
