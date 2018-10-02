@@ -27,9 +27,10 @@ const styles = StyleSheet.create({
   }
 });
 
-const filterFactory = selector => (sections, query) =>
-  // console.log(sections, query);
-  sections.filter(section => selector(section, query));
+const filterFactory = selector => (sections, query) => {
+  // console.log("selector args", sections, query);
+  return sections.filter(section => selector(section, query));
+};
 
 const byTitle = (section, string) => section.title.includes(string);
 
@@ -38,25 +39,20 @@ const filterSectionsByTitle = filterFactory(byTitle);
 const unpack = gqlData => {
   const { books } = gqlData.data;
   const booksWithId = books.map(book => ({ ...book, id: getNumericId() }));
-  console.log("result", booksWithId);
+  // console.log("result", booksWithId);
   return booksWithId;
 };
 
 const List = props => {
   const { navigate } = props.navigation;
   const user = getNavParams(props, "user");
-  const extractKey = ({ id }: {id: number}) => String(id);
-  const renderItem = ({ item }) => {
+  const extractKey = ({ id }: { id: number }) => String(id);
+  const renderItem = ({ item }) => (
     // console.log("item", item);
-    return (
-      <Text
-        onPress={() => navigate("Detail", { item, user })}
-        style={styles.row}
-      >
-        {`"${item.title}"\nby ${item.author && item.author.name}`}
-      </Text>
-    );
-  };
+    <Text onPress={() => navigate("Detail", { item, user })} style={styles.row}>
+      {`"${item.title}"\nby ${item.author && item.author.name}`}
+    </Text>
+  );
 
   return (
     <Layout user={user}>
@@ -75,10 +71,9 @@ const List = props => {
                     sections: unfilteredSections
                   }));
                 setState(({ unfilteredSections }) => {
-                  const { data } = unfilteredSections[0];
                   // console.log(filterSectionsByTitle(data, text));
                   return {
-                    sections: filterSectionsByTitle(data, text)
+                    sections: filterSectionsByTitle(unfilteredSections, text)
                   };
                 });
               }}
@@ -90,7 +85,7 @@ const List = props => {
                     query({ query: booksWithAuthors, variables: { token } })
                       .then(data => {
                         const unpackedData = unpack(data);
-                        console.log("unpacked", unpackedData);
+                        // console.log("unpacked", unpackedData);
                         setState({
                           unfilteredSections: unpackedData,
                           sections: unpackedData
