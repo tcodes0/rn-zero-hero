@@ -1,10 +1,17 @@
 import * as React from "react";
-import { StyleSheet, Text, View, TextInput, Button } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Button,
+  AsyncStorage
+} from "react-native";
 import { ApolloConsumer } from "react-apollo";
 import { State } from "react-powerplug";
 import Layout from "../layouts/DefaultLayout";
 import { addUser } from "../mutations";
-import { formatMessage, getNavParams } from "../utils";
+import { formatMessage, getNavParams, log } from "../utils";
 
 const styles = StyleSheet.create({
   container: {
@@ -83,7 +90,9 @@ const Detail = props => {
                           }
                         })
                           .then(({ data: { addUser: { token } } }) => {
-                            console.log(token);
+                            AsyncStorage.setItem("token", token).catch(
+                              e => e && log(e)
+                            );
                             navigate("Create", { user: state.name });
                           })
                           .catch(error => setState({ error }))

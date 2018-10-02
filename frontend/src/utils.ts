@@ -33,9 +33,11 @@ export const getNavParams = (props: any, key?: string) => {
     props.navigation &&
     props.navigation.state &&
     props.navigation.state.params;
-  if (!key) return params
-  const result = params[key]
 
-  if (result == undefined) return undefined
-  return result.length ? result : undefined
+  if (params == undefined) return undefined;
+  if (!key) return params;
+
+  const result = params[key];
+  if (result == undefined) return undefined;
+  return result.length ? result : undefined;
 };

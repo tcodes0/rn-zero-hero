@@ -1,6 +1,13 @@
 import * as React from "react";
-import { StyleSheet, Text, View, TextInput, Button } from "react-native";
-import { formatMessage, asteriskObfuscation } from "../utils";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Button,
+  AsyncStorage
+} from "react-native";
+import { formatMessage, log } from "../utils";
 import Layout from "../layouts/DefaultLayout";
 import { ApolloConsumer } from "react-apollo";
 import { State } from "react-powerplug";
@@ -67,7 +74,7 @@ const Login = props => {
                     />
                     <TextInput
                       style={styles.input}
-                      secureTextEntry={true}
+                      secureTextEntry
                       placeholder="Password..."
                       value={state.password}
                       onChangeText={password => setState({ password })}
@@ -90,6 +97,8 @@ const Login = props => {
                         })
                           .then(({ data: { login: { token } } }) => {
                             setState({ token, error: undefined });
+                            AsyncStorage.setItem("token", token)
+                              .catch(e => e && log(e));
                             navigate("Create", { user: state.name });
                           })
                           .catch(error => {
@@ -99,7 +108,7 @@ const Login = props => {
                     />
                     <Button
                       title="Create account"
-                      onPress={() => navigate("Register", { user: state.name })}
+                      onPress={() => navigate("Register")}
                     />
                   </View>
                   <View style={styles.messageContainer}>

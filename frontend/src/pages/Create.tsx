@@ -1,5 +1,12 @@
 import * as React from "react";
-import { StyleSheet, Text, View, Button, TextInput } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  TextInput,
+  AsyncStorage
+} from "react-native";
 import { Value } from "react-powerplug";
 import { ApolloConsumer } from "react-apollo";
 import { log, getNavParams } from "../utils";
