@@ -1,13 +1,7 @@
 import * as React from "react";
-import {
-  SectionList,
-  Text,
-  StyleSheet,
-  View,
-  AsyncStorage
-} from "react-native";
+import { FlatList, Text, StyleSheet, View, AsyncStorage } from "react-native";
 import { State } from "react-powerplug";
-import { Query, ApolloConsumer } from "react-apollo";
+import { ApolloConsumer } from "react-apollo";
 import ButtonInput from "../components/ButtonInput";
 import { log, getNumericId, getNavParams } from "../utils";
 import { booksWithAuthors } from "../queries";
@@ -33,10 +27,9 @@ const styles = StyleSheet.create({
   }
 });
 
-const filterFactory = selector => (sections, query) => {
+const filterFactory = selector => (sections, query) =>
   // console.log(sections, query);
-  return sections.filter(section => selector(section, query));
-};
+  sections.filter(section => selector(section, query));
 
 const byTitle = (section, string) => section.title.includes(string);
 
@@ -45,22 +38,25 @@ const filterSectionsByTitle = filterFactory(byTitle);
 const unpack = gqlData => {
   const { books } = gqlData.data;
   const booksWithId = books.map(book => ({ ...book, id: getNumericId() }));
-  const result = { id: getNumericId(), title: "books", data: booksWithId };
-  return [result];
+  console.log("result", booksWithId);
+  return booksWithId;
 };
 
 const List = props => {
   const { navigate } = props.navigation;
   const user = getNavParams(props, "user");
-  const extractKey = ({ id }: number): string => id;
-  const renderItem = ({ item }) => (
-    <Text onPress={() => navigate("Detail", { item, user })} style={styles.row}>
-      {`"${item.title}"\nby ${item.author && item.author.name}`}
-    </Text>
-  );
-  const renderSectionHeader = ({ section }) => (
-    <Text style={styles.header}>{section.title}</Text>
-  );
+  const extractKey = ({ id }: {id: number}) => String(id);
+  const renderItem = ({ item }) => {
+    // console.log("item", item);
+    return (
+      <Text
+        onPress={() => navigate("Detail", { item, user })}
+        style={styles.row}
+      >
+        {`"${item.title}"\nby ${item.author && item.author.name}`}
+      </Text>
+    );
+  };
 
   return (
     <Layout user={user}>
@@ -80,7 +76,7 @@ const List = props => {
                   }));
                 setState(({ unfilteredSections }) => {
                   const { data } = unfilteredSections[0];
-                  console.log(filterSectionsByTitle(data, text));
+                  // console.log(filterSectionsByTitle(data, text));
                   return {
                     sections: filterSectionsByTitle(data, text)
                   };
@@ -94,6 +90,7 @@ const List = props => {
                     query({ query: booksWithAuthors, variables: { token } })
                       .then(data => {
                         const unpackedData = unpack(data);
+                        console.log("unpacked", unpackedData);
                         setState({
                           unfilteredSections: unpackedData,
                           sections: unpackedData
@@ -106,11 +103,10 @@ const List = props => {
                 }
                 if (!state.sections) return <Text> Loading </Text>;
                 return (
-                  <SectionList
+                  <FlatList
                     style={styles.container}
-                    sections={state.sections}
+                    data={state.sections}
                     renderItem={renderItem}
-                    renderSectionHeader={renderSectionHeader}
                     keyExtractor={extractKey}
                   />
                 );

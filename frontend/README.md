@@ -1,20 +1,19 @@
-V Input - Auth, login
-  V controlled by a container
+✔ Input - Auth, login
+  ✔ controlled by a container
   possibly a group of Inputs with a single container
 
-V StateContainer
-V Button
+✔ StateContainer
+✔ Button
 
-V NewProduct
+✔ NewProduct
   controlled Input
   Button
-  radii ?
 
-V ListView
+✔ ListView
   Item
   must have scroll
 
-V Search
+✔ Search
   Filters the List
 
 Image
@@ -32,3 +31,4 @@ use graphql from react-apollo not ApolloConsumer
 theme provider, make things pretty
 Button -> touchable opacity
 add db
+✔ use flatList
