@@ -10,7 +10,7 @@ const secret = "ABB15D42-3BCD-498B-9095-416F24C4E821";
  * @param {User} user object to get token for.
  * @returns {String} Token.
  */
-export const newToken = user => jwt.sign(user, secret, { expiresIn: "1800s" });
+export const newToken = user => jwt.sign(user, secret, { expiresIn: "99999s" });
 
 /**
  * Pushes a user to database.

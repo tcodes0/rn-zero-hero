@@ -25,7 +25,11 @@ export const resolvers = {
 
     return validatePassword(password, user)
       .then(res => {
-        if (res) return { token: newToken(user) };
+        if (res) {
+          const token = newToken(user);
+          // console.log(`login ${user.name} with token - ${token}\n\n`);
+          return { token };
+        }
         throw Error("Server Error");
       })
       .catch(e => {

@@ -13,7 +13,11 @@ export const typeDefs = `
 export const resolvers = {
   books: (root, args) =>
     validateToken(args.token)
-      .then(() => BookLoader.loadAllBooks())
+      // eslint-disable-next-line
+      .then(() => {
+        // console.log(`books req with token - ${args.token}`);
+        return BookLoader.loadAllBooks();
+      })
       .catch(e => {
         if (e) throw e;
       }),
