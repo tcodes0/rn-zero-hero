@@ -25,17 +25,12 @@ const styles = StyleSheet.create({
   }
 });
 
-const getItem = (props: any) =>
-  props && props.navigation && props.navigation.state
-    ? props.navigation.state.params
-    : {};
-
 const Detail = props => {
-  const item = getItem(props);
   const { navigate } = props.navigation;
+  const { user, item } = props.navigation.state.params;
 
   return (
-    <Layout>
+    <Layout user={user}>
       <View style={styles.container} {...props}>
         <Text style={styles.heading}>{item.title}</Text>
         <Image
@@ -47,7 +42,7 @@ const Detail = props => {
         <Text style={styles.body}>
           By {item.author.name}, {item.author.age} years old.
         </Text>
-        <Button title="Back" onPress={() => navigate("List")}>
+        <Button title="Back" onPress={() => navigate("List", { user })}>
           Auth
         </Button>
       </View>

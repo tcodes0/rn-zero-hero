@@ -35,9 +35,10 @@ const initialState: Book = { name: "", title: "", age: undefined };
 
 const Create = props => {
   const { navigate } = props.navigation;
+  const { user } = props.navigation.state.params;
 
   return (
-    <Layout>
+    <Layout user={user}>
       <Value initial={initialState}>
         {({ value, set }) => (
           <View style={styles.container} {...props}>
@@ -83,7 +84,7 @@ const Create = props => {
                       variables: value
                     })
                       .then(log, log)
-                      .then(() => navigate("List"));
+                      .then(() => navigate("List", { user }));
                   }}
                 />
               )}

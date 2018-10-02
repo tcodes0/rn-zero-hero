@@ -7,18 +7,6 @@ import { log, getNumericId } from "../utils";
 import { booksWithAuthors } from "../queries";
 import Layout from "../layouts/DefaultLayout";
 
-// const sections = [
-//   {
-//     id: 0,
-//     title: "Basic Components",
-//     data: [
-//       { id: 0, text: "View" },
-//       { id: 1, text: "Text" },
-//       { id: 2, text: "Image" }
-//     ]
-//   }
-// ];
-
 const styles = StyleSheet.create({
   container: {
     marginTop: 20,
@@ -55,9 +43,10 @@ const unpack = gqlData => {
 
 const List = props => {
   const { navigate } = props.navigation;
+  const { user } = props.navigation.state.params;
   const extractKey = ({ id }: number): string => id;
   const renderItem = ({ item }) => (
-    <Text onPress={() => navigate("Detail", item)} style={styles.row}>
+    <Text onPress={() => navigate("Detail", { item, user })} style={styles.row}>
       {`"${item.title}"\nby ${item.author.name}`}
     </Text>
   );
@@ -66,7 +55,7 @@ const List = props => {
   );
 
   return (
-    <Layout>
+    <Layout user={user}>
       <State initial={{ sections: [], filter: "" }}>
         {({ state, setState }) => (
           <View style={styles.container}>

@@ -12,8 +12,10 @@ export const booksWithAuthors = gql`
   }
 `;
 
-export const isUser = gql`
-  query($name: String){
-    isUser(name: $name)
+export const login = gql`
+  query($name: String, $password: String) {
+    login(name: $name, password: $password) {
+      token
+    }
   }
 `;

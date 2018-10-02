@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-const users = [{ name: "foton", hash: bcrypt.hashSync("foton", 1) }];
+const users = [{ name: "foton", hash: bcrypt.hashSync("Foton", 1) }];
 
 const secret = "ABB15D42-3BCD-498B-9095-416F24C4E821";
 

@@ -1,10 +1,10 @@
 import * as React from "react";
 import { StyleSheet, Text, View, TextInput, Button } from "react-native";
-import { log } from "../utils";
+import { formatMessage } from "../utils";
 import Layout from "../layouts/DefaultLayout";
 import { ApolloConsumer } from "react-apollo";
 import { State } from "react-powerplug";
-import { isUser } from "../queries";
+import { login } from "../queries";
 
 const styles = StyleSheet.create({
   title: {
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 17,
-    marginBottom: 10,
+    marginBottom: 25,
     textAlign: "left"
   },
   messageContainer: {
@@ -38,62 +38,72 @@ const styles = StyleSheet.create({
 
 const initialState: {
   name: string;
-  isUser?: boolean;
-  lastQuery?: string;
+  password: string;
+  token?: string;
+  error?: Error;
 } = {
   name: "",
-  isUser: undefined,
-  lastQuery: undefined
+  password: ""
 };
 
-const Detail = () => (
-  <Layout>
-    <View style={styles.container}>
-      <Text style={styles.title}>Please type your name to login</Text>
-      <State initial={initialState}>
-        {({ state, setState }) => (
-          <ApolloConsumer>
-            {({ query }) => (
-              <View style={styles.loginContainer}>
-                <View style={styles.inputContainer}>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Your name..."
-                    value={state.name}
-                    onChangeText={name => setState({ name })}
-                  />
-                  <Button
-                    title="Login"
-                    onPress={() =>
-                      query<{ isUser: boolean }>({
-                        query: isUser,
-                        variables: { name: state.name }
-                      })
-                        .then(({ data: { isUser } }) =>
-                          setState({ isUser, lastQuery: state.name })
-                        )
-                        .catch(log)
-                    }
-                  />
-                </View>
-                <View style={styles.messageContainer}>
-                  {state.isUser && (
-                    <Text>{`Nice, ${state.lastQuery} is a valid user!`}</Text>
-                  )}
-                  {!state.isUser &&
-                    state.lastQuery && (
-                      <Text>
-                        {`${state.lastQuery} not found, please register!`}
-                      </Text>
-                    )}
-                </View>
-              </View>
-            )}
-          </ApolloConsumer>
-        )}
-      </State>
-    </View>
-  </Layout>
-);
+const Login = props => {
+  const { navigate } = props.navigation;
 
-export default Detail;
+  return (
+    <Layout>
+      <View style={styles.container}>
+        <Text style={styles.title}>Please fill in the fields to login</Text>
+        <State initial={initialState}>
+          {({ state, setState }) => (
+            <ApolloConsumer>
+              {({ query }) => (
+                <View style={styles.loginContainer}>
+                  <View style={styles.inputContainer}>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Your name..."
+                      value={state.name}
+                      onChangeText={name => setState({ name })}
+                    />
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Your password..."
+                      value={state.password}
+                      onChangeText={password => setState({ password })}
+                    />
+                    <Button
+                      title="Login"
+                      onPress={() => {
+                        const { name, password } = state;
+
+                        query<{ login: { token: string } }>({
+                          query: login,
+                          variables: { name, password }
+                        })
+                          .then(({ data: { login: { token } } }) => {
+                            setState({ token });
+                          })
+                          .catch(error => {
+                            setState({ error });
+                          });
+                      }}
+                    />
+                  </View>
+                  <View style={styles.messageContainer}>
+                    {state.token && navigate("Create", { user: state.name })}
+                    {!state.token &&
+                      state.error && (
+                        <Text>{formatMessage(state.error.message)}</Text>
+                      )}
+                  </View>
+                </View>
+              )}
+            </ApolloConsumer>
+          )}
+        </State>
+      </View>
+    </Layout>
+  );
+};
+
+export default Login;
