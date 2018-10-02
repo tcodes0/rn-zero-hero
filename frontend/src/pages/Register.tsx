@@ -3,8 +3,8 @@ import { StyleSheet, Text, View, TextInput, Button } from "react-native";
 import { ApolloConsumer } from "react-apollo";
 import { State } from "react-powerplug";
 import Layout from "../layouts/DefaultLayout";
-import { log } from "../utils";
 import { addUser } from "../mutations";
+import { formatMessage } from "../utils";
 
 const styles = StyleSheet.create({
   container: {
@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
 const initialState: {
   name: string;
   password: string;
+  error?: Error;
 } = {
   name: "",
   password: ""
@@ -55,33 +56,40 @@ const Detail = props => {
           {({ state, setState }) => (
             <ApolloConsumer>
               {({ mutate }) => (
-                <View style={styles.inputContainer}>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Your name..."
-                    value={state.name}
-                    onChangeText={name => setState({ name })}
-                  />
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Password..."
-                    value={state.password}
-                    onChangeText={password => setState({ password })}
-                  />
-                  <Button
-                    title="Register"
-                    onPress={() =>
-                      mutate<{ token: string }>({
-                        mutation: addUser,
-                        variables: {
-                          name: state.name,
-                          password: state.password
-                        }
-                      })
-                        .then(({ data: { addUser } }) => console.log(addUser))
-                        .catch(log)
-                    }
-                  />
+                <View style={styles.loginContainer}>
+                  <View style={styles.inputContainer}>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Your name..."
+                      value={state.name}
+                      onChangeText={name => setState({ name })}
+                    />
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Password..."
+                      value={state.password}
+                      onChangeText={password => setState({ password })}
+                    />
+                    <Button
+                      title="Register"
+                      onPress={() =>
+                        mutate<{ token: string }>({
+                          mutation: addUser,
+                          variables: {
+                            name: state.name,
+                            password: state.password
+                          }
+                        })
+                          .then(({ data: { addUser } }) => console.log(addUser))
+                          .catch(error => setState({ error }))
+                      }
+                    />
+                  </View>
+                  <View style={styles.messageContainer}>
+                    {state.error && (
+                      <Text>{formatMessage(state.error.message)}</Text>
+                    )}
+                  </View>
                 </View>
               )}
             </ApolloConsumer>
