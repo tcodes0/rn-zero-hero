@@ -22,6 +22,7 @@ const SchemaDefinition = `
     books: [Book]
     authors: [Author]
     login(name: String, password: String): Token
+    users: [User]
   }
   type Mutation {
     addBook(title: String, author: AuthorInput): Book

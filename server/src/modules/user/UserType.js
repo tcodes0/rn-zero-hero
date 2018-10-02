@@ -31,7 +31,8 @@ export const resolvers = {
       .catch(e => {
         throw e;
       });
-  }
+  },
+  users: () => loadAllUsers()
 };
 
 export const mutations = {
