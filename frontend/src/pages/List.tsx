@@ -1,5 +1,12 @@
 import * as React from "react";
-import { FlatList, Text, StyleSheet, View, AsyncStorage } from "react-native";
+import {
+  FlatList,
+  Text,
+  StyleSheet,
+  View,
+  AsyncStorage,
+  TextInput
+} from "react-native";
 import { State } from "react-powerplug";
 import { ApolloConsumer } from "react-apollo";
 import ButtonInput from "../components/ButtonInput";
@@ -24,13 +31,16 @@ const styles = StyleSheet.create({
     backgroundColor: "steelblue",
     color: "white",
     fontWeight: "bold"
+  },
+  input: {
+    fontSize: 17,
+    marginBottom: 10,
+    textAlign: "left"
   }
 });
 
-const filterFactory = selector => (sections, query) => {
-  // console.log("selector args", sections, query);
-  return sections.filter(section => selector(section, query));
-};
+const filterFactory = selector => (sections, query) =>
+  sections.filter(section => selector(section, query));
 
 const byTitle = (section, string) => section.title.includes(string);
 
@@ -39,7 +49,6 @@ const filterSectionsByTitle = filterFactory(byTitle);
 const unpack = gqlData => {
   const { books } = gqlData.data;
   const booksWithId = books.map(book => ({ ...book, id: getNumericId() }));
-  // console.log("result", booksWithId);
   return booksWithId;
 };
 
@@ -48,7 +57,6 @@ const List = props => {
   const user = getNavParams(props, "user");
   const extractKey = ({ id }: { id: number }) => String(id);
   const renderItem = ({ item }) => (
-    // console.log("item", item);
     <Text onPress={() => navigate("Detail", { item, user })} style={styles.row}>
       {`"${item.title}"\nby ${item.author && item.author.name}`}
     </Text>
@@ -57,25 +65,24 @@ const List = props => {
   return (
     <Layout user={user}>
       <State
-        initial={{ sections: [], filter: "", unfilteredSections: undefined }}
+        initial={{ sections: [], filter: "", unfilteredSections: undefined, text: "" }}
       >
         {({ state, setState }) => (
           <View style={styles.container}>
-            <ButtonInput
+            <TextInput
+              style={styles.input}
+              value={state.text}
               placeholder="filter by typing..."
-              title="Go"
-              onPress={log}
               onChangeText={(text: string) => {
-                if (!text)
+                setState({ text })
+                if (!text) {
                   return setState(({ unfilteredSections }) => ({
                     sections: unfilteredSections
                   }));
-                setState(({ unfilteredSections }) => {
-                  // console.log(filterSectionsByTitle(data, text));
-                  return {
-                    sections: filterSectionsByTitle(unfilteredSections, text)
-                  };
-                });
+                }
+                return setState(({ unfilteredSections }) => ({
+                  sections: filterSectionsByTitle(unfilteredSections, text)
+                }));
               }}
             />
             <ApolloConsumer>
@@ -85,7 +92,6 @@ const List = props => {
                     query({ query: booksWithAuthors, variables: { token } })
                       .then(data => {
                         const unpackedData = unpack(data);
-                        // console.log("unpacked", unpackedData);
                         setState({
                           unfilteredSections: unpackedData,
                           sections: unpackedData
