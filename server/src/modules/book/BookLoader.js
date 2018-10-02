@@ -38,6 +38,4 @@ export const newBook = (title, name, age) => ({
   }
 });
 
-export const loadAllBooks = (root, args, context) => {
-  return books;
-};
+export const loadAllBooks = () => books;

@@ -32,7 +32,7 @@ export const resolvers = {
         throw e;
       });
   },
-  users: () => loadAllUsers()
+  dev_users: () => loadAllUsers()
 };
 
 export const mutations = {

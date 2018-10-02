@@ -16,7 +16,8 @@ export const resolvers = {
       .then(() => BookLoader.loadAllBooks())
       .catch(e => {
         if (e) throw e;
-      })
+      }),
+  dev_books: () => BookLoader.loadAllBooks()
 };
 
 export const mutations = {
