@@ -83,27 +83,30 @@ const Login = props => {
                       title="Login"
                       onPress={() => {
                         const { name, password } = state;
-                        if (!name || !password)
+                        if (!name || !password) {
+                          console.log("no user or password");
                           return setState({
                             error: Error(
                               "Null input: Please don't leave it blank"
                             )
                           });
+                        }
 
-                        setState({ token: undefined });
-                        query<{ login: { token: string } }>({
-                          query: login,
-                          variables: { name, password }
-                        })
-                          .then(({ data: { login: { token } } }) => {
-                            setState({ token, error: undefined });
-                            AsyncStorage.setItem("token", token)
-                              .catch(e => e && log(e));
-                            navigate("Create", { user: state.name });
+                        return setState({ token: undefined }, () => {
+                          query<{ login: { token: string } }>({
+                            query: login,
+                            variables: { name, password }
                           })
-                          .catch(error => {
-                            setState({ error });
-                          });
+                            .then(({ data: { login: { token } } }) => {
+                              return AsyncStorage.setItem("token", token).then(
+                                () => navigate("Create", { user: state.name })
+                              );
+                            })
+                            .catch(error => {
+                              console.log("err");
+                              setState({ error });
+                            });
+                        });
                       }}
                     />
                     <Button

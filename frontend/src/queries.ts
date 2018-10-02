@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 
 export const booksWithAuthors = gql`
-  {
-    books {
+  query($token: String) {
+    books(token: $token) {
       title
       author {
         name

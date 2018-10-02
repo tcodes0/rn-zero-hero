@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 
 export const addBook = gql`
-  mutation($title: String, $name: String, $age: Int) {
-    addBook(title: $title, author: { name: $name, age: $age }) {
+  mutation($title: String, $name: String, $age: Int, $token: String) {
+    addBook(title: $title, author: { name: $name, age: $age }, token: $token) {
       title
       author {
         name

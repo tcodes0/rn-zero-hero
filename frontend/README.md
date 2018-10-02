@@ -21,4 +21,14 @@ Image
 Paragraph
 Heading
 
+TODO
 refactor value containers into state
+add pagination to List
+fix ts
+ci/cd
+tests
+detox
+use graphql from react-apollo not ApolloConsumer
+theme provider, make things pretty
+Button -> touchable opacity
+add db

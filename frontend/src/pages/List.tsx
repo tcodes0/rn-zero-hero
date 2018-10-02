@@ -1,7 +1,13 @@
 import * as React from "react";
-import { SectionList, Text, StyleSheet, View } from "react-native";
+import {
+  SectionList,
+  Text,
+  StyleSheet,
+  View,
+  AsyncStorage
+} from "react-native";
 import { State } from "react-powerplug";
-import { Query } from "react-apollo";
+import { Query, ApolloConsumer } from "react-apollo";
 import ButtonInput from "../components/ButtonInput";
 import { log, getNumericId, getNavParams } from "../utils";
 import { booksWithAuthors } from "../queries";
@@ -27,17 +33,19 @@ const styles = StyleSheet.create({
   }
 });
 
-const filterFactory = selector => (sections, query) =>
-  sections.filter(section => selector(section, query));
+const filterFactory = selector => (sections, query) => {
+  // console.log(sections, query);
+  return sections.filter(section => selector(section, query));
+};
 
 const byTitle = (section, string) => section.title.includes(string);
 
 const filterSectionsByTitle = filterFactory(byTitle);
 
 const unpack = gqlData => {
-  const [title] = Object.keys(gqlData);
-  const data = gqlData[title].map(obj => ({ ...obj, id: getNumericId() }));
-  const result = { id: getNumericId(), title, data };
+  const { books } = gqlData.data;
+  const booksWithId = books.map(book => ({ ...book, id: getNumericId() }));
+  const result = { id: getNumericId(), title: "books", data: booksWithId };
   return [result];
 };
 
@@ -47,7 +55,7 @@ const List = props => {
   const extractKey = ({ id }: number): string => id;
   const renderItem = ({ item }) => (
     <Text onPress={() => navigate("Detail", { item, user })} style={styles.row}>
-      {`"${item.title}"\nby ${item.author.name}`}
+      {`"${item.title}"\nby ${item.author && item.author.name}`}
     </Text>
   );
   const renderSectionHeader = ({ section }) => (
@@ -56,36 +64,58 @@ const List = props => {
 
   return (
     <Layout user={user}>
-      <State initial={{ sections: [], filter: "" }}>
+      <State
+        initial={{ sections: [], filter: "", unfilteredSections: undefined }}
+      >
         {({ state, setState }) => (
           <View style={styles.container}>
             <ButtonInput
-              onPress={log}
               placeholder="filter by typing..."
               title="Go"
+              onPress={log}
               onChangeText={(text: string) => {
-                if (!text) return setState({ sections });
-                setState(({ sections }) => ({
-                  sections: filterSectionsByTitle(sections, text)
-                }));
+                if (!text)
+                  return setState(({ unfilteredSections }) => ({
+                    sections: unfilteredSections
+                  }));
+                setState(({ unfilteredSections }) => {
+                  const { data } = unfilteredSections[0];
+                  console.log(filterSectionsByTitle(data, text));
+                  return {
+                    sections: filterSectionsByTitle(data, text)
+                  };
+                });
               }}
             />
-            <Query query={booksWithAuthors}>
-              {({ loading, error, data }) => {
-                if (loading) return <Text>Loading...</Text>;
-                if (error) return <Text>{`Error! ${error.message}`}</Text>;
-
+            <ApolloConsumer>
+              {({ query }) => {
+                if (!state.unfilteredSections) {
+                  AsyncStorage.getItem("token").then(token => {
+                    query({ query: booksWithAuthors, variables: { token } })
+                      .then(data => {
+                        const unpackedData = unpack(data);
+                        setState({
+                          unfilteredSections: unpackedData,
+                          sections: unpackedData
+                        });
+                      })
+                      .catch(e => {
+                        e && log(e);
+                      });
+                  });
+                }
+                if (!state.sections) return <Text> Loading </Text>;
                 return (
                   <SectionList
                     style={styles.container}
-                    sections={unpack(data) || []}
+                    sections={state.sections}
                     renderItem={renderItem}
                     renderSectionHeader={renderSectionHeader}
                     keyExtractor={extractKey}
                   />
                 );
               }}
-            </Query>
+            </ApolloConsumer>
           </View>
         )}
       </State>
