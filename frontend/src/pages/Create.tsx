@@ -30,15 +30,10 @@ const styles = StyleSheet.create({
   }
 });
 
-interface Author {
-  name: string;
-  age?: number;
-}
-interface Book extends Author {
-  title: string;
-}
-
-const initialState: Book = { name: "", title: "", age: undefined };
+const initialState: { name: string; age?: number; title: string } = {
+  name: "",
+  title: ""
+};
 
 const Create = props => {
   const { navigate } = props.navigation;
@@ -86,12 +81,14 @@ const Create = props => {
                 <Button
                   title="OK"
                   onPress={() => {
-                    mutate({
-                      mutation: addBook,
-                      variables: value
+                    AsyncStorage.getItem("token").then(token => {
+                      return mutate({
+                        mutation: addBook,
+                        variables: {...value, token }
+                      })
+                        .then(log, log)
+                        .then(() => navigate("List", { user }));
                     })
-                      .then(log, log)
-                      .then(() => navigate("List", { user }));
                   }}
                 />
               )}

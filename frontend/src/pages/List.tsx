@@ -105,7 +105,7 @@ const List = props => {
               {({ query }) => {
                 if (!state.unfilteredSections) {
                   AsyncStorage.getItem("token").then(token => {
-                    query({ query: booksWithAuthors, variables: { token } })
+                    return query({ query: booksWithAuthors, variables: { token } })
                       .then(data => {
                         const unpackedData = unpack(data);
                         setState({
