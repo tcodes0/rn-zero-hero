@@ -44,11 +44,18 @@ const Filter = props => <TextInput style={styles.input} {...props} />;
 class BookList<ItemT> extends React.Component<FlatListProps<ItemT>> {
   extractKey = ({ id }: { id: number }) => String(id);
 
-  renderItem = ({ item }) => (
-    <Text onPress={() => navigate("Detail", { item, user })} style={styles.row}>
-      {`"${item.title}"\nby ${item.author && item.author.name}`}
-    </Text>
-  );
+  renderItem = ({ item }) => {
+    const { navigate, user } = this.props;
+
+    return (
+      <Text
+        onPress={() => navigate("Detail", { item, user })}
+        style={styles.row}
+      >
+        {`"${item.title}"\nby ${item.author && item.author.name}`}
+      </Text>
+    );
+  };
 
   render() {
     return (
@@ -64,6 +71,7 @@ class BookList<ItemT> extends React.Component<FlatListProps<ItemT>> {
 
 const List = props => {
   const user = getNavParams(props, "user");
+  const { navigate } = props.navigation;
 
   const byTitle = (section, string) => section.title.includes(string);
   const filterSectionsByTitle = filterFactory(byTitle);
@@ -104,8 +112,11 @@ const List = props => {
             <ApolloConsumer>
               {({ query }) => {
                 if (!state.unfilteredSections) {
-                  AsyncStorage.getItem("token").then(token => {
-                    return query({ query: booksWithAuthors, variables: { token } })
+                  AsyncStorage.getItem("token").then(token =>
+                    query({
+                      query: booksWithAuthors,
+                      variables: { token }
+                    })
                       .then(data => {
                         const unpackedData = unpack(data);
                         setState({
@@ -115,11 +126,17 @@ const List = props => {
                       })
                       .catch(e => {
                         e && log(e);
-                      });
-                  });
+                      })
+                  );
                 }
                 if (!state.sections) return <Text> Loading </Text>;
-                return <BookList data={state.sections} />;
+                return (
+                  <BookList
+                    data={state.sections}
+                    navigate={navigate}
+                    user={user}
+                  />
+                );
               }}
             </ApolloConsumer>
           </View>
