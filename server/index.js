@@ -19,13 +19,12 @@ const SchemaDefinition = `
     token: String
   }
   type Query {
-    books: [Book]
-    authors: [Author]
+    books(token: String): [Book]
     login(name: String, password: String): Token
     users: [User]
   }
   type Mutation {
-    addBook(title: String, author: AuthorInput): Book
+    addBook(title: String, author: AuthorInput, token: String): Book
     addUser(name: String, password: String): Token
   }
 `;
@@ -35,7 +34,6 @@ const typeDefs = [BookType.typeDefs, AuthorType.typeDefs, UserType.typeDefs];
 const resolvers = {
   Query: {
     ...BookType.resolvers,
-    ...AuthorType.resolvers,
     ...UserType.resolvers
   },
   Mutation: {

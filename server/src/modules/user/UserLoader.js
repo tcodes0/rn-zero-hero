@@ -48,9 +48,8 @@ export const validatePassword = (password, user) =>
  */
 export const validateToken = token =>
   new Promise((res, rej) => {
-    jwt.verify(token, secret, (e, decoded) => {
+    jwt.verify(token, secret, e => {
       if (e) rej(Error("Invalid Token"));
-      console.log(decoded);
       res(true);
     });
   });

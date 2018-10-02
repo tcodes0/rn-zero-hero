@@ -1,4 +1,5 @@
 import * as BookLoader from "./BookLoader";
+import { validateToken } from "../user/UserLoader";
 
 const { addBook, newBook } = BookLoader;
 
@@ -10,12 +11,22 @@ export const typeDefs = `
 `;
 
 export const resolvers = {
-  books: () => BookLoader.loadAllBooks()
+  books: (root, args) =>
+    validateToken(args.token)
+      .then(() => BookLoader.loadAllBooks())
+      .catch(e => {
+        if (e) throw e;
+      })
 };
 
 export const mutations = {
-  addBook: (root, args) => {
-    const book = newBook(args.title, args.author.name, args.author.age);
-    return addBook(book);
-  }
+  addBook: (root, args) =>
+    validateToken(args.token)
+      .then(() => {
+        const book = newBook(args.title, args.author.name, args.author.age);
+        return addBook(book);
+      })
+      .catch(e => {
+        if (e) throw e;
+      })
 };

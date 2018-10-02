@@ -1,4 +1,4 @@
-import * as AuthorLoader from './AuthorLoader';
+import * as AuthorLoader from "./AuthorLoader";
 
 export const typeDefs = `
   type Author {
@@ -8,5 +8,5 @@ export const typeDefs = `
 `;
 
 export const resolvers = {
-  authors: () => AuthorLoader.loadAllAuthors(),
+  authors: () => AuthorLoader.loadAllAuthors()
 };
