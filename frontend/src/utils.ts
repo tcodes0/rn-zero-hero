@@ -11,8 +11,31 @@ export const getNumericId = (prefix?: string) => {
   return prefix ? `${prefix}${id}` : id;
 };
 
+/**
+ * Discards the first two words of an error message.
+ * @param message Error.message
+ * @returns sliced message.
+ */
 export const formatMessage = (message: string) =>
   message
     .split(" ")
     .slice(2)
     .join(" ");
+
+/**
+ * Safely get params from navigation.state
+ * @param props Component props.
+ * @param key Property to access in navigation state
+ */
+export const getNavParams = (props: any, key?: string) => {
+  const params =
+    props &&
+    props.navigation &&
+    props.navigation.state &&
+    props.navigation.state.params;
+  if (!key) return params
+  const result = params[key]
+
+  if (result == undefined) return undefined
+  return result.length ? result : undefined
+};

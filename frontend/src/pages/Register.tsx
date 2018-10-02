@@ -4,7 +4,7 @@ import { ApolloConsumer } from "react-apollo";
 import { State } from "react-powerplug";
 import Layout from "../layouts/DefaultLayout";
 import { addUser } from "../mutations";
-import { formatMessage } from "../utils";
+import { formatMessage, getNavParams } from "../utils";
 
 const styles = StyleSheet.create({
   container: {
@@ -46,12 +46,13 @@ const initialState: {
 };
 
 const Detail = props => {
-  const param = props.navigation.getParam("text", "null");
+  const { navigate } = props.navigation;
+  const user = getNavParams(props, "user");
 
   return (
-    <Layout>
+    <Layout user={user}>
       <View style={styles.container} {...props}>
-        <Text style={styles.title}>Please fill in the fields to register</Text>
+        <Text style={styles.title}>Please create your account :D</Text>
         <State initial={initialState}>
           {({ state, setState }) => (
             <ApolloConsumer>
@@ -67,6 +68,7 @@ const Detail = props => {
                     <TextInput
                       style={styles.input}
                       placeholder="Password..."
+                      secureTextEntry
                       value={state.password}
                       onChangeText={password => setState({ password })}
                     />
@@ -80,7 +82,10 @@ const Detail = props => {
                             password: state.password
                           }
                         })
-                          .then(({ data: { addUser } }) => console.log(addUser))
+                          .then(({ data: { addUser: { token } } }) => {
+                            console.log(token);
+                            navigate("Create", { user: state.name });
+                          })
                           .catch(error => setState({ error }))
                       }
                     />

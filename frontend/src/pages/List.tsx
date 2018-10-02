@@ -3,7 +3,7 @@ import { SectionList, Text, StyleSheet, View } from "react-native";
 import { State } from "react-powerplug";
 import { Query } from "react-apollo";
 import ButtonInput from "../components/ButtonInput";
-import { log, getNumericId } from "../utils";
+import { log, getNumericId, getNavParams } from "../utils";
 import { booksWithAuthors } from "../queries";
 import Layout from "../layouts/DefaultLayout";
 
@@ -43,7 +43,7 @@ const unpack = gqlData => {
 
 const List = props => {
   const { navigate } = props.navigation;
-  const { user } = props.navigation.state.params;
+  const user = getNavParams(props, "user");
   const extractKey = ({ id }: number): string => id;
   const renderItem = ({ item }) => (
     <Text onPress={() => navigate("Detail", { item, user })} style={styles.row}>

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { StyleSheet, Text, View, TextInput, Button } from "react-native";
-import { formatMessage } from "../utils";
+import { formatMessage, asteriskObfuscation } from "../utils";
 import Layout from "../layouts/DefaultLayout";
 import { ApolloConsumer } from "react-apollo";
 import { State } from "react-powerplug";
@@ -52,7 +52,7 @@ const Login = props => {
   return (
     <Layout>
       <View style={styles.container}>
-        <Text style={styles.title}>Please fill in the fields to login</Text>
+        <Text style={styles.title}>Welcome back</Text>
         <State initial={initialState}>
           {({ state, setState }) => (
             <ApolloConsumer>
@@ -67,7 +67,8 @@ const Login = props => {
                     />
                     <TextInput
                       style={styles.input}
-                      placeholder="Your password..."
+                      secureTextEntry={true}
+                      placeholder="Password..."
                       value={state.password}
                       onChangeText={password => setState({ password })}
                     />
@@ -75,22 +76,33 @@ const Login = props => {
                       title="Login"
                       onPress={() => {
                         const { name, password } = state;
+                        if (!name || !password)
+                          return setState({
+                            error: Error(
+                              "Null input: Please don't leave it blank"
+                            )
+                          });
 
+                        setState({ token: undefined });
                         query<{ login: { token: string } }>({
                           query: login,
                           variables: { name, password }
                         })
                           .then(({ data: { login: { token } } }) => {
-                            setState({ token });
+                            setState({ token, error: undefined });
+                            navigate("Create", { user: state.name });
                           })
                           .catch(error => {
                             setState({ error });
                           });
                       }}
                     />
+                    <Button
+                      title="Create account"
+                      onPress={() => navigate("Register", { user: state.name })}
+                    />
                   </View>
                   <View style={styles.messageContainer}>
-                    {state.token && navigate("Create", { user: state.name })}
                     {!state.token &&
                       state.error && (
                         <Text>{formatMessage(state.error.message)}</Text>

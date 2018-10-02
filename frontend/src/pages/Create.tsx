@@ -2,7 +2,7 @@ import * as React from "react";
 import { StyleSheet, Text, View, Button, TextInput } from "react-native";
 import { Value } from "react-powerplug";
 import { ApolloConsumer } from "react-apollo";
-import { log } from "../utils";
+import { log, getNavParams } from "../utils";
 import { addBook } from "../mutations";
 import Layout from "../layouts/DefaultLayout";
 
@@ -35,7 +35,7 @@ const initialState: Book = { name: "", title: "", age: undefined };
 
 const Create = props => {
   const { navigate } = props.navigation;
-  const { user } = props.navigation.state.params;
+  const user = getNavParams(props, "user");
 
   return (
     <Layout user={user}>
