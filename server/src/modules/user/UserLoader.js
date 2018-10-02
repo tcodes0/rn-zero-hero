@@ -1,15 +1,7 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-const users = [
-  { name: "jabur", hash: "jabur" },
-  { name: "guilherme jabur", hash: "guilherme jabur" },
-  { name: "guilherme", hash: "guilherme" },
-  { name: "foton", hash: "foton" },
-  { name: "thomazella", hash: "thomazella" },
-  { name: "raphael thomazella", hash: "raphael thomazella" },
-  { name: "raphael", hash: "raphael" }
-];
+const users = [{ name: "foton", hash: bcrypt.hashSync("foton", 1) }];
 
 const secret = "ABB15D42-3BCD-498B-9095-416F24C4E821";
 
@@ -34,7 +26,7 @@ export const addUser = user => {
  * Checks if a provided password matches a user's hash.
  * @param {String} password Plain text string to be validated.
  * @param {User} user User object to validate against.
- * @returns {Promise} Promise to be fulfilled with the user argument.
+ * @returns {Promise} Promise to be fulfilled with bool true.
  */
 export const validatePassword = (password, user) =>
   new Promise((res, rej) => {
@@ -44,7 +36,7 @@ export const validatePassword = (password, user) =>
         if (!success) {
           return rej(Error("Incorrect password"));
         }
-        return res(user);
+        return res(true);
       })
       .catch(e => rej(Error(`Server Error: ${JSON.stringify(e)}`)));
   });
@@ -52,14 +44,14 @@ export const validatePassword = (password, user) =>
 /**
  * Verify a token isn't expired
  * @param {String} token Token to verify.
- * @returns {Promise} Promise to be fulfilled with token argument.
+ * @returns {Promise} Promise to be fulfilled with bool true.
  */
 export const validateToken = token =>
   new Promise((res, rej) => {
     jwt.verify(token, secret, (e, decoded) => {
       if (e) rej(Error("Invalid Token"));
       console.log(decoded);
-      res(token);
+      res(true);
     });
   });
 

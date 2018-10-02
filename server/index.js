@@ -21,7 +21,7 @@ const SchemaDefinition = `
   type Query {
     books: [Book]
     authors: [Author]
-    isUser(name: String): Boolean
+    login(name: String, password: String): Token
   }
   type Mutation {
     addBook(title: String, author: AuthorInput): Book
