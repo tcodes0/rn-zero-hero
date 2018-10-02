@@ -52,3 +52,12 @@
 || add MongoDB & Mongoose |
 || refactor server files, move auth code to Auth module |
 || get some feedback |
+
+### App login
+
+|  |  |  |
+|--|--|--|
+|user| Foton | _case-**in**sensitive_ |
+|pass| foton | _case-sensitive_ |
+
+Or create your user. :)
