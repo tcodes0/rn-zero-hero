@@ -31,7 +31,7 @@ export const Input = styled.TextInput`
 `;
 
 const login = gql`
-  query($name: String!, $password: String!) {
+  mutation($name: String!, $password: String!) {
     login(name: $name, password: $password) {
       token
     }
@@ -58,7 +58,7 @@ const Login = (props: any) => {
         <State initial={initialState}>
           {({ state, setState }) => (
             <ApolloConsumer>
-              {({ query }) => (
+              {({ mutate }) => (
                 <LoginContainer>
                   <InputContainer>
                     <Input
@@ -87,8 +87,8 @@ const Login = (props: any) => {
                         }
 
                         return setState({ token: undefined }, () => {
-                          query<{ login: { token: string } }>({
-                            query: login,
+                          mutate<{ login: { token: string } }>({
+                            mutation: login,
                             variables: { name, password }
                           })
                             .then(({ data: { login: { token } } }) =>

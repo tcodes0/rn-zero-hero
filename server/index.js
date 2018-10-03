@@ -21,10 +21,10 @@ const SchemaDefinition = `
   type Query {
     books(token: String): [Book]
     dev_books: [Book]
-    login(name: String, password: String): Token
     dev_users: [User]
   }
   type Mutation {
+    login(name: String, password: String): Token
     addBook(title: String, author: AuthorInput, token: String): Book!
     addUser(name: String, password: String): Token!
   }
