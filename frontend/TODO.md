@@ -64,6 +64,7 @@
 
 #### Cheap
 - use theme provider to provide a color.main prop
+- moved styles to styled
 ✔ Button -> touchable opacity
 ✔ Remove redux
 - refactor server files, move auth code to Auth module

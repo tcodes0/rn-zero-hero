@@ -1,50 +1,45 @@
 import * as React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  AsyncStorage
-} from "react-native";
-import { formatMessage, log } from "../utils";
+import { Text, View, AsyncStorage } from "react-native";
+import styled from "styled-components";
+import { formatMessage } from "../utils";
 import Layout from "../layouts/DefaultLayout";
 import { ApolloConsumer } from "react-apollo";
 import { State } from "react-powerplug";
 import { login } from "../queries";
 import Touchable from "../components/Touchable";
 
-const styles = StyleSheet.create({
-  title: {
-    marginBottom: 70,
-    fontSize: 18
-  },
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF"
-  },
-  loginContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF"
-  },
-  inputContainer: {
-    padding: 10,
-    maxWidth: "45%"
-  },
-  input: {
-    fontSize: 17,
-    marginBottom: 25,
-    textAlign: "left"
-  },
-  messageContainer: {
-    height: 30
-  },
-  touchable: {
-    margin: 8
-  }
-});
+const Container = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5fcff;
+`;
+
+const LoginContainer = styled.View`
+  justify-content: center;
+  align-items: center;
+  background-color: #f5fcff;
+`;
+
+const InputContainer = styled.View`
+  padding: 10px;
+  max-width: 45%;
+`;
+
+const Title = styled.Text`
+  margin-bottom: 70px;
+  font-size: 18;
+`;
+
+const Input = styled.TextInput`
+  font-size: 17px;
+  margin-bottom: 25px;
+  text-align: left;
+`;
+
+const Button = styled(Touchable)`
+  margin: 8px;
+`;
 
 const initialState: {
   name: string;
@@ -56,34 +51,31 @@ const initialState: {
   password: ""
 };
 
-const Login = props => {
+const Login = (props: any) => {
   const { navigate } = props.navigation;
 
   return (
     <Layout>
-      <View style={styles.container}>
-        <Text style={styles.title}>Welcome back</Text>
+      <Container>
+        <Title>Welcome back</Title>
         <State initial={initialState}>
           {({ state, setState }) => (
             <ApolloConsumer>
               {({ query }) => (
-                <View style={styles.loginContainer}>
-                  <View style={styles.inputContainer}>
-                    <TextInput
-                      style={styles.input}
+                <LoginContainer>
+                  <InputContainer>
+                    <Input
                       placeholder="Your name..."
                       value={state.name}
-                      onChangeText={name => setState({ name })}
+                      onChangeText={(name: string) => setState({ name })}
                     />
-                    <TextInput
-                      style={styles.input}
+                    <Input
                       secureTextEntry
                       placeholder="Password..."
                       value={state.password}
-                      onChangeText={password => setState({ password })}
+                      onChangeText={(password: string) => setState({ password })}
                     />
-                    <Touchable
-                      style={styles.touchable}
+                    <Button
                       onPress={() => {
                         const { name, password } = state;
                         if (!name || !password) {
@@ -113,26 +105,23 @@ const Login = props => {
                       }}
                     >
                       <Text>Login</Text>
-                    </Touchable>
-                    <Touchable
-                      onPress={() => navigate("Register")}
-                      style={styles.touchable}
-                    >
+                    </Button>
+                    <Button onPress={() => navigate("Register")}>
                       <Text>Create account</Text>
-                    </Touchable>
-                  </View>
-                  <View style={styles.messageContainer}>
+                    </Button>
+                  </InputContainer>
+                  <View style={{ height: 30 }}>
                     {!state.token &&
                       state.error && (
                         <Text>{formatMessage(state.error.message)}</Text>
                       )}
                   </View>
-                </View>
+                </LoginContainer>
               )}
             </ApolloConsumer>
           )}
         </State>
-      </View>
+      </Container>
     </Layout>
   );
 };

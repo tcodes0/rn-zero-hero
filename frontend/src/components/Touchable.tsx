@@ -1,31 +1,28 @@
 import * as React from "react";
-import { TouchableOpacity, StyleSheet } from "react-native";
+import styled from "styled-components";
 
-const styles = StyleSheet.create({
-  touchable: {
-    borderRadius: 17,
-    borderColor: "pink",
-    borderStyle: "solid",
-    padding: 15,
-    alignItems: "center",
-    fontWeight: "bold",
-    backgroundColor: "skyblue",
-    fontSize: 18,
-    minWidth: 100
-  }
-});
+const Touchable = styled.TouchableOpacity`
+  border-radius: 17px;
+  border-color: pink;
+  border-style: solid;
+  padding: 15px;
+  align-items: center;
+  font-weight: bold;
+  background-color: skyblue;
+  font-size: 18px;
+  min-width: 100px;
+`;
 
-const Touchable = (props: any) => {
-  const { children, style, ...other } = props;
+const Component = (props: any) => {
+  const { children, ...other } = props;
   return (
-    <TouchableOpacity
-      style={{ ...(styles.touchable as {}), ...style }}
+    <Touchable
       activeOpacity={0.4}
       {...other}
     >
       {children}
-    </TouchableOpacity>
+    </Touchable>
   );
 };
 
-export default Touchable;
+export default Component;
