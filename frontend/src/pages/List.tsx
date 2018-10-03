@@ -6,14 +6,14 @@ import {
   View,
   AsyncStorage,
   TextInput,
-  FlatListProps,
-  TouchableOpacity
+  FlatListProps
 } from "react-native";
 import { State } from "react-powerplug";
 import { ApolloConsumer } from "react-apollo";
 import { log, getNumericId, getNavParams, filterFactory } from "../utils";
 import { booksWithAuthors } from "../queries";
 import Layout from "../layouts/DefaultLayout";
+import Touchable from "../components/Touchable";
 
 const styles = StyleSheet.create({
   container: {
@@ -21,8 +21,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20
   },
-  row: {
-    padding: 15,
+  item: {
+    alignItems: "flex-start",
     marginBottom: 5,
     backgroundColor: "skyblue"
   },
@@ -49,14 +49,14 @@ class BookList<ItemT> extends React.Component<FlatListProps<ItemT>> {
     const { navigate, user } = this.props;
 
     return (
-      <TouchableOpacity
+      <Touchable
         onPress={() => navigate("Detail", { item, user })}
-        style={styles.row}
+        style={styles.item}
         activeOpacity={0.4}
       >
-        <Text>{`"${item.title}"`}</Text>
+        <Text style={{fontSize: 18, marginBottom: 8}}>{`"${item.title}"`}</Text>
         <Text>{`by ${item.author && item.author.name}`}</Text>
-      </TouchableOpacity>
+      </Touchable>
     );
   };
 

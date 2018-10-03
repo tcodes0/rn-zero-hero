@@ -4,7 +4,6 @@ import {
   Text,
   View,
   TextInput,
-  Button,
   AsyncStorage
 } from "react-native";
 import { ApolloConsumer } from "react-apollo";
@@ -12,6 +11,7 @@ import { State } from "react-powerplug";
 import Layout from "../layouts/DefaultLayout";
 import { addUser } from "../mutations";
 import { formatMessage, getNavParams, log } from "../utils";
+import Touchable from "../components/Touchable";
 
 const styles = StyleSheet.create({
   container: {
@@ -79,8 +79,7 @@ const Detail = props => {
                       value={state.password}
                       onChangeText={password => setState({ password })}
                     />
-                    <Button
-                      title="Register"
+                    <Touchable
                       onPress={() =>
                         mutate<{ token: string }>({
                           mutation: addUser,
@@ -97,7 +96,9 @@ const Detail = props => {
                           })
                           .catch(error => setState({ error }))
                       }
-                    />
+                    >
+                      <Text>Register</Text>
+                    </Touchable>
                   </View>
                   <View style={styles.messageContainer}>
                     {state.error && (

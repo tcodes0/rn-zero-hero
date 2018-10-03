@@ -1,6 +1,7 @@
 import * as React from "react";
-import { StyleSheet, Text, View, Button, Image } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import Layout from "../layouts/DefaultLayout";
+import Touchable from "../components/Touchable";
 
 const styles = StyleSheet.create({
   container: {
@@ -42,9 +43,9 @@ const Detail = props => {
         <Text style={styles.body}>
           By {item.author.name}, {item.author.age} years old.
         </Text>
-        <Button title="Back" onPress={() => navigate("List", { user })}>
-          Auth
-        </Button>
+        <Touchable onPress={() => navigate("List", { user })}>
+          <Text>Back</Text>
+        </Touchable>
       </View>
     </Layout>
   );

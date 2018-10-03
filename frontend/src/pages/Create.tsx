@@ -3,7 +3,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
   TextInput,
   AsyncStorage
 } from "react-native";
@@ -12,6 +11,7 @@ import { ApolloConsumer } from "react-apollo";
 import { log, getNavParams } from "../utils";
 import { addBook } from "../mutations";
 import Layout from "../layouts/DefaultLayout";
+import Touchable from "../components/Touchable";
 
 const styles = StyleSheet.create({
   container: {
@@ -27,6 +27,9 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     marginBottom: 20
+  },
+  touchable: {
+    margin: 8
   }
 });
 
@@ -75,28 +78,37 @@ const Create = props => {
                 }
               />
             </View>
-            <Button title="Reset" onPress={() => set(initialState)} />
+            <Touchable
+              onPress={() => set(initialState)}
+              style={styles.touchable}
+            >
+              <Text>Reset</Text>
+            </Touchable>
             <ApolloConsumer>
               {({ mutate }) => (
-                <Button
-                  title="OK"
+                <Touchable
+                  style={styles.touchable}
                   onPress={() => {
-                    AsyncStorage.getItem("token").then(token => {
-                      return mutate({
+                    AsyncStorage.getItem("token").then(token =>
+                      mutate({
                         mutation: addBook,
                         variables: { ...value, token }
                       })
                         .then(log, log)
-                        .then(() => navigate("List", { user }));
-                    })
+                        .then(() => navigate("List", { user }))
+                    );
                   }}
-                />
+                >
+                  <Text>OK</Text>
+                </Touchable>
               )}
             </ApolloConsumer>
-            <Button
-              title="See books"
+            <Touchable
               onPress={() => navigate("List", { user })}
-            />
+              style={styles.touchable}
+            >
+              <Text>See books</Text>
+            </Touchable>
           </View>
         )}
       </Value>

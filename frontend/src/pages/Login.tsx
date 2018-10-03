@@ -4,7 +4,6 @@ import {
   Text,
   View,
   TextInput,
-  Button,
   AsyncStorage
 } from "react-native";
 import { formatMessage, log } from "../utils";
@@ -12,6 +11,7 @@ import Layout from "../layouts/DefaultLayout";
 import { ApolloConsumer } from "react-apollo";
 import { State } from "react-powerplug";
 import { login } from "../queries";
+import Touchable from "../components/Touchable";
 
 const styles = StyleSheet.create({
   title: {
@@ -40,6 +40,9 @@ const styles = StyleSheet.create({
   },
   messageContainer: {
     height: 30
+  },
+  touchable: {
+    margin: 8
   }
 });
 
@@ -79,8 +82,8 @@ const Login = props => {
                       value={state.password}
                       onChangeText={password => setState({ password })}
                     />
-                    <Button
-                      title="Login"
+                    <Touchable
+                      style={styles.touchable}
                       onPress={() => {
                         const { name, password } = state;
                         if (!name || !password) {
@@ -97,22 +100,26 @@ const Login = props => {
                             query: login,
                             variables: { name, password }
                           })
-                            .then(({ data: { login: { token } } }) => {
-                              return AsyncStorage.setItem("token", token).then(
-                                () => navigate("Create", { user: state.name })
-                              );
-                            })
+                            .then(({ data: { login: { token } } }) =>
+                              AsyncStorage.setItem("token", token).then(() =>
+                                navigate("Create", { user: state.name })
+                              )
+                            )
                             .catch(error => {
                               console.log("err");
                               setState({ error });
                             });
                         });
                       }}
-                    />
-                    <Button
-                      title="Create account"
+                    >
+                      <Text>Login</Text>
+                    </Touchable>
+                    <Touchable
                       onPress={() => navigate("Register")}
-                    />
+                      style={styles.touchable}
+                    >
+                      <Text>Create account</Text>
+                    </Touchable>
                   </View>
                   <View style={styles.messageContainer}>
                     {!state.token &&
