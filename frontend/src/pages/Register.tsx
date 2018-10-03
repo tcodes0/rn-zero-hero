@@ -73,7 +73,7 @@ const Detail = (props: any) => {
                           .catch(error => setState({ error }))
                       }
                     >
-                      <Text>Register</Text>
+                      <Text>Ok</Text>
                     </Button>
                   </InputContainer>
                   <MessageContainer>

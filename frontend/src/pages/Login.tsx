@@ -1,11 +1,10 @@
 import * as React from "react";
-import { Text, View, AsyncStorage } from "react-native";
+import { Text, AsyncStorage, ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
 import gql from "graphql-tag";
 import { formatMessage, log } from "../utils";
 import Layout from "../layouts/DefaultLayout";
-import { ApolloConsumer } from "react-apollo";
-import { State } from "react-powerplug";
+import { Mutation, MutationFn } from "react-apollo";
 import { Button, Wrapper } from "../components";
 
 export const LoginContainer = styled.View`
@@ -19,6 +18,10 @@ export const InputContainer = styled.View`
   max-width: 45%;
 `;
 
+export const Feedback = styled.View`
+  height: 30px;
+`;
+
 export const Title = styled.Text`
   margin-bottom: 70px;
   font-size: 18;
@@ -30,7 +33,7 @@ export const Input = styled.TextInput`
   text-align: left;
 `;
 
-const login = gql`
+const loginMutation = gql`
   mutation($name: String!, $password: String!) {
     login(name: $name, password: $password) {
       token
@@ -38,91 +41,93 @@ const login = gql`
   }
 `;
 
-const initialState: {
-  name: string;
-  password: string;
-  token?: string;
-  error?: Error;
-} = {
-  name: "",
-  password: ""
-};
+class Login extends React.Component {
+  state: {
+    name: string;
+    password: string;
+    token?: string;
+    error?: Error;
+  } = {
+    name: "",
+    password: ""
+  };
 
-const Login = (props: any) => {
-  const { navigate } = props.navigation;
+  handleLogin = (doLogin: MutationFn) => {
+    const { navigate } = this.props.navigation;
+    const { name, password } = this.state;
 
-  return (
-    <Layout>
-      <Wrapper>
-        <Title>Welcome back</Title>
-        <State initial={initialState}>
-          {({ state, setState }) => (
-            <ApolloConsumer>
-              {({ mutate }) => (
+    if (!name || !password) {
+      console.log("no user or password");
+      return this.setState({
+        error: Error("Null input: Please don't leave it blank")
+      });
+    }
+
+    return this.setState({ token: undefined }, () => {
+      doLogin({
+        variables: { name, password }
+      })
+        .then(({ data: { login: { token } } }) =>
+          AsyncStorage.setItem("token", token).then(() =>
+            navigate("Create", { user: this.state.name })
+          )
+        )
+        .catch((error: Error) => {
+          console.log(error);
+          this.setState({ error });
+        });
+    });
+  };
+
+  render() {
+    const { navigate } = this.props.navigation;
+    console.log(this.props);
+
+    return (
+      <Layout>
+        <Wrapper>
+          <Title>Welcome back</Title>
+          <Mutation mutation={loginMutation}>
+            {(login, { data, loading }) => {
+              if (data) log("data", data);
+              return (
                 <LoginContainer>
                   <InputContainer>
                     <Input
                       placeholder="Your name..."
-                      value={state.name}
-                      onChangeText={(name: string) => setState({ name })}
+                      value={this.state.name}
+                      onChangeText={(name: string) => this.setState({ name })}
                     />
                     <Input
-                      secureTextEntry
                       placeholder="Password..."
-                      value={state.password}
+                      secureTextEntry
+                      value={this.state.password}
                       onChangeText={(password: string) =>
-                        setState({ password })
+                        this.setState({ password })
                       }
                     />
-                    <Button
-                      onPress={() => {
-                        const { name, password } = state;
-                        if (!name || !password) {
-                          console.log("no user or password");
-                          return setState({
-                            error: Error(
-                              "Null input: Please don't leave it blank"
-                            )
-                          });
-                        }
-
-                        return setState({ token: undefined }, () => {
-                          mutate<{ login: { token: string } }>({
-                            mutation: login,
-                            variables: { name, password }
-                          })
-                            .then(({ data: { login: { token } } }) =>
-                              AsyncStorage.setItem("token", token).then(() =>
-                                navigate("Create", { user: state.name })
-                              )
-                            )
-                            .catch(error => {
-                              console.log("err");
-                              setState({ error });
-                            });
-                        });
-                      }}
-                    >
+                    <Button onPress={() => this.handleLogin(login)}>
                       <Text>Login</Text>
                     </Button>
                     <Button onPress={() => navigate("Register")}>
-                      <Text>Create account</Text>
+                      <Text>Register</Text>
                     </Button>
                   </InputContainer>
-                  <View style={{ height: 30 }}>
-                    {!state.token &&
-                      state.error && (
-                        <Text>{formatMessage(state.error.message)}</Text>
+                  <Feedback>
+                    {!data &&
+                      this.state.error && (
+                        <Text>{formatMessage(this.state.error.message)}</Text>
                       )}
-                  </View>
+                    {loading && <ActivityIndicator size="large" />}
+                  </Feedback>
                 </LoginContainer>
-              )}
-            </ApolloConsumer>
-          )}
-        </State>
-      </Wrapper>
-    </Layout>
-  );
-};
+              );
+            }}
+          </Mutation>
+        </Wrapper>
+      </Layout>
+    );
+  }
+}
 
 export default Login;
