@@ -1,42 +1,17 @@
 import * as React from "react";
-import { StyleSheet, Text, View, TextInput, AsyncStorage } from "react-native";
+import { Text, AsyncStorage } from "react-native";
 import { ApolloConsumer } from "react-apollo";
-import styled from "styled-components";
+import styled from "styled-components/native";
 import { State } from "react-powerplug";
 import Layout from "../layouts/DefaultLayout";
 import { addUser } from "../mutations";
 import { formatMessage, getNavParams, log } from "../utils";
-import Touchable from "../components/Touchable";
+import { Wrapper } from "../components";
+import { LoginContainer, InputContainer, Title, Input, Button } from "./Login";
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF"
-  },
-  title: {
-    marginBottom: 30,
-    fontSize: 18
-  },
-  loginContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF"
-  },
-  inputContainer: {
-    padding: 10,
-    maxWidth: "45%"
-  },
-  input: {
-    fontSize: 17,
-    marginBottom: 25,
-    textAlign: "left"
-  },
-  messageContainer: {
-    height: 30
-  }
-});
+const MessageContainer = styled.View`
+  height: 30;
+`;
 
 const initialState: {
   name: string;
@@ -47,34 +22,32 @@ const initialState: {
   password: ""
 };
 
-const Detail = props => {
+const Detail = (props: any) => {
   const { navigate } = props.navigation;
   const user = getNavParams(props, "user");
 
   return (
     <Layout user={user}>
-      <View style={styles.container} {...props}>
-        <Text style={styles.title}>Please create your account :D</Text>
+      <Wrapper>
+        <Title>Please create your account :D</Title>
         <State initial={initialState}>
           {({ state, setState }) => (
             <ApolloConsumer>
               {({ mutate }) => (
-                <View style={styles.loginContainer}>
-                  <View style={styles.inputContainer}>
-                    <TextInput
-                      style={styles.input}
+                <LoginContainer>
+                  <InputContainer>
+                    <Input
                       placeholder="Your name..."
                       value={state.name}
                       onChangeText={name => setState({ name })}
                     />
-                    <TextInput
-                      style={styles.input}
+                    <Input
                       placeholder="Password..."
                       secureTextEntry
                       value={state.password}
                       onChangeText={password => setState({ password })}
                     />
-                    <Touchable
+                    <Button
                       onPress={() =>
                         mutate<{ token: string }>({
                           mutation: addUser,
@@ -93,19 +66,19 @@ const Detail = props => {
                       }
                     >
                       <Text>Register</Text>
-                    </Touchable>
-                  </View>
-                  <View style={styles.messageContainer}>
+                    </Button>
+                  </InputContainer>
+                  <MessageContainer>
                     {state.error && (
                       <Text>{formatMessage(state.error.message)}</Text>
                     )}
-                  </View>
-                </View>
+                  </MessageContainer>
+                </LoginContainer>
               )}
             </ApolloConsumer>
           )}
         </State>
-      </View>
+      </Wrapper>
     </Layout>
   );
 };

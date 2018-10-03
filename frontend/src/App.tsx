@@ -14,12 +14,12 @@ const NavigationWrapper = createStackNavigator(
     Login: { screen: Login },
     Register: { screen: Register }
   },
-  { initialRouteName: "Login" }
+  { initialRouteName: "List" }
 );
 
 const App = () => (
   <ApolloProvider client={client}>
-      <NavigationWrapper />
+    <NavigationWrapper />
   </ApolloProvider>
 );
 

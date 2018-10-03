@@ -1,5 +1,5 @@
 import * as React from "react";
-import styled from "styled-components";
+import styled from "styled-components/native";
 
 const Touchable = styled.TouchableOpacity`
   border-radius: 17px;

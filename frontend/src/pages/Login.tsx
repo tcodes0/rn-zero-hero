@@ -6,32 +6,31 @@ import Layout from "../layouts/DefaultLayout";
 import { ApolloConsumer } from "react-apollo";
 import { State } from "react-powerplug";
 import { login } from "../queries";
-import Touchable from "../components/Touchable";
-import Wrapper from "../components/Wrapper";
+import { Touchable, Wrapper} from "../components";
 
-const LoginContainer = styled.View`
+export const LoginContainer = styled.View`
   justify-content: center;
   align-items: center;
   background-color: #f5fcff;
 `;
 
-const InputContainer = styled.View`
+export const InputContainer = styled.View`
   padding: 10px;
   max-width: 45%;
 `;
 
-const Title = styled.Text`
+export const Title = styled.Text`
   margin-bottom: 70px;
   font-size: 18;
 `;
 
-const Input = styled.TextInput`
+export const Input = styled.TextInput`
   font-size: 17px;
   margin-bottom: 25px;
   text-align: left;
 `;
 
-const Button = styled(Touchable)`
+export const Button = styled(Touchable)`
   margin: 8px;
 `;
 
