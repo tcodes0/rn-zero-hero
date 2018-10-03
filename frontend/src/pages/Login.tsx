@@ -1,19 +1,13 @@
 import * as React from "react";
 import { Text, View, AsyncStorage } from "react-native";
-import styled from "styled-components";
+import styled from "styled-components/native";
 import { formatMessage } from "../utils";
 import Layout from "../layouts/DefaultLayout";
 import { ApolloConsumer } from "react-apollo";
 import { State } from "react-powerplug";
 import { login } from "../queries";
 import Touchable from "../components/Touchable";
-
-const Container = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  background-color: #f5fcff;
-`;
+import Wrapper from "../components/Wrapper";
 
 const LoginContainer = styled.View`
   justify-content: center;
@@ -56,7 +50,7 @@ const Login = (props: any) => {
 
   return (
     <Layout>
-      <Container>
+      <Wrapper>
         <Title>Welcome back</Title>
         <State initial={initialState}>
           {({ state, setState }) => (
@@ -121,7 +115,7 @@ const Login = (props: any) => {
             </ApolloConsumer>
           )}
         </State>
-      </Container>
+      </Wrapper>
     </Layout>
   );
 };

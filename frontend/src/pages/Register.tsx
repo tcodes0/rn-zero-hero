@@ -1,12 +1,7 @@
 import * as React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  AsyncStorage
-} from "react-native";
+import { StyleSheet, Text, View, TextInput, AsyncStorage } from "react-native";
 import { ApolloConsumer } from "react-apollo";
+import styled from "styled-components";
 import { State } from "react-powerplug";
 import Layout from "../layouts/DefaultLayout";
 import { addUser } from "../mutations";
