@@ -1,9 +1,7 @@
 import * as React from "react";
 import { createStackNavigator } from "react-navigation";
-import { Provider as ReduxProvider } from "react-redux";
 import { ApolloProvider } from "react-apollo";
 import client from "./client";
-import store from "./store";
 import { Create, Detail, Login, Register, List } from "./pages";
 
 export const env = "development";
@@ -21,9 +19,7 @@ const NavigationWrapper = createStackNavigator(
 
 const App = () => (
   <ApolloProvider client={client}>
-    <ReduxProvider store={store}>
       <NavigationWrapper />
-    </ReduxProvider>
   </ApolloProvider>
 );
 

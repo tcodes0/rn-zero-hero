@@ -64,7 +64,8 @@
 
 #### Cheap
 - use theme provider to provide a color.main prop
-- Button -> touchable opacity
+✔ Button -> touchable opacity
+✔ Remove redux
 - refactor server files, move auth code to Auth module
 - queries in component
 - Ditch react-power-plug in cases where the JSX is full of complicated handlers that can be moved to an instance method in the class. E.g. `() => this.doFoo()`
