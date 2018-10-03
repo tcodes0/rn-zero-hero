@@ -70,7 +70,7 @@
 - Ditch react-power-plug in cases where the JSX is full of complicated handlers that can be moved to an instance method in the class. E.g. `() => this.doFoo()`
 - refactor \n in texts to two <Text>`s
 - use reverse to sort items by new first!
--b make queries required (!) where it makes sense
+✔ make queries required (!) where it makes sense
 -b `combineResolvers` with `skip` from `graphql-resolvers`
 -b destruct in args `(parent, { name, genre, authorId }) => {`
 

@@ -12,11 +12,11 @@ const SchemaDefinition = `
     mutation: Mutation
   }
   input AuthorInput {
-    name: String
-    age: Int
+    name: String!
+    age: Int!
   }
   type Token {
-    token: String
+    token: String!
   }
   type Query {
     books(token: String): [Book]
@@ -25,8 +25,8 @@ const SchemaDefinition = `
     dev_users: [User]
   }
   type Mutation {
-    addBook(title: String, author: AuthorInput, token: String): Book
-    addUser(name: String, password: String): Token
+    addBook(title: String, author: AuthorInput, token: String): Book!
+    addUser(name: String, password: String): Token!
   }
 `;
 

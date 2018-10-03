@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 
 export const booksWithAuthors = gql`
-  query($token: String) {
+  query($token: String!) {
     books(token: $token) {
       title
       author {
@@ -13,7 +13,7 @@ export const booksWithAuthors = gql`
 `;
 
 export const login = gql`
-  query($name: String, $password: String) {
+  query($name: String!, $password: String!) {
     login(name: $name, password: $password) {
       token
     }

@@ -10,8 +10,8 @@ const getUserByName = (providedName = "") =>
 
 export const typeDefs = `
   type User {
-    name: String
-    hash: String
+    name: String!
+    hash: String!
   }
 `;
 
