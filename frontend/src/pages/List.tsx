@@ -5,58 +5,65 @@ import {
   StyleSheet,
   View,
   AsyncStorage,
-  TextInput,
   FlatListProps
 } from "react-native";
 import { State } from "react-powerplug";
+import styled from "styled-components/native";
 import { ApolloConsumer } from "react-apollo";
 import { log, getNumericId, getNavParams, filterFactory } from "../utils";
 import { booksWithAuthors } from "../queries";
 import Layout from "../layouts/DefaultLayout";
-import Touchable from "../components/Touchable";
+import { Touchable } from "../components";
 
 const styles = StyleSheet.create({
   container: {
     marginTop: 20,
     flex: 1,
     padding: 20
-  },
-  item: {
-    alignItems: "flex-start",
-    marginBottom: 5,
-    backgroundColor: "skyblue"
-  },
-  header: {
-    padding: 15,
-    marginBottom: 5,
-    backgroundColor: "steelblue",
-    color: "white",
-    fontWeight: "bold"
-  },
-  input: {
-    fontSize: 17,
-    marginBottom: 10,
-    textAlign: "left"
   }
 });
 
-const Filter = props => <TextInput style={styles.input} {...props} />;
+const Item = styled(Touchable)`
+  align-items: flex-start;
+  margin-bottom: 5px;
+  background-color: skyblue;
+`;
 
-class BookList<ItemT> extends React.Component<FlatListProps<ItemT>> {
-  extractKey = ({ id }: { id: number }) => String(id);
+const BookTitle = styled.Text`
+  font-size: 18px;
+  margin-bottom: 8px;
+`;
 
-  renderItem = ({ item }) => {
+const Filter = styled.TextInput`
+  font-size: 17px;
+  margin-bottom: 10px;
+  text-align: left;
+`;
+
+interface Author {
+  name: string;
+  age: number;
+}
+interface Book {
+  id: number;
+  author: Author;
+  title: string;
+}
+
+class BookList<B extends Book> extends React.Component<FlatListProps<B>> {
+  extractKey = (book: B) => String(book.id);
+
+  renderItem = ({ item: book }: { item: B }) => {
     const { navigate, user } = this.props;
 
     return (
-      <Touchable
-        onPress={() => navigate("Detail", { item, user })}
-        style={styles.item}
+      <Item
+        onPress={() => navigate("Detail", { book, user })}
         activeOpacity={0.4}
       >
-        <Text style={{fontSize: 18, marginBottom: 8}}>{`"${item.title}"`}</Text>
-        <Text>{`by ${item.author && item.author.name}`}</Text>
-      </Touchable>
+        <BookTitle>{`"${book.title}"`}</BookTitle>
+        <Text>{`by ${book.author && book.author.name}`}</Text>
+      </Item>
     );
   };
 
@@ -72,16 +79,19 @@ class BookList<ItemT> extends React.Component<FlatListProps<ItemT>> {
   }
 }
 
-const List = props => {
+const List = (props: any) => {
   const user = getNavParams(props, "user");
   const { navigate } = props.navigation;
 
-  const byTitle = (section, string) => section.title.includes(string);
+  const byTitle = (section: any, text: string) => section.title.includes(text);
   const filterSectionsByTitle = filterFactory(byTitle);
 
-  const unpack = gqlData => {
+  const unpack = (gqlData: any) => {
     const { books } = gqlData.data;
-    const booksWithId = books.map(book => ({ ...book, id: getNumericId() }));
+    const booksWithId = books.map((book: Book) => ({
+      ...book,
+      id: getNumericId()
+    }));
     return booksWithId;
   };
 
@@ -135,7 +145,7 @@ const List = props => {
                 }
                 if (!state.sections) return <Text> Loading </Text>;
                 return (
-                  <BookList
+                  <BookList<Book>
                     data={state.sections}
                     navigate={navigate}
                     user={user}

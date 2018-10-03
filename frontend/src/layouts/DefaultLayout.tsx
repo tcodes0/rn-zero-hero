@@ -1,31 +1,31 @@
 import * as React from "react";
-import { Text, View, StyleSheet } from "react-native";
+import styled from "styled-components/native";
+import { capitalize } from "../utils";
 
-const capitalize = (x: string) => x[0].toUpperCase() + x.slice(1);
+const Wrapper = styled.View`
+  padding: 10px;
+  height: 100%;
+  width: 100%;
+`;
 
-const styles = StyleSheet.create({
-  container: {
-    padding: 10,
-    height: "100%",
-    width: "100%"
-  },
-  header: {
-    fontSize: 12,
-    marginBottom: 10,
-    textAlign: "left",
-    width: "100%",
-    paddingTop: 5
-  }
-});
+const Header = styled.Text`
+  font-size: 12px;
+  margin-bottom: 10px;
+  text-align: left;
+  width: 100%;
+  padding-top: 5px;
+`;
 
-const Layout = props => {
+const Layout = (props: any) => {
   const { children, user, ...otherProps } = props;
 
   return (
-    <View style={styles.container} {...otherProps}>
-      {user && <Text style={styles.header}>Welcome {capitalize(user)}!</Text>}
+    <Wrapper {...otherProps}>
+      {user && (
+        <Header>Welcome {capitalize(user)}!</Header>
+      )}
       {children}
-    </View>
+    </Wrapper>
   );
 };
 
