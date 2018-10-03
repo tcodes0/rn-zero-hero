@@ -1,16 +1,24 @@
 import * as React from "react";
 import { Text, AsyncStorage } from "react-native";
 import { ApolloConsumer } from "react-apollo";
+import gql from "graphql-tag";
 import styled from "styled-components/native";
 import { State } from "react-powerplug";
 import Layout from "../layouts/DefaultLayout";
-import { addUser } from "../mutations";
 import { formatMessage, getNavParams, log } from "../utils";
-import { Wrapper } from "../components";
-import { LoginContainer, InputContainer, Title, Input, Button } from "./Login";
+import { Wrapper, Button } from "../components";
+import { LoginContainer, InputContainer, Title, Input } from "./Login";
 
 const MessageContainer = styled.View`
   height: 30;
+`;
+
+const addUser = gql`
+  mutation($name: String!, $password: String!) {
+    addUser(name: $name, password: $password) {
+      token
+    }
+  }
 `;
 
 const initialState: {

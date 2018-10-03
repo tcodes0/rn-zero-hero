@@ -2,20 +2,32 @@ import * as React from "react";
 import { Text, TextInput, AsyncStorage } from "react-native";
 import styled from "styled-components/native";
 import { State } from "react-powerplug";
+import gql from "graphql-tag";
 import { ApolloConsumer } from "react-apollo";
 import { log, getNavParams } from "../utils";
-import { addBook } from "../mutations";
 import Layout from "../layouts/DefaultLayout";
 import { Button, Wrapper } from "../components";
 
 const Title = styled.Text`
-    background-color: #F5FCFF;
-    font-size: 22;
-    margin-bottom: 50;
+  background-color: #f5fcff;
+  font-size: 22;
+  margin-bottom: 50;
 `;
 
 const Field = styled.View`
   margin-bottom: 20px;
+`;
+
+const addBook = gql`
+  mutation($title: String!, $name: String!, $age: Int!, $token: String!) {
+    addBook(title: $title, author: { name: $name, age: $age }, token: $token) {
+      title
+      author {
+        name
+        age
+      }
+    }
+  }
 `;
 
 const initialState: { name: string; age?: string; title: string } = {

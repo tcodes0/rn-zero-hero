@@ -8,10 +8,10 @@ import {
   FlatListProps
 } from "react-native";
 import { State } from "react-powerplug";
+import gql from "graphql-tag";
 import styled from "styled-components/native";
 import { ApolloConsumer } from "react-apollo";
 import { log, getNumericId, getNavParams, filterFactory } from "../utils";
-import { booksWithAuthors } from "../queries";
 import Layout from "../layouts/DefaultLayout";
 import { Touchable } from "../components";
 
@@ -38,6 +38,18 @@ const Filter = styled.TextInput`
   font-size: 17px;
   margin-bottom: 10px;
   text-align: left;
+`;
+
+const booksWithAuthors = gql`
+  query($token: String!) {
+    books(token: $token) {
+      title
+      author {
+        name
+        age
+      }
+    }
+  }
 `;
 
 interface Author {

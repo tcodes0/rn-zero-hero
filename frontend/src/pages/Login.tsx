@@ -1,11 +1,11 @@
 import * as React from "react";
 import { Text, View, AsyncStorage } from "react-native";
 import styled from "styled-components/native";
-import { formatMessage } from "../utils";
+import gql from "graphql-tag";
+import { formatMessage, log } from "../utils";
 import Layout from "../layouts/DefaultLayout";
 import { ApolloConsumer } from "react-apollo";
 import { State } from "react-powerplug";
-import { login } from "../queries";
 import { Button, Wrapper } from "../components";
 
 export const LoginContainer = styled.View`
@@ -28,6 +28,14 @@ export const Input = styled.TextInput`
   font-size: 17px;
   margin-bottom: 25px;
   text-align: left;
+`;
+
+const login = gql`
+  query($name: String!, $password: String!) {
+    login(name: $name, password: $password) {
+      token
+    }
+  }
 `;
 
 const initialState: {
@@ -62,7 +70,9 @@ const Login = (props: any) => {
                       secureTextEntry
                       placeholder="Password..."
                       value={state.password}
-                      onChangeText={(password: string) => setState({ password })}
+                      onChangeText={(password: string) =>
+                        setState({ password })
+                      }
                     />
                     <Button
                       onPress={() => {

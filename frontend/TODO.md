@@ -58,18 +58,18 @@
     ```
 - Use Mutation and Query from `react-apollo` to leverage the loading state
     use Activity indicator to show loading states
-- add TS on server
+-b add TS on server
 - ApolloConsumer -> graphql HOC
-- add MongoDB & Mongoose
+-b add MongoDB & Mongoose
 ✔ moved styles to styled
+- Ditch react-power-plug in cases where the JSX is full of complicated handlers that can be moved to an instance method in the class. E.g. `() => this.doFoo()`
 
 #### Cheap
 ✔ use theme provider to provide a color.main prop
 ✔ Button -> touchable opacity
 ✔ Remove redux
 -b refactor server files, move auth code to Auth module
-- queries in component
-- Ditch react-power-plug in cases where the JSX is full of complicated handlers that can be moved to an instance method in the class. E.g. `() => this.doFoo()`
+✔ queries in component
 ✔ refactor \n in texts to two <Text>`s
 ✔ use reverse to sort items by new first!
 ✔ make queries required (!) where it makes sense

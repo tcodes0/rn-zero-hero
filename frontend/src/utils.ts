@@ -1,4 +1,4 @@
-export const log = (x: any) => console.log(x);
+export const log = (...x: any[]) => console.log(...x);
 
 let id = -1;
 /**
