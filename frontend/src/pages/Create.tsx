@@ -84,7 +84,7 @@ const Create = props => {
                     AsyncStorage.getItem("token").then(token => {
                       return mutate({
                         mutation: addBook,
-                        variables: {...value, token }
+                        variables: { ...value, token }
                       })
                         .then(log, log)
                         .then(() => navigate("List", { user }));
@@ -93,6 +93,10 @@ const Create = props => {
                 />
               )}
             </ApolloConsumer>
+            <Button
+              title="See books"
+              onPress={() => navigate("List", { user })}
+            />
           </View>
         )}
       </Value>

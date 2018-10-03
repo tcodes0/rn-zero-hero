@@ -6,7 +6,8 @@ import {
   View,
   AsyncStorage,
   TextInput,
-  FlatListProps
+  FlatListProps,
+  TouchableOpacity
 } from "react-native";
 import { State } from "react-powerplug";
 import { ApolloConsumer } from "react-apollo";
@@ -48,12 +49,14 @@ class BookList<ItemT> extends React.Component<FlatListProps<ItemT>> {
     const { navigate, user } = this.props;
 
     return (
-      <Text
+      <TouchableOpacity
         onPress={() => navigate("Detail", { item, user })}
         style={styles.row}
+        activeOpacity={0.4}
       >
-        {`"${item.title}"\nby ${item.author && item.author.name}`}
-      </Text>
+        <Text>{`"${item.title}"`}</Text>
+        <Text>{`by ${item.author && item.author.name}`}</Text>
+      </TouchableOpacity>
     );
   };
 
