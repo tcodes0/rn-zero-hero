@@ -1,12 +1,6 @@
 import * as React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  AsyncStorage
-} from "react-native";
-import { Value } from "react-powerplug";
+import { StyleSheet, Text, View, TextInput, AsyncStorage } from "react-native";
+import { State } from "react-powerplug";
 import { ApolloConsumer } from "react-apollo";
 import { log, getNavParams } from "../utils";
 import { addBook } from "../mutations";
@@ -33,53 +27,50 @@ const styles = StyleSheet.create({
   }
 });
 
-const initialState: { name: string; age?: number; title: string } = {
+const initialState: { name: string; age?: string; title: string } = {
   name: "",
   title: ""
 };
 
-const Create = props => {
+const Create = (props: any) => {
   const { navigate } = props.navigation;
   const user = getNavParams(props, "user");
 
   return (
     <Layout user={user}>
-      <Value initial={initialState}>
-        {({ value, set }) => (
+      <State initial={initialState}>
+        {({ state, setState }) => (
           <View style={styles.container} {...props}>
             <Text style={styles.title}>Create a book</Text>
             <View style={styles.wrapper}>
               <Text>Enter book title</Text>
               <TextInput
-                value={value.title}
+                value={state.title}
                 placeholder="title..."
-                onChangeText={input =>
-                  set(state => ({ ...state, title: input }))
-                }
+                onChangeText={input => setState({ title: input })}
               />
             </View>
             <View style={styles.wrapper}>
               <Text>Enter author name</Text>
               <TextInput
-                value={value.name}
+                value={state.name}
                 placeholder="name..."
-                onChangeText={input =>
-                  set(state => ({ ...state, name: input }))
-                }
+                onChangeText={input => setState({ name: input })}
               />
             </View>
             <View style={styles.wrapper}>
               <Text>How old is the author?</Text>
               <TextInput
-                value={value.age && String(value.age)}
+                value={state.age || ""}
                 placeholder="age..."
-                onChangeText={input =>
-                  set(state => ({ ...state, age: Number(input) }))
-                }
+                onChangeText={(input: string) => {
+                  if (Number.isNaN(Number(input))) return
+                  return setState({ age: input })
+                }}
               />
             </View>
             <Touchable
-              onPress={() => set(initialState)}
+              onPress={() => setState(initialState)}
               style={styles.touchable}
             >
               <Text>Reset</Text>
@@ -89,13 +80,16 @@ const Create = props => {
                 <Touchable
                   style={styles.touchable}
                   onPress={() => {
-                    AsyncStorage.getItem("token").then(token =>
-                      mutate({
+                    const { age, name, title } = state;
+                    AsyncStorage.getItem("token").then(token => {
+                      if (!age || !name || !title) return
+                      return mutate({
                         mutation: addBook,
-                        variables: { ...value, token }
+                        variables: { name, title, token, age: Number(age) }
                       })
                         .then(log, log)
                         .then(() => navigate("List", { user }))
+                    }
                     );
                   }}
                 >
@@ -111,7 +105,7 @@ const Create = props => {
             </Touchable>
           </View>
         )}
-      </Value>
+      </State>
     </Layout>
   );
 };
