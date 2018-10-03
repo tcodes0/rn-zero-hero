@@ -118,7 +118,8 @@ const List = props => {
                       variables: { token }
                     })
                       .then(data => {
-                        const unpackedData = unpack(data);
+                        const unpackedData = [...unpack(data)].reverse();
+                        console.log("unpackedData", unpackedData);
                         setState({
                           unfilteredSections: unpackedData,
                           sections: unpackedData

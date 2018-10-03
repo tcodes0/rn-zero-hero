@@ -69,10 +69,13 @@
 - queries in component
 - Ditch react-power-plug in cases where the JSX is full of complicated handlers that can be moved to an instance method in the class. E.g. `() => this.doFoo()`
 - refactor \n in texts to two <Text>`s
-- use reverse to sort items by new first!
+✔ use reverse to sort items by new first!
 ✔ make queries required (!) where it makes sense
 -b `combineResolvers` with `skip` from `graphql-resolvers`
 -b destruct in args `(parent, { name, genre, authorId }) => {`
+
+#### Bugs
+- firing a second addBook mutation from same user doesn't update  UI even tho book is added on server. (CACHE)
 
 ### App login
 
