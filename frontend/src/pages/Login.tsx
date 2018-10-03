@@ -41,6 +41,8 @@ const loginMutation = gql`
   }
 `;
 
+type loginData = { data: { addUser: { token: string } } };
+
 class Login extends React.Component {
   state: {
     name: string;
@@ -52,14 +54,14 @@ class Login extends React.Component {
     password: ""
   };
 
-  handleLogin = (doLogin: MutationFn) => {
+  handleLogin = (doLogin: MutationFn<loginData>) => {
     const { navigate } = this.props.navigation;
     const { name, password } = this.state;
 
     if (!name || !password) {
       console.log("no user or password");
       return this.setState({
-        error: Error("Null input: Please don't leave it blank")
+        error: Error("Null input: Please fill in all fields")
       });
     }
 

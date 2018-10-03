@@ -15,10 +15,10 @@ const NavigationWrapper = createStackNavigator(
     Login: { screen: Login },
     Register: { screen: Register }
   },
-  { initialRouteName: "Login" }
+  { initialRouteName: "Create" }
 );
 
-const theme = { colors: { main: "pink", secondary: "#ba9eff"}}
+const theme = { colors: { main: "pink", secondary: "#ba9eff" } };
 
 const App = () => (
   <ThemeProvider theme={theme}>

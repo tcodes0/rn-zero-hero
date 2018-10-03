@@ -56,12 +56,12 @@
           .limit(args.size)
           .skip(args.size * args.page)
     ```
-- Use Mutation and Query from `react-apollo` to leverage the loading state
-    use Activity indicator to show loading states
 -b add TS on server
-- ApolloConsumer -> graphql HOC
 -b add MongoDB & Mongoose
 ✔ moved styles to styled
+- Use Mutation and Query from `react-apollo` to leverage the loading state
+    use Activity indicator to show loading states
+- ApolloConsumer -> graphql HOC
 - Ditch react-power-plug in cases where the JSX is full of complicated handlers that can be moved to an instance method in the class. E.g. `() => this.doFoo()`
 
 #### Cheap
