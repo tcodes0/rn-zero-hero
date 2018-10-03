@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
 const Item = styled(Touchable)`
   align-items: flex-start;
   margin-bottom: 5px;
-  background-color: skyblue;
+  background-color: ${props => props.theme.colors.secondary};
 `;
 
 const BookTitle = styled.Text`

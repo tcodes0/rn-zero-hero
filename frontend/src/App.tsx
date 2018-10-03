@@ -1,5 +1,6 @@
 import * as React from "react";
 import { createStackNavigator } from "react-navigation";
+import { ThemeProvider } from "styled-components";
 import { ApolloProvider } from "react-apollo";
 import client from "./client";
 import { Create, Detail, Login, Register, List } from "./pages";
@@ -17,10 +18,14 @@ const NavigationWrapper = createStackNavigator(
   { initialRouteName: "Login" }
 );
 
+const theme = { colors: { main: "pink", secondary: "#ba9eff"}}
+
 const App = () => (
-  <ApolloProvider client={client}>
-    <NavigationWrapper />
-  </ApolloProvider>
+  <ThemeProvider theme={theme}>
+    <ApolloProvider client={client}>
+      <NavigationWrapper />
+    </ApolloProvider>
+  </ThemeProvider>
 );
 
 export default App;

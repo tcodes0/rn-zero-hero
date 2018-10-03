@@ -2,7 +2,7 @@ import * as React from "react";
 import { Text, Image } from "react-native";
 import styled from "styled-components/native";
 import Layout from "../layouts/DefaultLayout";
-import { Touchable } from "../components";
+import { Button } from "../components";
 
 const Title = styled.Text`
     font-size: 21px;
@@ -44,9 +44,9 @@ const Detail = (props: any) => {
         <Body>
           By {book.author.name}, {book.author.age} years old.
         </Body>
-        <Touchable onPress={() => navigate("List", { user })}>
+        <Button onPress={() => navigate("List", { user })}>
           <Text>Back</Text>
-        </Touchable>
+        </Button>
       </Wrapper>
     </Layout>
   );

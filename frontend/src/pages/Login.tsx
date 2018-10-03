@@ -6,7 +6,7 @@ import Layout from "../layouts/DefaultLayout";
 import { ApolloConsumer } from "react-apollo";
 import { State } from "react-powerplug";
 import { login } from "../queries";
-import { Touchable, Wrapper} from "../components";
+import { Button, Wrapper } from "../components";
 
 export const LoginContainer = styled.View`
   justify-content: center;
@@ -28,10 +28,6 @@ export const Input = styled.TextInput`
   font-size: 17px;
   margin-bottom: 25px;
   text-align: left;
-`;
-
-export const Button = styled(Touchable)`
-  margin: 8px;
 `;
 
 const initialState: {
