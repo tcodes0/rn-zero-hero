@@ -58,6 +58,8 @@
     ```
 -b add TS on server
 -b add MongoDB & Mongoose
+
+
 ✔ moved styles to styled
 - Use Mutation and Query from `react-apollo` to leverage the loading state
     use Activity indicator to show loading states
