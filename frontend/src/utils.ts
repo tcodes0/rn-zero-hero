@@ -42,7 +42,4 @@ export const getNavParams = (props: any, key?: string) => {
   return result.length ? result : undefined;
 };
 
-export const filterFactory = selector => (sections, query) =>
-  sections.filter(section => selector(section, query));
-
 export const capitalize = (x: string) => x[0].toUpperCase() + x.slice(1);

@@ -1,43 +1,21 @@
 import * as React from "react";
-import {
-  FlatList,
-  Text,
-  StyleSheet,
-  View,
-  AsyncStorage,
-  FlatListProps
-} from "react-native";
-import { State } from "react-powerplug";
+import { AsyncStorage, ActivityIndicator } from "react-native";
 import gql from "graphql-tag";
 import styled from "styled-components/native";
 import { ApolloConsumer } from "react-apollo";
-import { log, getNumericId, getNavParams, filterFactory } from "../utils";
-import Layout from "../layouts/DefaultLayout";
-import { Touchable } from "../components";
+import { ApolloQueryResult, ApolloClient } from "apollo-client";
+import { log, getNumericId, getNavParams } from "../utils";
+import { Layout } from "../layouts";
+import { BookFlatList, Book, Filter } from "../components";
 
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 20,
-    flex: 1,
-    padding: 20
-  }
-});
-
-const Item = styled(Touchable)`
-  align-items: flex-start;
-  margin-bottom: 5px;
-  background-color: ${props => props.theme.colors.secondary};
+const Wrapper = styled.View`
+  margin-top: 20px;
+  flex: 1;
+  padding: 20px;
 `;
 
-const BookTitle = styled.Text`
-  font-size: 18px;
-  margin-bottom: 8px;
-`;
-
-const Filter = styled.TextInput`
-  font-size: 17px;
-  margin-bottom: 10px;
-  text-align: left;
+const View = styled.View`
+  flex: 1;
 `;
 
 const booksWithAuthors = gql`
@@ -52,124 +30,88 @@ const booksWithAuthors = gql`
   }
 `;
 
-interface Author {
-  name: string;
-  age: number;
-}
-interface Book {
-  id: number;
-  author: Author;
-  title: string;
-}
+type ListData = { books: Book[] };
+type ListState = {
+  books: any[];
+  filtered: any[];
+};
 
-class BookList<B extends Book> extends React.Component<FlatListProps<B>> {
-  extractKey = (book: B) => String(book.id);
+class List extends React.Component<{}, ListState> {
+  state: ListState = { filtered: [], books: [] };
 
-  renderItem = ({ item: book }: { item: B }) => {
-    const { navigate, user } = this.props;
+  showAll = () => this.setState(({ books }) => ({ filtered: books }));
 
-    return (
-      <Item
-        onPress={() => navigate("Detail", { book, user })}
-        activeOpacity={0.4}
-      >
-        <BookTitle>{`"${book.title}"`}</BookTitle>
-        <Text>{`by ${book.author && book.author.name}`}</Text>
-      </Item>
-    );
+  filterByTitle = (sections: any[], query: string) =>
+    sections.filter(section => section.title.includes(query));
+
+  handleChangeText = (text: string) => {
+    if (!text) {
+      return this.showAll();
+    }
+    return this.setState(({ books }) => ({
+      filtered: this.filterByTitle(books, text)
+    }));
   };
 
-  render() {
-    return (
-      <FlatList
-        style={styles.container}
-        renderItem={this.renderItem}
-        keyExtractor={this.extractKey}
-        {...this.props}
-      />
-    );
-  }
-}
-
-const List = (props: any) => {
-  const user = getNavParams(props, "user");
-  const { navigate } = props.navigation;
-
-  const byTitle = (section: any, text: string) => section.title.includes(text);
-  const filterSectionsByTitle = filterFactory(byTitle);
-
-  const unpack = (gqlData: any) => {
-    const { books } = gqlData.data;
-    const booksWithId = books.map((book: Book) => ({
+  unpack = (ApolloRes: ApolloQueryResult<ListData>) => {
+    const { books } = ApolloRes.data;
+    const booksWithId = books.map(book => ({
       ...book,
       id: getNumericId()
     }));
-    return booksWithId;
+    return booksWithId.reverse();
   };
 
-  return (
-    <Layout user={user}>
-      <State
-        initial={{
-          sections: [],
-          filter: "",
-          unfilteredSections: undefined,
-          text: ""
-        }}
-      >
-        {({ state, setState }) => (
-          <View style={styles.container}>
-            <Filter
-              value={state.text}
-              placeholder="filter by typing..."
-              onChangeText={(text: string) => {
-                setState({ text });
-                if (!text) {
-                  return setState(({ unfilteredSections }) => ({
-                    sections: unfilteredSections
-                  }));
-                }
-                return setState(({ unfilteredSections }) => ({
-                  sections: filterSectionsByTitle(unfilteredSections, text)
-                }));
-              }}
-            />
-            <ApolloConsumer>
-              {({ query }) => {
-                if (!state.unfilteredSections) {
-                  AsyncStorage.getItem("token").then(token =>
-                    query({
-                      query: booksWithAuthors,
-                      variables: { token }
-                    })
-                      .then(data => {
-                        const unpackedData = [...unpack(data)].reverse();
-                        console.log("unpackedData", unpackedData);
-                        setState({
-                          unfilteredSections: unpackedData,
-                          sections: unpackedData
-                        });
-                      })
-                      .catch(e => {
-                        e && log(e);
-                      })
-                  );
-                }
-                if (!state.sections) return <Text> Loading </Text>;
-                return (
-                  <BookList<Book>
-                    data={state.sections}
+  getBooks = (query: ApolloClient<any>["query"]) => {
+    AsyncStorage.getItem("token")
+      .then(token =>
+        query<ListData>({
+          query: booksWithAuthors,
+          variables: { token }
+        }).then(packedData => {
+          const data = this.unpack(packedData);
+          console.log("got data:", data);
+          this.setState({
+            books: data,
+            filtered: data
+          });
+        })
+      )
+      .catch(e => {
+        e && log(e);
+      });
+  };
+
+  render() {
+    const user = getNavParams(this.props, "user");
+    const { navigate } = this.props.navigation;
+    const { books, filtered } = this.state;
+
+    return (
+      <Layout user={user}>
+        <Wrapper>
+          <ApolloConsumer>
+            {({ query }) => {
+              if (!books.length) {
+                this.getBooks(query);
+                return <ActivityIndicator size="large" />;
+              }
+              return (
+                <View>
+                  <Filter onChangeText={this.handleChangeText} />
+                  <BookFlatList<Book>
+                    data={filtered}
                     navigate={navigate}
                     user={user}
                   />
-                );
-              }}
-            </ApolloConsumer>
-          </View>
-        )}
-      </State>
-    </Layout>
-  );
-};
+                </View>
+              );
+            }}
+          </ApolloConsumer>
+        </Wrapper>
+      </Layout>
+    );
+  }
+}
 
 export default List;
