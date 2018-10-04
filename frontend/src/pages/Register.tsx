@@ -21,13 +21,14 @@ const mutationAddUser = gql`
 `;
 
 type addUserData = { data: { addUser: { token: string } } };
+type RegisterState = {
+  name: string;
+  password: string;
+  error?: Error;
+};
 
-class Register extends React.Component {
-  state: {
-    name: string;
-    password: string;
-    error?: Error;
-  } = {
+class Register extends React.Component<{}, RegisterState> {
+  state = {
     name: "",
     password: ""
   };

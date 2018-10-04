@@ -15,6 +15,7 @@ const Touchable = styled.TouchableOpacity`
 
 const Component = (props: any) => {
   const { children, ...other } = props;
+
   return (
     <Touchable
       activeOpacity={0.4}

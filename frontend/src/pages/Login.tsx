@@ -42,14 +42,15 @@ const loginMutation = gql`
 `;
 
 type loginData = { data: { addUser: { token: string } } };
+type LoginState = {
+  name: string;
+  password: string;
+  token?: string;
+  error?: Error;
+};
 
-class Login extends React.Component {
-  state: {
-    name: string;
-    password: string;
-    token?: string;
-    error?: Error;
-  } = {
+class Login extends React.Component<{}, LoginState> {
+  state = {
     name: "",
     password: ""
   };
