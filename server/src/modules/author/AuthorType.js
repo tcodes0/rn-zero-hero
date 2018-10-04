@@ -2,8 +2,8 @@ import * as AuthorLoader from "./AuthorLoader";
 
 export const typeDefs = `
   type Author {
-    name: String
-    age: Int
+    name: String!
+    age: Int!
   }
 `;
 

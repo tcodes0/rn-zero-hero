@@ -1,133 +1,136 @@
 import * as React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  Button,
-  AsyncStorage
-} from "react-native";
+import { Text, AsyncStorage, ActivityIndicator } from "react-native";
+import styled from "styled-components/native";
+import gql from "graphql-tag";
 import { formatMessage, log } from "../utils";
 import Layout from "../layouts/DefaultLayout";
-import { ApolloConsumer } from "react-apollo";
-import { State } from "react-powerplug";
-import { login } from "../queries";
+import { Mutation, MutationFn } from "react-apollo";
+import { Button, Wrapper } from "../components";
 
-const styles = StyleSheet.create({
-  title: {
-    marginBottom: 70,
-    fontSize: 18
-  },
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF"
-  },
-  loginContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF"
-  },
-  inputContainer: {
-    padding: 10,
-    maxWidth: "45%"
-  },
-  input: {
-    fontSize: 17,
-    marginBottom: 25,
-    textAlign: "left"
-  },
-  messageContainer: {
-    height: 30
+export const LoginContainer = styled.View`
+  justify-content: center;
+  align-items: center;
+  background-color: #f5fcff;
+`;
+
+export const InputContainer = styled.View`
+  padding: 10px;
+  max-width: 45%;
+`;
+
+export const Feedback = styled.View`
+  height: 30px;
+`;
+
+export const Title = styled.Text`
+  margin-bottom: 70px;
+  font-size: 18;
+`;
+
+export const Input = styled.TextInput`
+  font-size: 17px;
+  margin-bottom: 25px;
+  text-align: left;
+`;
+
+const loginMutation = gql`
+  mutation($name: String!, $password: String!) {
+    login(name: $name, password: $password) {
+      token
+    }
   }
-});
+`;
 
-const initialState: {
+type loginData = { data: { addUser: { token: string } } };
+type LoginState = {
   name: string;
   password: string;
   token?: string;
   error?: Error;
-} = {
-  name: "",
-  password: ""
 };
 
-const Login = props => {
-  const { navigate } = props.navigation;
+class Login extends React.Component<{}, LoginState> {
+  state = {
+    name: "",
+    password: ""
+  };
 
-  return (
-    <Layout>
-      <View style={styles.container}>
-        <Text style={styles.title}>Welcome back</Text>
-        <State initial={initialState}>
-          {({ state, setState }) => (
-            <ApolloConsumer>
-              {({ query }) => (
-                <View style={styles.loginContainer}>
-                  <View style={styles.inputContainer}>
-                    <TextInput
-                      style={styles.input}
+  handleLogin = (doLogin: MutationFn<loginData>) => {
+    const { navigate } = this.props.navigation;
+    const { name, password } = this.state;
+
+    if (!name || !password) {
+      console.log("no user or password");
+      return this.setState({
+        error: Error("Null input: Please fill in all fields")
+      });
+    }
+
+    return this.setState({ token: undefined }, () => {
+      doLogin({
+        variables: { name, password }
+      })
+        .then(({ data: { login: { token } } }) =>
+          AsyncStorage.setItem("token", token).then(() =>
+            navigate("Create", { user: this.state.name })
+          )
+        )
+        .catch((error: Error) => {
+          console.log(error);
+          this.setState({ error });
+        });
+    });
+  };
+
+  render() {
+    const { navigate } = this.props.navigation;
+    console.log(this.props);
+
+    return (
+      <Layout>
+        <Wrapper>
+          <Title>Welcome back</Title>
+          <Mutation mutation={loginMutation}>
+            {(login, { data, loading }) => {
+              if (data) log("data", data);
+              return (
+                <LoginContainer>
+                  <InputContainer>
+                    <Input
                       placeholder="Your name..."
-                      value={state.name}
-                      onChangeText={name => setState({ name })}
+                      value={this.state.name}
+                      onChangeText={(name: string) => this.setState({ name })}
                     />
-                    <TextInput
-                      style={styles.input}
-                      secureTextEntry
+                    <Input
                       placeholder="Password..."
-                      value={state.password}
-                      onChangeText={password => setState({ password })}
+                      secureTextEntry
+                      value={this.state.password}
+                      onChangeText={(password: string) =>
+                        this.setState({ password })
+                      }
                     />
-                    <Button
-                      title="Login"
-                      onPress={() => {
-                        const { name, password } = state;
-                        if (!name || !password) {
-                          console.log("no user or password");
-                          return setState({
-                            error: Error(
-                              "Null input: Please don't leave it blank"
-                            )
-                          });
-                        }
-
-                        return setState({ token: undefined }, () => {
-                          query<{ login: { token: string } }>({
-                            query: login,
-                            variables: { name, password }
-                          })
-                            .then(({ data: { login: { token } } }) => {
-                              return AsyncStorage.setItem("token", token).then(
-                                () => navigate("Create", { user: state.name })
-                              );
-                            })
-                            .catch(error => {
-                              console.log("err");
-                              setState({ error });
-                            });
-                        });
-                      }}
-                    />
-                    <Button
-                      title="Create account"
-                      onPress={() => navigate("Register")}
-                    />
-                  </View>
-                  <View style={styles.messageContainer}>
-                    {!state.token &&
-                      state.error && (
-                        <Text>{formatMessage(state.error.message)}</Text>
+                    <Button onPress={() => this.handleLogin(login)}>
+                      <Text>Login</Text>
+                    </Button>
+                    <Button onPress={() => navigate("Register")}>
+                      <Text>Register</Text>
+                    </Button>
+                  </InputContainer>
+                  <Feedback>
+                    {!data &&
+                      this.state.error && (
+                        <Text>{formatMessage(this.state.error.message)}</Text>
                       )}
-                  </View>
-                </View>
-              )}
-            </ApolloConsumer>
-          )}
-        </State>
-      </View>
-    </Layout>
-  );
-};
+                    {loading && <ActivityIndicator size="large" />}
+                  </Feedback>
+                </LoginContainer>
+              );
+            }}
+          </Mutation>
+        </Wrapper>
+      </Layout>
+    );
+  }
+}
 
 export default Login;

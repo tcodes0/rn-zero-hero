@@ -1,103 +1,148 @@
 import * as React from "react";
 import {
-  StyleSheet,
   Text,
-  View,
-  Button,
   TextInput,
-  AsyncStorage
+  AsyncStorage,
+  View,
+  ActivityIndicator
 } from "react-native";
-import { Value } from "react-powerplug";
-import { ApolloConsumer } from "react-apollo";
-import { log, getNavParams } from "../utils";
-import { addBook } from "../mutations";
+import styled from "styled-components/native";
+import gql from "graphql-tag";
+import { Mutation, MutationFn } from "react-apollo";
+import { log, getNavParams, formatMessage } from "../utils";
 import Layout from "../layouts/DefaultLayout";
+import { Button, Wrapper } from "../components";
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF"
-  },
-  title: {
-    backgroundColor: "#F5FCFF",
-    fontSize: 22,
-    marginBottom: 50
-  },
-  wrapper: {
-    marginBottom: 20
+const Title = styled.Text`
+  background-color: #f5fcff;
+  font-size: 22;
+  margin-bottom: 50;
+`;
+
+const Field = styled.View`
+  margin-bottom: 20px;
+`;
+
+const Feedback = styled.View`
+  height: 30px;
+`;
+
+const mutationAddBook = gql`
+  mutation($title: String!, $name: String!, $age: Int!, $token: String!) {
+    addBook(title: $title, author: { name: $name, age: $age }, token: $token) {
+      title
+      author {
+        name
+        age
+      }
+    }
   }
-});
+`;
 
-const initialState: { name: string; age?: number; title: string } = {
-  name: "",
-  title: ""
-};
+type CreateState = Readonly<{
+  name: string;
+  age?: string;
+  title: string;
+  error?: Error;
+}>;
+type addBookdata = any;
 
-const Create = props => {
-  const { navigate } = props.navigation;
-  const user = getNavParams(props, "user");
+class Create extends React.Component<{}, CreateState> {
+  initialState: CreateState = {
+    name: "",
+    title: "",
+    age: undefined
+  };
 
-  return (
-    <Layout user={user}>
-      <Value initial={initialState}>
-        {({ value, set }) => (
-          <View style={styles.container} {...props}>
-            <Text style={styles.title}>Create a book</Text>
-            <View style={styles.wrapper}>
-              <Text>Enter book title</Text>
-              <TextInput
-                value={value.title}
-                placeholder="title..."
-                onChangeText={input =>
-                  set(state => ({ ...state, title: input }))
-                }
-              />
-            </View>
-            <View style={styles.wrapper}>
-              <Text>Enter author name</Text>
-              <TextInput
-                value={value.name}
-                placeholder="name..."
-                onChangeText={input =>
-                  set(state => ({ ...state, name: input }))
-                }
-              />
-            </View>
-            <View style={styles.wrapper}>
-              <Text>How old is the author?</Text>
-              <TextInput
-                value={value.age && String(value.age)}
-                placeholder="age..."
-                onChangeText={input =>
-                  set(state => ({ ...state, age: Number(input) }))
-                }
-              />
-            </View>
-            <Button title="Reset" onPress={() => set(initialState)} />
-            <ApolloConsumer>
-              {({ mutate }) => (
-                <Button
-                  title="OK"
-                  onPress={() => {
-                    AsyncStorage.getItem("token").then(token => {
-                      return mutate({
-                        mutation: addBook,
-                        variables: {...value, token }
-                      })
-                        .then(log, log)
-                        .then(() => navigate("List", { user }));
-                    })
-                  }}
-                />
-              )}
-            </ApolloConsumer>
-          </View>
-        )}
-      </Value>
-    </Layout>
-  );
-};
+  state = this.initialState;
+
+  resetState = () => this.setState({ ...this.initialState });
+
+  validate = (input: string) => {
+    const invalidNumber = Number.isNaN(Number(input));
+    if (invalidNumber) return;
+    return this.setState({ age: input });
+  };
+
+  handleAddBook = (doAddBook: MutationFn<addBookdata>) => {
+    const user = getNavParams(this.props, "user");
+    const { age, name, title } = this.state;
+    const { navigate } = this.props.navigation;
+
+    if (!age || !name || !title) {
+      console.log("not all book fields filled");
+      return this.setState({
+        error: Error("Null input: Please fill in all fields")
+      });
+    }
+
+    AsyncStorage.getItem("token").then(token =>
+      doAddBook({
+        variables: { name, title, token, age: Number(age) }
+      })
+        .then(() => navigate("List", { user }))
+        .catch(e => log(e))
+    );
+  };
+
+  render() {
+    const { navigate } = this.props.navigation;
+    const user = getNavParams(this.props, "user");
+
+    return (
+      <Layout user={user}>
+        <Wrapper>
+          <Title>Create a book</Title>
+          <Field>
+            <Text>Enter book title</Text>
+            <TextInput
+              value={this.state.title}
+              placeholder="title..."
+              onChangeText={input => this.setState({ title: input })}
+            />
+          </Field>
+          <Field>
+            <Text>Enter author name</Text>
+            <TextInput
+              value={this.state.name}
+              placeholder="name..."
+              onChangeText={input => this.setState({ name: input })}
+            />
+          </Field>
+          <Field>
+            <Text>How old is the author?</Text>
+            <TextInput
+              value={this.state.age || ""}
+              placeholder="age..."
+              onChangeText={text => this.validate(text)}
+            />
+          </Field>
+          <Button onPress={() => this.resetState()}>
+            <Text>Reset</Text>
+          </Button>
+          <Mutation mutation={mutationAddBook}>
+            {(addBook, { data, loading }) => (
+              <View>
+                <Button onPress={() => this.handleAddBook(addBook)}>
+                  <Text>OK</Text>
+                </Button>
+                <Button onPress={() => navigate("List", { user })}>
+                  <Text>See books</Text>
+                </Button>
+                <Feedback>
+                  {!data &&
+                    this.state.error && (
+                      <Text>{formatMessage(this.state.error.message)}</Text>
+                    )}
+                  {loading && <ActivityIndicator size="large" />}
+                </Feedback>
+              </View>
+            )}
+          </Mutation>
+        </Wrapper>
+      </Layout>
+    );
+  }
+}
 
 export default Create;

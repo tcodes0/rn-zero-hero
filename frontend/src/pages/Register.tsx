@@ -1,117 +1,102 @@
 import * as React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  Button,
-  AsyncStorage
-} from "react-native";
-import { ApolloConsumer } from "react-apollo";
-import { State } from "react-powerplug";
+import { Text, AsyncStorage, ActivityIndicator } from "react-native";
+import gql from "graphql-tag";
+import styled from "styled-components/native";
 import Layout from "../layouts/DefaultLayout";
-import { addUser } from "../mutations";
-import { formatMessage, getNavParams, log } from "../utils";
+import { Mutation, MutationFn } from "react-apollo";
+import { formatMessage, getNavParams } from "../utils";
+import { Wrapper, Button } from "../components";
+import { LoginContainer, InputContainer, Title, Input } from "./Login";
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF"
-  },
-  title: {
-    marginBottom: 30,
-    fontSize: 18
-  },
-  loginContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF"
-  },
-  inputContainer: {
-    padding: 10,
-    maxWidth: "45%"
-  },
-  input: {
-    fontSize: 17,
-    marginBottom: 25,
-    textAlign: "left"
-  },
-  messageContainer: {
-    height: 30
+const Feedback = styled.View`
+  height: 30;
+`;
+
+const mutationAddUser = gql`
+  mutation($name: String!, $password: String!) {
+    addUser(name: $name, password: $password) {
+      token
+    }
   }
-});
+`;
 
-const initialState: {
+type addUserData = { data: { addUser: { token: string } } };
+type RegisterState = {
   name: string;
   password: string;
   error?: Error;
-} = {
-  name: "",
-  password: ""
 };
 
-const Detail = props => {
-  const { navigate } = props.navigation;
-  const user = getNavParams(props, "user");
+class Register extends React.Component<{}, RegisterState> {
+  state = {
+    name: "",
+    password: ""
+  };
 
-  return (
-    <Layout user={user}>
-      <View style={styles.container} {...props}>
-        <Text style={styles.title}>Please create your account :D</Text>
-        <State initial={initialState}>
-          {({ state, setState }) => (
-            <ApolloConsumer>
-              {({ mutate }) => (
-                <View style={styles.loginContainer}>
-                  <View style={styles.inputContainer}>
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Your name..."
-                      value={state.name}
-                      onChangeText={name => setState({ name })}
-                    />
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Password..."
-                      secureTextEntry
-                      value={state.password}
-                      onChangeText={password => setState({ password })}
-                    />
-                    <Button
-                      title="Register"
-                      onPress={() =>
-                        mutate<{ token: string }>({
-                          mutation: addUser,
-                          variables: {
-                            name: state.name,
-                            password: state.password
-                          }
-                        })
-                          .then(({ data: { addUser: { token } } }) => {
-                            AsyncStorage.setItem("token", token).catch(
-                              e => e && log(e)
-                            );
-                            navigate("Create", { user: state.name });
-                          })
-                          .catch(error => setState({ error }))
-                      }
-                    />
-                  </View>
-                  <View style={styles.messageContainer}>
-                    {state.error && (
-                      <Text>{formatMessage(state.error.message)}</Text>
+  handleRegister = (addUser: MutationFn<addUserData>) => {
+    const { navigate } = this.props.navigation;
+    const { name, password } = this.state;
+
+    if (!name || !password) {
+      console.log("no user or password");
+      return this.setState({
+        error: Error("Null input: Please fill in all fields")
+      });
+    }
+
+    addUser({
+      variables: {
+        name: this.state.name,
+        password: this.state.password
+      }
+    })
+      .then(({ data: { addUser: { token } } }) => {
+        navigate("Create", { user: this.state.name });
+        return AsyncStorage.setItem("token", token);
+      })
+      .catch(error => this.setState({ error }));
+  };
+
+  render() {
+    const user = getNavParams(this.props, "user");
+
+    return (
+      <Layout user={user}>
+        <Wrapper>
+          <Title>Good you're joining us!</Title>
+          <Mutation mutation={mutationAddUser}>
+            {(addUser, { data, loading }) => (
+              <LoginContainer>
+                <InputContainer>
+                  <Input
+                    placeholder="Your name..."
+                    value={this.state.name}
+                    onChangeText={name => this.setState({ name })}
+                  />
+                  <Input
+                    placeholder="Password..."
+                    secureTextEntry
+                    value={this.state.password}
+                    onChangeText={password => this.setState({ password })}
+                  />
+                  <Button onPress={() => this.handleRegister(addUser)}>
+                    <Text>Ok</Text>
+                  </Button>
+                </InputContainer>
+                <Feedback>
+                  {!data &&
+                    this.state.error && (
+                      <Text>{formatMessage(this.state.error.message)}</Text>
                     )}
-                  </View>
-                </View>
-              )}
-            </ApolloConsumer>
-          )}
-        </State>
-      </View>
-    </Layout>
-  );
-};
+                  {loading && <ActivityIndicator size="large" />}
+                </Feedback>
+              </LoginContainer>
+            )}
+          </Mutation>
+        </Wrapper>
+      </Layout>
+    );
+  }
+}
 
-export default Detail;
+export default Register;

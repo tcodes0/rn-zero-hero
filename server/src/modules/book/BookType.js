@@ -5,8 +5,8 @@ const { addBook, newBook } = BookLoader;
 
 export const typeDefs = `
   type Book {
-    title: String
-    author: Author
+    title: String!
+    author: Author!
   }
 `;
 

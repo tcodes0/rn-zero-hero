@@ -1,51 +1,58 @@
 import * as React from "react";
-import { StyleSheet, Text, View, Button, Image } from "react-native";
+import { Text } from "react-native";
+import styled from "styled-components/native";
 import Layout from "../layouts/DefaultLayout";
+import { Button } from "../components";
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF",
-    padding: 25
-  },
-  heading: {
-    fontSize: 21,
-    color: "darkblue",
-    marginTop: 25,
-    marginBottom: 25,
-    textAlign: "center"
-  },
-  body: {
-    fontSize: 17,
-    marginTop: 25,
-    marginBottom: 25,
-    textAlign: "left"
-  }
-});
+const Title = styled.Text`
+  font-size: 21px;
+  color: darkblue;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  text-align: center;
+`;
 
-const Detail = props => {
+const Cover = styled.Image`
+  width: 220px;
+  height: 220px;
+  margin: 25px;
+`;
+
+const Wrapper = styled.View`
+  flex: 1;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #f5fcff;
+  padding: 25px;
+`;
+
+const Description = styled.Text`
+  font-size: 17px;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  text-align: left;
+`;
+
+const Detail = (props: any) => {
   const { navigate } = props.navigation;
-  const { user, item } = props.navigation.state.params;
+  const { user, book } = props.navigation.state.params;
 
   return (
     <Layout user={user}>
-      <View style={styles.container} {...props}>
-        <Text style={styles.heading}>{item.title}</Text>
-        <Image
-          style={{ width: 220, height: 220, margin: 25 }}
+      <Wrapper>
+        <Title>{book.title}</Title>
+        <Cover
           source={{
             uri: "https://placekitten.com/220/220"
           }}
         />
-        <Text style={styles.body}>
-          By {item.author.name}, {item.author.age} years old.
-        </Text>
-        <Button title="Back" onPress={() => navigate("List", { user })}>
-          Auth
+        <Description>
+          By {book.author.name}, {book.author.age} years old.
+        </Description>
+        <Button onPress={() => navigate("List", { user })}>
+          <Text>Back</Text>
         </Button>
-      </View>
+      </Wrapper>
     </Layout>
   );
 };

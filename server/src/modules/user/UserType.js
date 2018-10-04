@@ -10,12 +10,25 @@ const getUserByName = (providedName = "") =>
 
 export const typeDefs = `
   type User {
-    name: String
-    hash: String
+    name: String!
+    hash: String!
   }
 `;
 
 export const resolvers = {
+  dev_users: () => loadAllUsers()
+};
+
+export const mutations = {
+  addUser: (root, args) => {
+    const { name, password } = args;
+    if (getUserByName(name)) throw Error("User already registered");
+    const user = {
+      name: lowerCase(name),
+      hash: bcrypt.hashSync(password, 8)
+    };
+    return addUser(user);
+  },
   login: (root, args) => {
     const { name, password } = args;
     const user = getUserByName(name);
@@ -35,18 +48,5 @@ export const resolvers = {
       .catch(e => {
         throw e;
       });
-  },
-  dev_users: () => loadAllUsers()
-};
-
-export const mutations = {
-  addUser: (root, args) => {
-    const { name, password } = args;
-    if (getUserByName(name)) throw Error("User already registered");
-    const user = {
-      name: lowerCase(name),
-      hash: bcrypt.hashSync(password, 8)
-    };
-    return addUser(user);
   }
 };

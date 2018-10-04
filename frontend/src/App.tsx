@@ -1,9 +1,8 @@
 import * as React from "react";
 import { createStackNavigator } from "react-navigation";
-import { Provider as ReduxProvider } from "react-redux";
+import { ThemeProvider } from "styled-components";
 import { ApolloProvider } from "react-apollo";
 import client from "./client";
-import store from "./store";
 import { Create, Detail, Login, Register, List } from "./pages";
 
 export const env = "development";
@@ -16,15 +15,17 @@ const NavigationWrapper = createStackNavigator(
     Login: { screen: Login },
     Register: { screen: Register }
   },
-  { initialRouteName: "Login" }
+  { initialRouteName: "Create" }
 );
 
+const theme = { colors: { main: "pink", secondary: "#ba9eff" } };
+
 const App = () => (
-  <ApolloProvider client={client}>
-    <ReduxProvider store={store}>
+  <ThemeProvider theme={theme}>
+    <ApolloProvider client={client}>
       <NavigationWrapper />
-    </ReduxProvider>
-  </ApolloProvider>
+    </ApolloProvider>
+  </ThemeProvider>
 );
 
 export default App;
