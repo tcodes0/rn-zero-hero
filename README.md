@@ -20,6 +20,7 @@
 - `cd -` To go back to the repo
 - `cd frontend`
 - `yarn && yarn start` To start Metro Bundler.
+-  On yet another terminal tab:
 
 >Now you need: `react-native-cli` installed globally (`npm i -g react-native-cli`)
 
