@@ -1,33 +1,45 @@
 import * as React from "react";
-import {
-  Text,
-  TextInput,
-  AsyncStorage,
-  View,
-  ActivityIndicator
-} from "react-native";
+import { AsyncStorage, View, ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
 import gql from "graphql-tag";
 import { Mutation, MutationFn } from "react-apollo";
 import { log, getNavParams, formatMessage } from "../utils";
 import Layout from "../layouts/DefaultLayout";
-import { Button, Wrapper, Book } from "../components";
+import {
+  Button,
+  Wrapper,
+  Book,
+  TextInput,
+  Sans,
+  ErrorText,
+  Heading
+} from "../components";
 
-const Title = styled.Text`
-  background-color: #f5fcff;
-  font-size: 22;
+const Title = styled(Heading)`
   margin-bottom: 50;
 `;
 
+const Text = styled(Sans)`
+  font-weight: 400;
+  font-size: 16px;
+  margin-bottom: 7px;
+`;
+
 const Field = styled.View`
-  margin-bottom: 20px;
+  margin-bottom: 35px;
 `;
 
 const Feedback = styled.View`
+  align-items: center;
   height: 30px;
 `;
 
-type addBookData = { data: Book}
+const Buttons = styled.View`
+  margin-top: 30px;
+  flex-direction: row;
+`;
+
+type addBookData = { data: Book };
 
 const mutationAddBook = gql`
   mutation($title: String!, $name: String!, $age: Int!, $token: String!) {
@@ -99,7 +111,7 @@ class Create extends React.Component<{}, CreateState> {
             <TextInput
               value={this.state.title}
               placeholder="title..."
-              onChangeText={input => this.setState({ title: input })}
+              onChangeText={(input: string) => this.setState({ title: input })}
             />
           </Field>
           <Field>
@@ -107,7 +119,7 @@ class Create extends React.Component<{}, CreateState> {
             <TextInput
               value={this.state.name}
               placeholder="name..."
-              onChangeText={input => this.setState({ name: input })}
+              onChangeText={(input: string) => this.setState({ name: input })}
             />
           </Field>
           <Field>
@@ -115,28 +127,32 @@ class Create extends React.Component<{}, CreateState> {
             <TextInput
               value={this.state.age || ""}
               placeholder="age..."
-              onChangeText={text => this.validate(text)}
+              onChangeText={(text: string) => this.validate(text)}
             />
           </Field>
-          <Button onPress={() => this.resetState()}>
-            <Text>Reset</Text>
-          </Button>
           <Mutation mutation={mutationAddBook}>
             {(addBook, { data, loading }) => (
               <View>
-                <Button onPress={() => this.handleAddBook(addBook)}>
-                  <Text>OK</Text>
-                </Button>
-                <Button onPress={() => navigate("List", { user })}>
-                  <Text>See books</Text>
-                </Button>
                 <Feedback>
                   {!data &&
                     this.state.error && (
-                      <Text>{formatMessage(this.state.error.message)}</Text>
+                      <ErrorText>
+                        {formatMessage(this.state.error.message)}
+                      </ErrorText>
                     )}
                   {loading && <ActivityIndicator size="large" />}
                 </Feedback>
+                <Buttons>
+                  <Button onPress={() => this.resetState()}>
+                    <Sans>RESET</Sans>
+                  </Button>
+                  <Button onPress={() => this.handleAddBook(addBook)}>
+                    <Sans>OK</Sans>
+                  </Button>
+                  <Button onPress={() => navigate("List", { user })}>
+                    <Sans>BOOKS</Sans>
+                  </Button>
+                </Buttons>
               </View>
             )}
           </Mutation>

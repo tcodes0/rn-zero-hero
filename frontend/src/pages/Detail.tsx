@@ -1,32 +1,36 @@
 import * as React from "react";
-import { Text } from "react-native";
 import styled from "styled-components/native";
 import Layout from "../layouts/DefaultLayout";
-import { Button } from "../components";
+import { getNavParams } from "../utils";
+import { Button, Text, Strong, Sans } from "../components";
 
-const Title = styled.Text`
-  font-size: 21px;
-  color: darkblue;
+const Title = styled(Strong)`
+  font-family: "Crimson Text";
+  font-style: italic;
+  font-size: 35px;
   margin-top: 25px;
   margin-bottom: 25px;
   text-align: center;
+  text-transform: capitalize;
 `;
 
 const Cover = styled.Image`
   width: 220px;
   height: 220px;
   margin: 25px;
+  border-color: ${props => props.theme.colors.text};
+  border-style: solid;
+  border-width: 2px;
 `;
 
 const Wrapper = styled.View`
   flex: 1;
   justify-content: flex-start;
   align-items: center;
-  background-color: #f5fcff;
   padding: 25px;
 `;
 
-const Description = styled.Text`
+const Description = styled(Text)`
   font-size: 17px;
   margin-top: 25px;
   margin-bottom: 25px;
@@ -35,7 +39,11 @@ const Description = styled.Text`
 
 const Detail = (props: any) => {
   const { navigate } = props.navigation;
-  const { user, book } = props.navigation.state.params;
+  const params = getNavParams(props);
+  if (!params) {
+    return null;
+  }
+  const { user, book } = params;
 
   return (
     <Layout user={user}>
@@ -50,7 +58,7 @@ const Detail = (props: any) => {
           By {book.author.name}, {book.author.age} years old.
         </Description>
         <Button onPress={() => navigate("List", { user })}>
-          <Text>Back</Text>
+          <Sans>Back</Sans>
         </Button>
       </Wrapper>
     </Layout>

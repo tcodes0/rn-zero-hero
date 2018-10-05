@@ -42,11 +42,11 @@
 ✔ get some feedback
 
 #### Expensive
-- make things pretty
+✔ make things pretty
 - CI/CD
 - unit tests
 - detox e2e
-✔  fix TS
+✔ fix TS
 
 #### Regular
 - add pagination to List using meta-data <Query> ({fetchMore})
@@ -56,14 +56,14 @@
           .limit(args.size)
           .skip(args.size * args.page)
     ```
--b add TS on server
--b add MongoDB & Mongoose
+xb add TS on server
+✔b add MongoDB & Mongoose
 
 ✔ moved styles to styled
-- Use Mutation and Query from `react-apollo` to leverage the loading state
+✔ Use Mutation and Query from `react-apollo` to leverage the loading state
     use Activity indicator to show loading states
-- ApolloConsumer -> graphql HOC
-- Ditch react-power-plug in cases where the JSX is full of complicated handlers that can be moved to an instance method in the class. E.g. `() => this.doFoo()`
+✔ ApolloConsumer -> graphql HOC
+✔ Ditch react-power-plug in cases where the JSX is full of complicated handlers that can be moved to an instance method in the class. E.g. `() => this.doFoo()`
 
 #### Cheap
 ✔ use theme provider to provide a color.main prop

@@ -4,7 +4,7 @@ import gql from "graphql-tag";
 import styled from "styled-components/native";
 import { ApolloConsumer } from "react-apollo";
 import { ApolloQueryResult, ApolloClient } from "apollo-client";
-import { log, getNumericId, getNavParams } from "../utils";
+import { getNumericId, getNavParams, lowerCase } from "../utils";
 import { Layout } from "../layouts";
 import { BookFlatList, Book, Filter } from "../components";
 
@@ -12,10 +12,15 @@ const Wrapper = styled.View`
   margin-top: 20px;
   flex: 1;
   padding: 20px;
+  width: 100%;
 `;
 
 const View = styled.View`
   flex: 1;
+`;
+
+const FilterView = styled.View`
+  margin: 10px 15px 0px 15px;
 `;
 
 const booksWithAuthors = gql`
@@ -42,14 +47,17 @@ class List extends React.Component<{}, ListState> {
   showAll = () => this.setState(({ books }) => ({ filtered: books }));
 
   filterByTitle = (sections: any[], query: string) =>
-    sections.filter(section => section.title.includes(query));
+    sections.filter(section => {
+      const title = lowerCase(section.title);
+      return title.includes(query);
+    });
 
   handleChangeText = (text: string) => {
     if (!text) {
       return this.showAll();
     }
     return this.setState(({ books }) => ({
-      filtered: this.filterByTitle(books, text)
+      filtered: this.filterByTitle(books, lowerCase(text))
     }));
   };
 
@@ -98,7 +106,9 @@ class List extends React.Component<{}, ListState> {
               }
               return (
                 <View>
-                  <Filter onChangeText={this.handleChangeText} />
+                  <FilterView>
+                    <Filter onChangeText={this.handleChangeText} style={{width: "100%"}}/>
+                  </FilterView>
                   <BookFlatList<Book>
                     data={filtered}
                     navigate={navigate}

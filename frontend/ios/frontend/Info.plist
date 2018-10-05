@@ -40,13 +40,25 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Spectral-BoldItalic.ttf</string>
+		<string>Spectral-Bold.ttf</string>
+		<string>Spectral-Italic.ttf</string>
+		<string>Spectral-Regular.ttf</string>
+		<string>CrimsonText-Bold.ttf</string>
+		<string>CrimsonText-BoldItalic.ttf</string>
+		<string>CrimsonText-Italic.ttf</string>
+		<string>CrimsonText-Regular.ttf</string>
+		<string>Spectral-Medium.ttf</string>
+		<string>Spectral-MediumItalic.ttf</string>
+		<string>Spectral-SemiBold.ttf</string>
+		<string>Spectral-SemiBoldItalic.ttf</string>
+	</array>
 	<key>NSAppTransportSecurity</key>
-	<!--See http://ste.vn/2015/06/10/configuring-app-transport-security-ios-9-osx-10-11/ -->
 	<dict>
-    <key>NSAllowsArbitraryLoads</key>
-    <true/>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
 			<key>localhost</key>

@@ -1,8 +1,9 @@
 import * as React from "react";
 import { Value } from "react-powerplug";
 import styled from "styled-components/native";
+import TextInput from "./TextInput";
 
-const Input = styled.TextInput`
+const Input = styled(TextInput)`
   font-size: 17px;
   margin-bottom: 10px;
   text-align: left;
