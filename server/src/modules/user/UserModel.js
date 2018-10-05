@@ -1,5 +1,12 @@
+import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
 
-const users = [{ name: "foton", hash: bcrypt.hashSync("foton", 1) }];
+export const users = [{ name: "foton", hash: bcrypt.hashSync("foton", 1) }];
 
-export default users;
+const userSchema = new Schema({
+  _id: Schema.Types.ObjectId,
+  name: String,
+  hash: String
+});
+
+export default mongoose.model("User", userSchema);

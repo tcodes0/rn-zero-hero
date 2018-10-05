@@ -1,6 +1,4 @@
-import * as BookLoader from "./BookLoader";
-
-const { addBook, newBook } = BookLoader;
+import { loadAllBooks, addBook } from "./BookLoader";
 
 export const typeDefs = `
   type Book {
@@ -10,22 +8,21 @@ export const typeDefs = `
 `;
 
 export const resolvers = {
-  // eslint-disable-next-line arrow-body-style
   books: (root, args, { auth }) => {
     if (auth) {
-      return BookLoader.loadAllBooks();
+      return loadAllBooks(args);
     }
     return null;
   },
-  dev_books: () => BookLoader.loadAllBooks()
+  dev_books: (root, args) => loadAllBooks(args)
 };
 
 export const mutations = {
   addBook: (root, args, { auth }) => {
     if (auth) {
-      const book = newBook(args.title, args.author.name, args.author.age);
-      return addBook(book);
+      return addBook(args);
     }
     return null;
-  }
+  },
+  dev_addBook: (root, args) => addBook(args)
 };

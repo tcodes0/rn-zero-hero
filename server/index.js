@@ -1,11 +1,20 @@
 /* eslint-disable no-console */
 import { ApolloServer } from "apollo-server-express";
 import express from "express";
+import mongoose from "mongoose";
 import { validateToken } from "./src/modules/user/UserLoader";
 
 import * as BookType from "./src/modules/book/BookType";
 import * as AuthorType from "./src/modules/author/AuthorType";
 import * as UserType from "./src/modules/user/UserType";
+
+mongoose.connect(
+  "mongodb://localhost:27017",
+  { useNewUrlParser: true }
+);
+mongoose.connection.on("error", () => {
+  console.log("database connection error");
+});
 
 const SchemaDefinition = `
   schema {
@@ -20,13 +29,14 @@ const SchemaDefinition = `
     token: String!
   }
   type Query {
-    books(token: String): [Book]
-    dev_books: [Book]
+    books(skip: Int, limit: Int, token: String): [Book]
+    dev_books(skip: Int, limit: Int): [Book]
     dev_users: [User]
   }
   type Mutation {
     login(name: String, password: String): Token!
     addBook(title: String, author: AuthorInput, token: String): Book
+    dev_addBook(title: String, author: AuthorInput): Book
     addUser(name: String, password: String): Token!
   }
 `;
