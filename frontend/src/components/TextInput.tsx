@@ -6,4 +6,4 @@ const TextInput = styled.TextInput`
   font-style: italic;
 `;
 
-export default (props: any) => <TextInput autoCapitalize="none" {...props} />;
+export default (props: any) => <TextInput autoCapitalize="none" placeholderTextColor="rgba(83, 32, 0, 0.6)" {...props} />;

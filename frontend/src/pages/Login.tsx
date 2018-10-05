@@ -10,7 +10,6 @@ import { Button, Wrapper, TextInput, Strong, ErrorText } from "../components";
 export const LoginContainer = styled.View`
   justify-content: center;
   align-items: center;
-  background-color: #f5fcff;
 `;
 
 export const InputContainer = styled.View`

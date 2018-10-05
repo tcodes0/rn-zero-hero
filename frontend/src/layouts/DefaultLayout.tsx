@@ -3,11 +3,18 @@ import styled from "styled-components/native";
 import { capitalize } from "../utils";
 import { Strong } from "../components";
 
-const Wrapper = styled.ImageBackground`
+const OuterBackground = styled.ImageBackground`
   padding: 15px 15px 15px 15px;
   height: 100%;
   width: 100%;
-  /* background-color: rgba(151, 72, 0, 1); */
+`;
+
+const InnerBackground = styled.ImageBackground`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 `;
 
 const Header = styled(Strong)`
@@ -22,10 +29,13 @@ const Layout = (props: any) => {
   const { children, user, ...otherProps } = props;
 
   return (
-    <Wrapper source={require("../../ios/Resources/wood-bg.png")} {...otherProps}>
+    <OuterBackground
+      source={require("../../ios/Resources/wood-bg.png")}
+      {...otherProps}
+    >
       {user && <Header>Welcome {capitalize(user)}!</Header>}
-      {children}
-    </Wrapper>
+      <InnerBackground source={require("../../ios/Resources/paper-bg.png")}>{children}</InnerBackground>
+    </OuterBackground>
   );
 };
 
