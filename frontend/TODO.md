@@ -43,7 +43,7 @@
 
 #### Expensive
 ✔ make things pretty
-- CI/CD
+- CI
 - unit tests
 - detox e2e
 ✔ fix TS

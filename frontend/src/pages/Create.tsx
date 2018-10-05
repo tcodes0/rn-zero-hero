@@ -3,7 +3,7 @@ import { AsyncStorage, View, ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
 import gql from "graphql-tag";
 import { Mutation, MutationFn } from "react-apollo";
-import { log, getNavParams, formatMessage } from "../utils";
+import { log, getNavParams, formatMessage, NavigatableProps } from "../utils";
 import Layout from "../layouts/DefaultLayout";
 import {
   Button,
@@ -60,7 +60,8 @@ type CreateState = Readonly<{
   error?: Error;
 }>;
 
-class Create extends React.Component<{}, CreateState> {
+
+class Create extends React.Component<NavigatableProps, CreateState> {
   initialState: Readonly<CreateState> = {
     name: "",
     title: "",

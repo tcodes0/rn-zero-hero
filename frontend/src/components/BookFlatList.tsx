@@ -60,6 +60,7 @@ class BookFlatList<B extends Book> extends React.Component<
 
   render() {
     return (
+      // @ts-ignore
       <FlatList
         style={this.bookStyle.book}
         renderItem={this.renderItem}

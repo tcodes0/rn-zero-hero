@@ -1,10 +1,10 @@
 import * as React from "react";
-import { AsyncStorage, ActivityIndicator, View } from "react-native";
+import { AsyncStorage, ActivityIndicator } from "react-native";
 import gql from "graphql-tag";
 import styled from "styled-components/native";
-import Layout from "../layouts/DefaultLayout";
 import { Mutation, MutationFn } from "react-apollo";
-import { formatMessage, getNavParams } from "../utils";
+import Layout from "../layouts/DefaultLayout";
+import { formatMessage, getNavParams, NavigatableProps } from "../utils";
 import { Wrapper, Button, Sans, ErrorText } from "../components";
 import { LoginContainer, Title, Input, Buttons } from "./Login";
 
@@ -39,7 +39,7 @@ type RegisterState = {
   error?: Error;
 };
 
-class Register extends React.Component<{}, RegisterState> {
+class Register extends React.Component<NavigatableProps, RegisterState> {
   state: Readonly<RegisterState> = {
     name: "",
     password: ""
@@ -62,6 +62,7 @@ class Register extends React.Component<{}, RegisterState> {
         password: this.state.password
       }
     })
+      // @ts-ignore
       .then(({ data: { addUser: { token } } }) => {
         navigate("Create", { user: this.state.name });
         return AsyncStorage.setItem("token", token);

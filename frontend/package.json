@@ -19,6 +19,7 @@
   "dependencies": {
     "@babel/runtime": "^7.0.0",
     "apollo-boost": "^0.1.16",
+    "babel-core": "7.0.0-bridge.0",
     "enzyme": "^3.4.4",
     "graphql": "^14.0.2",
     "graphql-tag": "^2.9.2",
@@ -54,7 +55,6 @@
     "@types/styled-components": "^3.0.1",
     "babel-eslint": "^9.0.0",
     "babel-jest": "^23.6.0",
-    "enzyme-adapter-react-16": "^1.5.0",
     "eslint": "^5.6.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-prettier": "^2.9.0",
@@ -70,7 +70,7 @@
     "react-native-typescript-transformer": "^1.2.10",
     "react-test-renderer": "16.5.0",
     "ts-jest": "^23.10.2",
-    "typescript": "^3.1.1",
+    "typescript": "~3.0.1",
     "typescript-eslint-parser": "^19.0.1",
     "typescript-styled-plugin": "^0.11.0"
   }

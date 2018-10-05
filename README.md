@@ -1,17 +1,17 @@
 # React Native Fullstack: Zer0 to Hero
 
 <br>
-
+<p>
+  <a href="https://travis-ci.org/Thomazella/tt"><img src="https://img.shields.io/travis/Thomazella/rn-zero-hero/master.svg?style=flat-square" alt="Build Status" /></a>
+  <a href="https://github.com/prettier/prettier">
+    <img alt="code style: prettier" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square">
+  </a>
+</p>
 <p align="center">
-  <img src="https://placekitten.com/220/220" alt="reakit" width="320" />
+  <img src="https://user-images.githubusercontent.com/15015324/46561262-479b2180-c8cd-11e8-9b43-f5f6e59f8f48.png" alt="react native fullstack zero to hero" width="320" />
 </p>
 
-*awesome logo goes here*
-
-
-## Initial working version
-
-### How to play with it
+## How to play with it
 
 - Clone the repo
 - `cd` into it
@@ -35,29 +35,6 @@
 
 - `Open ios/frontend.xcodeproj` To launch the Xcode project. Click the build button and hang tight, it'll launch the Simulator soon.
 
-### What's to be improved
-
-|  | to-do|
-|--|--|
-|| add pagination to List using meta-data |
-|✔| use flatList |
-|| fix TS |
-|| add TS on server |
-|| CI/CD |
-|| unit tests |
-|| detox e2e |
-|| ApolloConsumer -> graphql HOC |
-|| theme provider, make things pretty |
-|| Button -> touchable opacity |
-|| add MongoDB & Mongoose |
-|| refactor server files, move auth code to Auth module |
-|| get some feedback |
-
 ### App login
 
-|  |  |  |
-|--|--|--|
-|user| Foton | _case-**in**sensitive_ |
-|pass| foton | _case-sensitive_ |
-
-Or create your user. :)
+You'll have to create your user. :)

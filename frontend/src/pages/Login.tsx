@@ -2,10 +2,17 @@ import * as React from "react";
 import { AsyncStorage, ActivityIndicator, View } from "react-native";
 import styled from "styled-components/native";
 import gql from "graphql-tag";
-import { formatMessage, log } from "../utils";
-import Layout from "../layouts/DefaultLayout";
 import { Mutation, MutationFn } from "react-apollo";
-import { Button, Wrapper, TextInput, Sans, ErrorText, Heading } from "../components";
+import { formatMessage, log, NavigatableProps } from "../utils";
+import Layout from "../layouts/DefaultLayout";
+import {
+  Button,
+  Wrapper,
+  TextInput,
+  Sans,
+  ErrorText,
+  Heading
+} from "../components";
 
 export const LoginContainer = styled.View`
   justify-content: center;
@@ -57,7 +64,7 @@ type LoginState = {
   error?: Error;
 };
 
-class Login extends React.Component<{}, LoginState> {
+class Login extends React.Component<NavigatableProps, LoginState> {
   state: Readonly<LoginState> = {
     name: "",
     password: ""
@@ -78,6 +85,7 @@ class Login extends React.Component<{}, LoginState> {
       doLogin({
         variables: { name, password }
       })
+        // @ts-ignore
         .then(({ data: { login: { token } } }) =>
           AsyncStorage.setItem("token", token).then(() =>
             navigate("Create", { user: this.state.name })
@@ -120,14 +128,14 @@ class Login extends React.Component<{}, LoginState> {
                       />
                     </View>
                     <Feedback>
-                    {!data &&
-                      this.state.error && (
-                        <ErrorText>
-                          {formatMessage(this.state.error.message)}
-                        </ErrorText>
-                      )}
-                    {loading && <ActivityIndicator size="large" />}
-                  </Feedback>
+                      {!data &&
+                        this.state.error && (
+                          <ErrorText>
+                            {formatMessage(this.state.error.message)}
+                          </ErrorText>
+                        )}
+                      {loading && <ActivityIndicator size="large" />}
+                    </Feedback>
                     <Buttons>
                       <Button onPress={() => this.handleLogin(login)}>
                         <Sans>Login</Sans>
