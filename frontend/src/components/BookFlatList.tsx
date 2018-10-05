@@ -14,9 +14,11 @@ const Book = styled(Button)`
 `;
 
 const BookTitle = styled(Strong)`
-  font-size: 21px;
-  margin-bottom: 10px;
+  font-family: "Crimson Text";
+  font-style: italic;
+  font-size: 24px;
   text-transform: capitalize;
+  margin-bottom: 10px;
 `;
 
 export type Author = {
@@ -47,7 +49,7 @@ class BookFlatList<B extends Book> extends React.Component<BookFlatListProps<B>>
 
     return (
       <Book onPress={() => navigate("Detail", { book, user })}>
-        <BookTitle>{`"${book.title}"`}</BookTitle>
+        <BookTitle>{`${book.title}`}</BookTitle>
         <Text>{`by ${book.author && book.author.name}`}</Text>
       </Book>
     );

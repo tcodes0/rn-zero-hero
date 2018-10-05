@@ -5,7 +5,9 @@ import { getNavParams } from "../utils";
 import { Button, Text, Strong } from "../components";
 
 const Title = styled(Strong)`
-  font-size: 29px;
+  font-family: "Crimson Text";
+  font-style: italic;
+  font-size: 35px;
   margin-top: 25px;
   margin-bottom: 25px;
   text-align: center;

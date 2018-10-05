@@ -46,6 +46,10 @@
 		<string>Spectral-Bold.ttf</string>
 		<string>Spectral-Italic.ttf</string>
 		<string>Spectral-Regular.ttf</string>
+		<string>CrimsonText-Bold.ttf</string>
+		<string>CrimsonText-BoldItalic.ttf</string>
+		<string>CrimsonText-Italic.ttf</string>
+		<string>CrimsonText-Regular.ttf</string>
 	</array>
 	<key>NSAppTransportSecurity</key>
 	<dict>
