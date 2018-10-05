@@ -1,7 +1,5 @@
-import * as BookLoader from "./BookLoader";
-import { validateToken } from "../user/UserLoader";
-
-const { addBook, newBook } = BookLoader;
+import { AuthenticationError } from "apollo-server-express";
+import { loadAllBooks, addBook } from "./BookLoader";
 
 export const typeDefs = `
   type Book {
@@ -11,27 +9,21 @@ export const typeDefs = `
 `;
 
 export const resolvers = {
-  books: (root, args) =>
-    validateToken(args.token)
-      // eslint-disable-next-line
-      .then(() => {
-        // console.log(`books req with token - ${args.token}`);
-        return BookLoader.loadAllBooks();
-      })
-      .catch(e => {
-        if (e) throw e;
-      }),
-  dev_books: () => BookLoader.loadAllBooks()
+  books: (root, args, { auth }) => {
+    if (auth) {
+      return loadAllBooks(args);
+    }
+    throw AuthenticationError("Please signing again.");
+  },
+  dev_books: (root, args) => loadAllBooks(args)
 };
 
 export const mutations = {
-  addBook: (root, args) =>
-    validateToken(args.token)
-      .then(() => {
-        const book = newBook(args.title, args.author.name, args.author.age);
-        return addBook(book);
-      })
-      .catch(e => {
-        if (e) throw e;
-      })
+  addBook: (root, args, { auth }) => {
+    if (auth) {
+      return addBook(args);
+    }
+    throw AuthenticationError("Please signing again.");
+  },
+  dev_addBook: (root, args) => addBook(args)
 };

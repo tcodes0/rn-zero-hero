@@ -37,7 +37,7 @@ type ListState = {
 };
 
 class List extends React.Component<{}, ListState> {
-  state: ListState = { filtered: [], books: [] };
+  state: Readonly<ListState> = { filtered: [], books: [] };
 
   showAll = () => this.setState(({ books }) => ({ filtered: books }));
 
@@ -78,7 +78,7 @@ class List extends React.Component<{}, ListState> {
         })
       )
       .catch(e => {
-        e && log(e);
+        e && console.log("e");
       });
   };
 

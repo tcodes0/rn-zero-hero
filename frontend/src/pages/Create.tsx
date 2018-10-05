@@ -11,7 +11,7 @@ import gql from "graphql-tag";
 import { Mutation, MutationFn } from "react-apollo";
 import { log, getNavParams, formatMessage } from "../utils";
 import Layout from "../layouts/DefaultLayout";
-import { Button, Wrapper } from "../components";
+import { Button, Wrapper, Book } from "../components";
 
 const Title = styled.Text`
   background-color: #f5fcff;
@@ -26,6 +26,8 @@ const Field = styled.View`
 const Feedback = styled.View`
   height: 30px;
 `;
+
+type addBookData = { data: Book}
 
 const mutationAddBook = gql`
   mutation($title: String!, $name: String!, $age: Int!, $token: String!) {
@@ -45,10 +47,9 @@ type CreateState = Readonly<{
   title: string;
   error?: Error;
 }>;
-type addBookdata = any;
 
 class Create extends React.Component<{}, CreateState> {
-  initialState: CreateState = {
+  initialState: Readonly<CreateState> = {
     name: "",
     title: "",
     age: undefined
@@ -64,7 +65,7 @@ class Create extends React.Component<{}, CreateState> {
     return this.setState({ age: input });
   };
 
-  handleAddBook = (doAddBook: MutationFn<addBookdata>) => {
+  handleAddBook = (doAddBook: MutationFn<addBookData>) => {
     const user = getNavParams(this.props, "user");
     const { age, name, title } = this.state;
     const { navigate } = this.props.navigation;

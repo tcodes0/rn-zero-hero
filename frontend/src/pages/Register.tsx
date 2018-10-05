@@ -12,6 +12,8 @@ const Feedback = styled.View`
   height: 30;
 `;
 
+type addUserData = { data: { addUser: { token: string } } };
+
 const mutationAddUser = gql`
   mutation($name: String!, $password: String!) {
     addUser(name: $name, password: $password) {
@@ -20,7 +22,6 @@ const mutationAddUser = gql`
   }
 `;
 
-type addUserData = { data: { addUser: { token: string } } };
 type RegisterState = {
   name: string;
   password: string;
@@ -28,7 +29,7 @@ type RegisterState = {
 };
 
 class Register extends React.Component<{}, RegisterState> {
-  state = {
+  state: Readonly<RegisterState> = {
     name: "",
     password: ""
   };

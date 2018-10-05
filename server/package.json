@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "start": "babel-watch index.js"
+    "start": "babel-watch index.js",
+    "lint": "eslint src"
   },
   "license": "MIT",
   "dependencies": {
@@ -9,13 +10,16 @@
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "bcrypt": "^3.0.1",
+    "express": "^4.16.3",
     "graphql": "^14.0.2",
     "graphql-tools": "^4.0.0",
-    "jsonwebtoken": "^8.3.0"
+    "jsonwebtoken": "^8.3.0",
+    "mongoose": "^5.3.1"
   },
   "devDependencies": {
     "babel-eslint": "^9.0.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-watch": "^2.0.7",
     "eslint": "^5.6.0",
     "eslint-config-airbnb": "^16.1.0",

@@ -1,12 +1,13 @@
-import bcrypt from "bcrypt";
 import * as UserLoader from "./UserLoader";
+import UserModel from "./UserModel";
 
-const { addUser, validatePassword, loadAllUsers, newToken } = UserLoader;
-
-const lowerCase = input => String.prototype.toLowerCase.call(input);
-
-const getUserByName = (providedName = "") =>
-  loadAllUsers().find(({ name }) => name === lowerCase(providedName));
+const {
+  addUser,
+  loadAllUsers,
+  newToken,
+  validatePassword,
+  lowerCase
+} = UserLoader;
 
 export const typeDefs = `
   type User {
@@ -20,33 +21,26 @@ export const resolvers = {
 };
 
 export const mutations = {
-  addUser: (root, args) => {
-    const { name, password } = args;
-    if (getUserByName(name)) throw Error("User already registered");
-    const user = {
-      name: lowerCase(name),
-      hash: bcrypt.hashSync(password, 8)
-    };
-    return addUser(user);
-  },
-  login: (root, args) => {
-    const { name, password } = args;
-    const user = getUserByName(name);
-    if (!user) {
-      throw Error("User not registered");
-    }
+  addUser: (root, args) => addUser(args),
+  login: (root, { name: inputName, password }) => {
+    const name = lowerCase(inputName);
+    return UserModel.find({ name }).then(result => {
+      if (!result.length) {
+        throw Error("User doesn't exist. Please register.");
+      }
 
-    return validatePassword(password, user)
-      .then(res => {
-        if (res) {
-          const token = newToken(user);
-          // console.log(`login ${user.name} with token - ${token}\n\n`);
-          return { token };
-        }
-        throw Error("Server Error");
-      })
-      .catch(e => {
-        throw e;
-      });
+      const [user] = result;
+      return validatePassword(password, user)
+        .then(res => {
+          if (res) {
+            const token = newToken({ name });
+            return { token };
+          }
+          throw Error("Server Error");
+        })
+        .catch(e => {
+          throw e;
+        });
+    });
   }
 };

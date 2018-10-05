@@ -1,10 +1,25 @@
 /* eslint-disable no-console */
-import { ApolloServer } from "apollo-server";
-import { makeExecutableSchema } from "graphql-tools";
+import { ApolloServer } from "apollo-server-express";
+import express from "express";
+import mongoose from "mongoose";
+import { validateToken } from "./src/modules/user/UserLoader";
 
 import * as BookType from "./src/modules/book/BookType";
 import * as AuthorType from "./src/modules/author/AuthorType";
 import * as UserType from "./src/modules/user/UserType";
+
+const dbAddress = {
+  production: "mongodb://our-awesome/server/db",
+  development: "mongodb://localhost:27017/test2"
+};
+
+mongoose.connect(
+  dbAddress.development,
+  { useNewUrlParser: true }
+);
+mongoose.connection.on("error", () => {
+  console.log("database connection error");
+});
 
 const SchemaDefinition = `
   schema {
@@ -19,13 +34,14 @@ const SchemaDefinition = `
     token: String!
   }
   type Query {
-    books(token: String): [Book]
-    dev_books: [Book]
+    books(skip: Int, limit: Int, token: String): [Book]
+    dev_books(skip: Int, limit: Int): [Book]
     dev_users: [User]
   }
   type Mutation {
-    login(name: String, password: String): Token
-    addBook(title: String, author: AuthorInput, token: String): Book!
+    login(name: String, password: String): Token!
+    addBook(title: String, author: AuthorInput, token: String): Book
+    dev_addBook(title: String, author: AuthorInput): Book
     addUser(name: String, password: String): Token!
   }
 `;
@@ -43,13 +59,15 @@ const resolvers = {
   }
 };
 
-const schema = makeExecutableSchema({
+const server = new ApolloServer({
   typeDefs: [SchemaDefinition, ...typeDefs],
-  resolvers
+  resolvers,
+  context: validateToken
 });
 
-const server = new ApolloServer({ schema });
+const app = express();
+server.applyMiddleware({ app });
 
-server.listen().then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`);
-});
+app.listen({ port: 4000 }, () =>
+  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+);

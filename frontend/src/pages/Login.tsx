@@ -33,6 +33,8 @@ export const Input = styled.TextInput`
   text-align: left;
 `;
 
+type loginData = { data: { addUser: { token: string } } };
+
 const loginMutation = gql`
   mutation($name: String!, $password: String!) {
     login(name: $name, password: $password) {
@@ -41,7 +43,6 @@ const loginMutation = gql`
   }
 `;
 
-type loginData = { data: { addUser: { token: string } } };
 type LoginState = {
   name: string;
   password: string;
@@ -50,7 +51,7 @@ type LoginState = {
 };
 
 class Login extends React.Component<{}, LoginState> {
-  state = {
+  state: Readonly<LoginState> = {
     name: "",
     password: ""
   };
@@ -119,7 +120,7 @@ class Login extends React.Component<{}, LoginState> {
                   <Feedback>
                     {!data &&
                       this.state.error && (
-                        <Text>{formatMessage(this.state.error.message)}</Text>
+                      <Text>{formatMessage(this.state.error.message)}</Text>
                       )}
                     {loading && <ActivityIndicator size="large" />}
                   </Feedback>

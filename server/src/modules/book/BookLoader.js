@@ -1,41 +1,21 @@
-const books = [
-  {
-    title: "Harry Potter and the Chamber of Secrets",
-    author: {
-      name: "JKR",
-      age: 98
-    }
-  },
-  {
-    title: "Jurassic Park",
-    author: {
-      name: "Michael Crichton",
-      age: 33
-    }
-  }
-];
+import mongoose from "mongoose";
+import BookModel from "./BookModel";
+import addAuthor from "../author/AuthorLoader";
 
-/**
- * Pushes a book to database. Returns the book.
- * @param {Book} book Book type, see schema
- */
-export const addBook = book => {
-  books.push(book);
-  return book;
+const { ObjectId } = mongoose.Types;
+
+export const addBook = ({ title, author: bookAuthor }) => {
+  return addAuthor({ ...bookAuthor }).then(author => {
+    const _id = new ObjectId();
+    const book = new BookModel({ title, author, _id });
+    return book.save();
+  });
 };
 
-/**
- * Create a book object. Returns the book.
- * @param {String} title Book title
- * @param {String} name Author Name
- * @param {Int} age Author age
- */
-export const newBook = (title, name, age) => ({
-  title,
-  author: {
-    name,
-    age
-  }
-});
-
-export const loadAllBooks = () => books;
+export const loadAllBooks = ({ skip, limit }) => {
+  return BookModel.find({}, null, { skip, limit })
+    .populate("author")
+    .then(result => {
+      return result;
+    });
+};

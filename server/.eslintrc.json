@@ -13,11 +13,10 @@
     "sourceType": "module"
   },
   "rules": {
-    "linebreak-style": [
-      "error",
-      "unix"
-    ],
-    "react/jsx-filename-extension": "off"
+    "linebreak-style": ["error", "unix"],
+    "react/jsx-filename-extension": "off",
+    "no-underscore-dangle": "off",
+    "arrow-body-style": "off"
   },
   "parser": "babel-eslint"
 }

@@ -1,26 +1,50 @@
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 import bcrypt from "bcrypt";
+import { AuthenticationError } from "apollo-server-express";
+import UserModel from "./UserModel";
 
-const users = [{ name: "foton", hash: bcrypt.hashSync("foton", 1) }];
-
+const { ObjectId } = mongoose.Types;
 const secret = "ABB15D42-3BCD-498B-9095-416F24C4E821";
+
+export const lowerCase = input => String.prototype.toLowerCase.call(input);
+
+export const loadAllUsers = () => {
+  return UserModel.find({}).then(result => {
+    return result;
+  });
+};
+
+/**
+ * Verify token in request is not expired. Uses graphQL variables.
+ * @param  req Request.
+ * @returns {Promise} Promise to be fulfilled with { auth: String }.
+ */
+export const validateToken = ({ req }) => {
+  const token = req.body && req.body.variables && req.body.variables.token;
+  if (!token) {
+    return Promise.resolve();
+  }
+
+  return new Promise((res, rej) => {
+    jwt.verify(token, secret, e => {
+      if (e) {
+        rej(new AuthenticationError("Please sign in again"));
+      }
+      res({ auth: token });
+    });
+  });
+};
 
 /**
  * Get a new JWT token.
  * @param {User} user object to get token for.
  * @returns {String} Token.
  */
-export const newToken = user => jwt.sign(user, secret, { expiresIn: "99999s" });
-
-/**
- * Pushes a user to database.
- * @param {User} user User type, see schema
- * @returns {String} Token.
- */
-export const addUser = user => {
-  if (!users.some(({ name }) => name === user.name)) users.push(user);
-  return { token: newToken(user) };
-};
+export const newToken = user =>
+  jwt.sign(user, secret, {
+    expiresIn: "1800s"
+  }); // 30min
 
 /**
  * Checks if a provided password matches a user's hash.
@@ -41,17 +65,17 @@ export const validatePassword = (password, user) =>
       .catch(e => rej(Error(`Server Error: ${JSON.stringify(e)}`)));
   });
 
-/**
- * Verify a token isn't expired
- * @param {String} token Token to verify.
- * @returns {Promise} Promise to be fulfilled with bool true.
- */
-export const validateToken = token =>
-  new Promise((res, rej) => {
-    jwt.verify(token, secret, e => {
-      if (e) rej(Error("Invalid Token"));
-      res(true);
-    });
+export const addUser = ({ name: inputName, password }) => {
+  const name = lowerCase(inputName);
+  return UserModel.find({ name }).then(found => {
+    if (found.length) {
+      throw Error("User already registered.");
+    }
+    const hash = bcrypt.hashSync(password, 4);
+    const _id = new ObjectId();
+    const user = new UserModel({ name, hash, _id });
+    user.save();
+    const token = newToken({ name });
+    return { token };
   });
-
-export const loadAllUsers = () => users;
+};

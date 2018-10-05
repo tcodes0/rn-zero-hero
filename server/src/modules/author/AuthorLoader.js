@@ -1,14 +1,12 @@
-export const loadAllAuthors = (root, args, context) => {
-  const authors = [
-    {
-      name: 'Guilherme Jabur',
-      age: 22,
-    },
-    {
-      name: 'Sebastiao matos',
-      age: 22,
-    },
-  ];
+import mongoose from "mongoose";
+import AuthorModel from "./AuthorModel";
 
-  return authors;
-}
+const { ObjectId } = mongoose.Types;
+
+const addAuthor = ({ name, age }) => {
+  const _id = new ObjectId();
+  const author = new AuthorModel({ name, age, _id });
+  return author.save();
+};
+
+export default addAuthor;
