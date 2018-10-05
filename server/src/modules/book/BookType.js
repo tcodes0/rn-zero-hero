@@ -1,5 +1,4 @@
 import * as BookLoader from "./BookLoader";
-import { validateToken } from "../user/UserLoader";
 
 const { addBook, newBook } = BookLoader;
 
@@ -11,27 +10,22 @@ export const typeDefs = `
 `;
 
 export const resolvers = {
-  books: (root, args) =>
-    validateToken(args.token)
-      // eslint-disable-next-line
-      .then(() => {
-        // console.log(`books req with token - ${args.token}`);
-        return BookLoader.loadAllBooks();
-      })
-      .catch(e => {
-        if (e) throw e;
-      }),
+  // eslint-disable-next-line arrow-body-style
+  books: (root, args, { auth }) => {
+    if (auth) {
+      return BookLoader.loadAllBooks();
+    }
+    return null;
+  },
   dev_books: () => BookLoader.loadAllBooks()
 };
 
 export const mutations = {
-  addBook: (root, args) =>
-    validateToken(args.token)
-      .then(() => {
-        const book = newBook(args.title, args.author.name, args.author.age);
-        return addBook(book);
-      })
-      .catch(e => {
-        if (e) throw e;
-      })
+  addBook: (root, args, { auth }) => {
+    if (auth) {
+      const book = newBook(args.title, args.author.name, args.author.age);
+      return addBook(book);
+    }
+    return null;
+  }
 };

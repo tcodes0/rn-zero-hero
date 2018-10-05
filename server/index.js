@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
-import { ApolloServer } from "apollo-server";
-import { makeExecutableSchema } from "graphql-tools";
+import { ApolloServer } from "apollo-server-express";
+import express from "express";
+import { validateToken } from "./src/modules/user/UserLoader";
 
 import * as BookType from "./src/modules/book/BookType";
 import * as AuthorType from "./src/modules/author/AuthorType";
@@ -24,8 +25,8 @@ const SchemaDefinition = `
     dev_users: [User]
   }
   type Mutation {
-    login(name: String, password: String): Token
-    addBook(title: String, author: AuthorInput, token: String): Book!
+    login(name: String, password: String): Token!
+    addBook(title: String, author: AuthorInput, token: String): Book
     addUser(name: String, password: String): Token!
   }
 `;
@@ -43,13 +44,15 @@ const resolvers = {
   }
 };
 
-const schema = makeExecutableSchema({
+const server = new ApolloServer({
   typeDefs: [SchemaDefinition, ...typeDefs],
-  resolvers
+  resolvers,
+  context: validateToken
 });
 
-const server = new ApolloServer({ schema });
+const app = express();
+server.applyMiddleware({ app });
 
-server.listen().then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`);
-});
+app.listen({ port: 4000 }, () =>
+  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+);

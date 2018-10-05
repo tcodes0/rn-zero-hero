@@ -50,7 +50,7 @@ type LoginState = {
 };
 
 class Login extends React.Component<{}, LoginState> {
-  state = {
+  state: Readonly<LoginState> = {
     name: "",
     password: ""
   };
@@ -119,7 +119,7 @@ class Login extends React.Component<{}, LoginState> {
                   <Feedback>
                     {!data &&
                       this.state.error && (
-                        <Text>{formatMessage(this.state.error.message)}</Text>
+                      <Text>{formatMessage(this.state.error.message)}</Text>
                       )}
                     {loading && <ActivityIndicator size="large" />}
                   </Feedback>

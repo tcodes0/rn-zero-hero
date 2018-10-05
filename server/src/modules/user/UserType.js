@@ -1,12 +1,14 @@
 import bcrypt from "bcrypt";
 import * as UserLoader from "./UserLoader";
 
-const { addUser, validatePassword, loadAllUsers, newToken } = UserLoader;
-
-const lowerCase = input => String.prototype.toLowerCase.call(input);
-
-const getUserByName = (providedName = "") =>
-  loadAllUsers().find(({ name }) => name === lowerCase(providedName));
+const {
+  addUser,
+  loadAllUsers,
+  newToken,
+  validatePassword,
+  getUserByName,
+  lowerCase
+} = UserLoader;
 
 export const typeDefs = `
   type User {
