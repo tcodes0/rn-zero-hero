@@ -1,11 +1,11 @@
 import * as React from "react";
-import { Text, AsyncStorage, ActivityIndicator } from "react-native";
+import { AsyncStorage, ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
 import gql from "graphql-tag";
 import { formatMessage, log } from "../utils";
 import Layout from "../layouts/DefaultLayout";
 import { Mutation, MutationFn } from "react-apollo";
-import { Button, Wrapper } from "../components";
+import { Button, Wrapper, TextInput, Strong, ErrorText } from "../components";
 
 export const LoginContainer = styled.View`
   justify-content: center;
@@ -22,12 +22,12 @@ export const Feedback = styled.View`
   height: 30px;
 `;
 
-export const Title = styled.Text`
+export const Title = styled(Strong)`
   margin-bottom: 70px;
-  font-size: 18;
+  font-size: 25;
 `;
 
-export const Input = styled.TextInput`
+export const Input = styled(TextInput)`
   font-size: 17px;
   margin-bottom: 25px;
   text-align: left;
@@ -111,16 +111,16 @@ class Login extends React.Component<{}, LoginState> {
                       }
                     />
                     <Button onPress={() => this.handleLogin(login)}>
-                      <Text>Login</Text>
+                      <Strong>Login</Strong>
                     </Button>
                     <Button onPress={() => navigate("Register")}>
-                      <Text>Register</Text>
+                      <Strong>Register</Strong>
                     </Button>
                   </InputContainer>
                   <Feedback>
                     {!data &&
                       this.state.error && (
-                      <Text>{formatMessage(this.state.error.message)}</Text>
+                      <ErrorText>{formatMessage(this.state.error.message)}</ErrorText>
                       )}
                     {loading && <ActivityIndicator size="large" />}
                   </Feedback>

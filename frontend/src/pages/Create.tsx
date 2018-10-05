@@ -1,21 +1,16 @@
 import * as React from "react";
-import {
-  Text,
-  TextInput,
-  AsyncStorage,
-  View,
-  ActivityIndicator
-} from "react-native";
+import { AsyncStorage, View, ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
 import gql from "graphql-tag";
 import { Mutation, MutationFn } from "react-apollo";
 import { log, getNavParams, formatMessage } from "../utils";
 import Layout from "../layouts/DefaultLayout";
-import { Button, Wrapper, Book } from "../components";
+import { Button, Wrapper, Book, Text, TextInput, Strong, ErrorText } from "../components";
 
-const Title = styled.Text`
+const Title = styled(Text)`
   background-color: #f5fcff;
-  font-size: 22;
+  font-size: 23;
+  font-weight: 700;
   margin-bottom: 50;
 `;
 
@@ -27,7 +22,7 @@ const Feedback = styled.View`
   height: 30px;
 `;
 
-type addBookData = { data: Book}
+type addBookData = { data: Book };
 
 const mutationAddBook = gql`
   mutation($title: String!, $name: String!, $age: Int!, $token: String!) {
@@ -99,7 +94,7 @@ class Create extends React.Component<{}, CreateState> {
             <TextInput
               value={this.state.title}
               placeholder="title..."
-              onChangeText={input => this.setState({ title: input })}
+              onChangeText={(input: string) => this.setState({ title: input })}
             />
           </Field>
           <Field>
@@ -107,7 +102,7 @@ class Create extends React.Component<{}, CreateState> {
             <TextInput
               value={this.state.name}
               placeholder="name..."
-              onChangeText={input => this.setState({ name: input })}
+              onChangeText={(input: string) => this.setState({ name: input })}
             />
           </Field>
           <Field>
@@ -115,25 +110,25 @@ class Create extends React.Component<{}, CreateState> {
             <TextInput
               value={this.state.age || ""}
               placeholder="age..."
-              onChangeText={text => this.validate(text)}
+              onChangeText={(text: string) => this.validate(text)}
             />
           </Field>
           <Button onPress={() => this.resetState()}>
-            <Text>Reset</Text>
+            <Strong>Reset</Strong>
           </Button>
           <Mutation mutation={mutationAddBook}>
             {(addBook, { data, loading }) => (
               <View>
                 <Button onPress={() => this.handleAddBook(addBook)}>
-                  <Text>OK</Text>
+                  <Strong>OK</Strong>
                 </Button>
                 <Button onPress={() => navigate("List", { user })}>
-                  <Text>See books</Text>
+                  <Strong>See books</Strong>
                 </Button>
                 <Feedback>
                   {!data &&
                     this.state.error && (
-                      <Text>{formatMessage(this.state.error.message)}</Text>
+                      <ErrorText>{formatMessage(this.state.error.message)}</ErrorText>
                     )}
                   {loading && <ActivityIndicator size="large" />}
                 </Feedback>

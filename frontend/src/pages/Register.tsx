@@ -1,11 +1,11 @@
 import * as React from "react";
-import { Text, AsyncStorage, ActivityIndicator } from "react-native";
+import { AsyncStorage, ActivityIndicator } from "react-native";
 import gql from "graphql-tag";
 import styled from "styled-components/native";
 import Layout from "../layouts/DefaultLayout";
 import { Mutation, MutationFn } from "react-apollo";
 import { formatMessage, getNavParams } from "../utils";
-import { Wrapper, Button } from "../components";
+import { Wrapper, Button, Strong, ErrorText } from "../components";
 import { LoginContainer, InputContainer, Title, Input } from "./Login";
 
 const Feedback = styled.View`
@@ -72,22 +72,22 @@ class Register extends React.Component<{}, RegisterState> {
                   <Input
                     placeholder="Your name..."
                     value={this.state.name}
-                    onChangeText={name => this.setState({ name })}
+                    onChangeText={(name: string) => this.setState({ name })}
                   />
                   <Input
                     placeholder="Password..."
                     secureTextEntry
                     value={this.state.password}
-                    onChangeText={password => this.setState({ password })}
+                    onChangeText={(password: string) => this.setState({ password })}
                   />
                   <Button onPress={() => this.handleRegister(addUser)}>
-                    <Text>Ok</Text>
+                    <Strong>Ok</Strong>
                   </Button>
                 </InputContainer>
                 <Feedback>
                   {!data &&
                     this.state.error && (
-                      <Text>{formatMessage(this.state.error.message)}</Text>
+                      <ErrorText>{formatMessage(this.state.error.message)}</ErrorText>
                     )}
                   {loading && <ActivityIndicator size="large" />}
                 </Feedback>

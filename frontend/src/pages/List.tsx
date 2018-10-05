@@ -4,7 +4,7 @@ import gql from "graphql-tag";
 import styled from "styled-components/native";
 import { ApolloConsumer } from "react-apollo";
 import { ApolloQueryResult, ApolloClient } from "apollo-client";
-import { log, getNumericId, getNavParams } from "../utils";
+import { getNumericId, getNavParams, lowerCase } from "../utils";
 import { Layout } from "../layouts";
 import { BookFlatList, Book, Filter } from "../components";
 
@@ -42,14 +42,17 @@ class List extends React.Component<{}, ListState> {
   showAll = () => this.setState(({ books }) => ({ filtered: books }));
 
   filterByTitle = (sections: any[], query: string) =>
-    sections.filter(section => section.title.includes(query));
+    sections.filter(section => {
+      const title = lowerCase(section.title)
+      return title.includes(query)
+    });
 
   handleChangeText = (text: string) => {
     if (!text) {
       return this.showAll();
     }
     return this.setState(({ books }) => ({
-      filtered: this.filterByTitle(books, text)
+      filtered: this.filterByTitle(books, lowerCase(text))
     }));
   };
 

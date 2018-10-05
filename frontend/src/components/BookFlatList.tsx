@@ -1,12 +1,11 @@
 import * as React from "react";
 import {
   FlatList,
-  Text,
   StyleSheet,
   FlatListProps
 } from "react-native";
 import styled from "styled-components/native";
-import { Button } from ".";
+import { Button, Text, Strong } from ".";
 
 const Book = styled(Button)`
   align-items: flex-start;
@@ -14,9 +13,10 @@ const Book = styled(Button)`
   background-color: ${props => props.theme.colors.secondary};
 `;
 
-const BookTitle = styled.Text`
-  font-size: 18px;
-  margin-bottom: 8px;
+const BookTitle = styled(Strong)`
+  font-size: 21px;
+  margin-bottom: 10px;
+  text-transform: capitalize;
 `;
 
 export type Author = {

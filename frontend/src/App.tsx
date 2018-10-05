@@ -20,7 +20,7 @@ const NavigationWrapper = createStackNavigator(
     Login: { screen: Login },
     Register: { screen: Register }
   },
-  { initialRouteName: "Create" }
+  { initialRouteName: "List" }
 );
 
 const theme = { colors: { main: "pink", secondary: "#ba9eff" } };

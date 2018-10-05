@@ -1,15 +1,15 @@
 import * as React from "react";
-import { Text } from "react-native";
 import styled from "styled-components/native";
 import Layout from "../layouts/DefaultLayout";
-import { Button } from "../components";
+import { getNavParams } from "../utils";
+import { Button, Text, Strong } from "../components";
 
-const Title = styled.Text`
-  font-size: 21px;
-  color: darkblue;
+const Title = styled(Strong)`
+  font-size: 29px;
   margin-top: 25px;
   margin-bottom: 25px;
   text-align: center;
+  text-transform: capitalize;
 `;
 
 const Cover = styled.Image`
@@ -26,7 +26,7 @@ const Wrapper = styled.View`
   padding: 25px;
 `;
 
-const Description = styled.Text`
+const Description = styled(Text)`
   font-size: 17px;
   margin-top: 25px;
   margin-bottom: 25px;
@@ -35,7 +35,11 @@ const Description = styled.Text`
 
 const Detail = (props: any) => {
   const { navigate } = props.navigation;
-  const { user, book } = props.navigation.state.params;
+  const params = getNavParams(props);
+  if (!params) {
+    return null;
+  }
+  const { user, book } = params;
 
   return (
     <Layout user={user}>
@@ -50,7 +54,7 @@ const Detail = (props: any) => {
           By {book.author.name}, {book.author.age} years old.
         </Description>
         <Button onPress={() => navigate("List", { user })}>
-          <Text>Back</Text>
+          <Strong>Back</Strong>
         </Button>
       </Wrapper>
     </Layout>
