@@ -46,7 +46,7 @@
 - CI/CD
 - unit tests
 - detox e2e
-- fix TS
+✔  fix TS
 
 #### Regular
 - add pagination to List using meta-data <Query> ({fetchMore})
@@ -59,7 +59,6 @@
 -b add TS on server
 -b add MongoDB & Mongoose
 
-
 ✔ moved styles to styled
 - Use Mutation and Query from `react-apollo` to leverage the loading state
     use Activity indicator to show loading states
@@ -70,13 +69,12 @@
 ✔ use theme provider to provide a color.main prop
 ✔ Button -> touchable opacity
 ✔ Remove redux
--b refactor server files, move auth code to Auth module
+✔  refactor server files, move auth code to Auth module
 ✔ queries in component
 ✔ refactor \n in texts to two <Text>`s
 ✔ use reverse to sort items by new first!
 ✔ make queries required (!) where it makes sense
--b `combineResolvers` with `skip` from `graphql-resolvers`
--b destruct in args `(parent, { name, genre, authorId }) => {`
+✔  destruct in args `(parent, { name, genre, authorId }) => {`
 
 #### Bugs
 - firing a second addBook mutation from same user doesn't update  UI even tho book is added on server. (CACHE)

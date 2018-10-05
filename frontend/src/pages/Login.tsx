@@ -33,6 +33,8 @@ export const Input = styled.TextInput`
   text-align: left;
 `;
 
+type loginData = { data: { addUser: { token: string } } };
+
 const loginMutation = gql`
   mutation($name: String!, $password: String!) {
     login(name: $name, password: $password) {
@@ -41,7 +43,6 @@ const loginMutation = gql`
   }
 `;
 
-type loginData = { data: { addUser: { token: string } } };
 type LoginState = {
   name: string;
   password: string;

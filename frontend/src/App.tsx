@@ -1,11 +1,16 @@
 import * as React from "react";
 import { createStackNavigator } from "react-navigation";
 import { ThemeProvider } from "styled-components";
+import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
-import client from "./client";
 import { Create, Detail, Login, Register, List } from "./pages";
 
 export const env = "development";
+
+// @ts-ignore
+export const client = env == "production"
+    ? new ApolloClient({ uri: "https://nicelooking.client.domain.com" })
+    : new ApolloClient({ uri: "http://localhost:4000/graphql" });
 
 const NavigationWrapper = createStackNavigator(
   {
