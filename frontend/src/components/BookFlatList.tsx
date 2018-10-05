@@ -5,20 +5,23 @@ import {
   FlatListProps
 } from "react-native";
 import styled from "styled-components/native";
-import { Button, Text, Strong } from ".";
+import { Touchable, Text, Strong } from ".";
 
-const Book = styled(Button)`
+const Book = styled(Touchable)`
+  border-color: ${props => props.theme.colors.faded};
+  border-style: solid;
+  border-width: 2px;
   align-items: flex-start;
-  margin-bottom: 5px;
-  background-color: ${props => props.theme.colors.secondary};
+  margin-bottom: 10px;
+  background-color: ${props => props.theme.colors.faded2};
 `;
 
 const BookTitle = styled(Strong)`
   font-family: "Crimson Text";
   font-style: italic;
-  font-size: 24px;
+  font-size: 25px;
   text-transform: capitalize;
-  margin-bottom: 10px;
+  margin-bottom: 13px;
 `;
 
 export type Author = {

@@ -24,3 +24,6 @@ export * from "./ErrorText";
 
 export { default as BookFlatList } from "./BookFlatList";
 export * from "./BookFlatList";
+
+export { default as Heading } from "./Heading";
+export * from "./Heading";

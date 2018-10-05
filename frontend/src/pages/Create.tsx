@@ -5,12 +5,18 @@ import gql from "graphql-tag";
 import { Mutation, MutationFn } from "react-apollo";
 import { log, getNavParams, formatMessage } from "../utils";
 import Layout from "../layouts/DefaultLayout";
-import { Button, Wrapper, Book, Text, TextInput, Strong, ErrorText } from "../components";
+import {
+  Button,
+  Wrapper,
+  Book,
+  Text,
+  TextInput,
+  Strong,
+  ErrorText,
+  Heading
+} from "../components";
 
-const Title = styled(Text)`
-  background-color: #f5fcff;
-  font-size: 23;
-  font-weight: 700;
+const Title = styled(Heading)`
   margin-bottom: 50;
 `;
 
@@ -19,7 +25,13 @@ const Field = styled.View`
 `;
 
 const Feedback = styled.View`
+  align-items: center;
   height: 30px;
+`;
+
+const Buttons = styled.View`
+  margin-top: 70px;
+  flex-direction: row;
 `;
 
 type addBookData = { data: Book };
@@ -113,25 +125,29 @@ class Create extends React.Component<{}, CreateState> {
               onChangeText={(text: string) => this.validate(text)}
             />
           </Field>
-          <Button onPress={() => this.resetState()}>
-            <Strong>Reset</Strong>
-          </Button>
           <Mutation mutation={mutationAddBook}>
             {(addBook, { data, loading }) => (
               <View>
-                <Button onPress={() => this.handleAddBook(addBook)}>
-                  <Strong>OK</Strong>
-                </Button>
-                <Button onPress={() => navigate("List", { user })}>
-                  <Strong>See books</Strong>
-                </Button>
                 <Feedback>
                   {!data &&
                     this.state.error && (
-                      <ErrorText>{formatMessage(this.state.error.message)}</ErrorText>
+                      <ErrorText>
+                        {formatMessage(this.state.error.message)}
+                      </ErrorText>
                     )}
                   {loading && <ActivityIndicator size="large" />}
                 </Feedback>
+                <Buttons>
+                  <Button onPress={() => this.resetState()}>
+                    <Strong>RESET</Strong>
+                  </Button>
+                  <Button onPress={() => this.handleAddBook(addBook)}>
+                    <Strong>OK</Strong>
+                  </Button>
+                  <Button onPress={() => navigate("List", { user })}>
+                    <Strong>BOOKS</Strong>
+                  </Button>
+                </Buttons>
               </View>
             )}
           </Mutation>

@@ -18,13 +18,15 @@ const Cover = styled.Image`
   width: 220px;
   height: 220px;
   margin: 25px;
+  border-color: ${props => props.theme.colors.text};
+  border-style: solid;
+  border-width: 2px;
 `;
 
 const Wrapper = styled.View`
   flex: 1;
   justify-content: flex-start;
   align-items: center;
-  background-color: #f5fcff;
   padding: 25px;
 `;
 

@@ -50,6 +50,10 @@
 		<string>CrimsonText-BoldItalic.ttf</string>
 		<string>CrimsonText-Italic.ttf</string>
 		<string>CrimsonText-Regular.ttf</string>
+		<string>Spectral-Medium.ttf</string>
+		<string>Spectral-MediumItalic.ttf</string>
+		<string>Spectral-SemiBold.ttf</string>
+		<string>Spectral-SemiBoldItalic.ttf</string>
 	</array>
 	<key>NSAppTransportSecurity</key>
 	<dict>

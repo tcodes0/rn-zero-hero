@@ -1,11 +1,11 @@
 import * as React from "react";
-import { AsyncStorage, ActivityIndicator } from "react-native";
+import { AsyncStorage, ActivityIndicator, View } from "react-native";
 import styled from "styled-components/native";
 import gql from "graphql-tag";
 import { formatMessage, log } from "../utils";
 import Layout from "../layouts/DefaultLayout";
 import { Mutation, MutationFn } from "react-apollo";
-import { Button, Wrapper, TextInput, Strong, ErrorText } from "../components";
+import { Button, Wrapper, TextInput, Strong, ErrorText, Heading } from "../components";
 
 export const LoginContainer = styled.View`
   justify-content: center;
@@ -13,17 +13,21 @@ export const LoginContainer = styled.View`
 `;
 
 export const InputContainer = styled.View`
-  padding: 10px;
-  max-width: 45%;
+  /* border-color: black;
+  border-style: solid;
+  border-width: 1px; */
+  justify-content: space-between;
+  align-items: center;
+  height: 65%;
 `;
 
 export const Feedback = styled.View`
   height: 30px;
 `;
 
-export const Title = styled(Strong)`
-  margin-bottom: 70px;
-  font-size: 25;
+export const Title = styled(Heading)`
+  margin-top: 120px;
+  margin-bottom: 20px;
 `;
 
 export const Input = styled(TextInput)`
@@ -96,30 +100,36 @@ class Login extends React.Component<{}, LoginState> {
               return (
                 <LoginContainer>
                   <InputContainer>
-                    <Input
-                      placeholder="Your name..."
-                      value={this.state.name}
-                      onChangeText={(name: string) => this.setState({ name })}
-                    />
-                    <Input
-                      placeholder="Password..."
-                      secureTextEntry
-                      value={this.state.password}
-                      onChangeText={(password: string) =>
-                        this.setState({ password })
-                      }
-                    />
-                    <Button onPress={() => this.handleLogin(login)}>
-                      <Strong>Login</Strong>
-                    </Button>
-                    <Button onPress={() => navigate("Register")}>
-                      <Strong>Register</Strong>
-                    </Button>
+                    <View>
+                      <Input
+                        placeholder="Your name..."
+                        value={this.state.name}
+                        onChangeText={(name: string) => this.setState({ name })}
+                      />
+                      <Input
+                        placeholder="Password..."
+                        secureTextEntry
+                        value={this.state.password}
+                        onChangeText={(password: string) =>
+                          this.setState({ password })
+                        }
+                      />
+                    </View>
+                    <View>
+                      <Button onPress={() => this.handleLogin(login)}>
+                        <Strong>Login</Strong>
+                      </Button>
+                      <Button onPress={() => navigate("Register")}>
+                        <Strong>Register</Strong>
+                      </Button>
+                    </View>
                   </InputContainer>
                   <Feedback>
                     {!data &&
                       this.state.error && (
-                      <ErrorText>{formatMessage(this.state.error.message)}</ErrorText>
+                        <ErrorText>
+                          {formatMessage(this.state.error.message)}
+                        </ErrorText>
                       )}
                     {loading && <ActivityIndicator size="large" />}
                   </Feedback>

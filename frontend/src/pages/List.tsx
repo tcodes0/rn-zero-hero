@@ -12,10 +12,15 @@ const Wrapper = styled.View`
   margin-top: 20px;
   flex: 1;
   padding: 20px;
+  width: 100%;
 `;
 
 const View = styled.View`
   flex: 1;
+`;
+
+const FilterView = styled.View`
+  margin: 10px 15px 0px 15px;
 `;
 
 const booksWithAuthors = gql`
@@ -43,8 +48,8 @@ class List extends React.Component<{}, ListState> {
 
   filterByTitle = (sections: any[], query: string) =>
     sections.filter(section => {
-      const title = lowerCase(section.title)
-      return title.includes(query)
+      const title = lowerCase(section.title);
+      return title.includes(query);
     });
 
   handleChangeText = (text: string) => {
@@ -101,7 +106,9 @@ class List extends React.Component<{}, ListState> {
               }
               return (
                 <View>
-                  <Filter onChangeText={this.handleChangeText} />
+                  <FilterView>
+                    <Filter onChangeText={this.handleChangeText} style={{width: "100%"}}/>
+                  </FilterView>
                   <BookFlatList<Book>
                     data={filtered}
                     navigate={navigate}
