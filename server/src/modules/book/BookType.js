@@ -1,3 +1,4 @@
+import { AuthenticationError } from "apollo-server-express";
 import { loadAllBooks, addBook } from "./BookLoader";
 
 export const typeDefs = `
@@ -12,7 +13,7 @@ export const resolvers = {
     if (auth) {
       return loadAllBooks(args);
     }
-    return null;
+    throw AuthenticationError("Please signing again.");
   },
   dev_books: (root, args) => loadAllBooks(args)
 };
@@ -22,7 +23,7 @@ export const mutations = {
     if (auth) {
       return addBook(args);
     }
-    return null;
+    throw AuthenticationError("Please signing again.");
   },
   dev_addBook: (root, args) => addBook(args)
 };

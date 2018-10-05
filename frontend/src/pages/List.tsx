@@ -78,7 +78,7 @@ class List extends React.Component<{}, ListState> {
         })
       )
       .catch(e => {
-        e && log(e);
+        e && console.log("e");
       });
   };
 

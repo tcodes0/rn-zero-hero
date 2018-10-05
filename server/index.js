@@ -10,7 +10,7 @@ import * as UserType from "./src/modules/user/UserType";
 
 const dbAddress = {
   production: "mongodb://our-awesome/server/db",
-  development: "mongodb://localhost:27017"
+  development: "mongodb://localhost:27017/test2"
 };
 
 mongoose.connect(
