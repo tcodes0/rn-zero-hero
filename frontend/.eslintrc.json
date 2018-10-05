@@ -5,7 +5,7 @@
   },
   "extends": [
     "eslint:recommended",
-    "prettier",
+    "prettier/react",
     "airbnb",
     "plugin:prettier/recommended"
   ],
@@ -16,5 +16,5 @@
     "linebreak-style": ["error", "unix"],
     "react/jsx-filename-extension": "off"
   },
-  "parser": "babel-eslint"
+  "parser": "typescript-eslint-parser"
 }

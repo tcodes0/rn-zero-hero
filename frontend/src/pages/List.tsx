@@ -4,7 +4,7 @@ import gql from "graphql-tag";
 import styled from "styled-components/native";
 import { ApolloConsumer } from "react-apollo";
 import { ApolloQueryResult, ApolloClient } from "apollo-client";
-import { getNumericId, getNavParams, lowerCase } from "../utils";
+import { getNumericId, getNavParams, lowerCase, NavigatableProps } from "../utils";
 import { Layout } from "../layouts";
 import { BookFlatList, Book, Filter } from "../components";
 
@@ -41,7 +41,7 @@ type ListState = {
   filtered: any[];
 };
 
-class List extends React.Component<{}, ListState> {
+class List extends React.Component<NavigatableProps, ListState> {
   state: Readonly<ListState> = { filtered: [], books: [] };
 
   showAll = () => this.setState(({ books }) => ({ filtered: books }));

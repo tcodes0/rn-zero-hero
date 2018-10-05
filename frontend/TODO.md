@@ -41,9 +41,15 @@
 ✔ use flatList
 ✔ get some feedback
 
+#### Modern design
+rounded buttons
+gradients
+dark bg gradient
+
+
 #### Expensive
 ✔ make things pretty
-- CI/CD
+- CI
 - unit tests
 - detox e2e
 ✔ fix TS

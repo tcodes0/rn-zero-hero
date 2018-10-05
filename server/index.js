@@ -9,12 +9,12 @@ import * as AuthorType from "./src/modules/author/AuthorType";
 import * as UserType from "./src/modules/user/UserType";
 
 const dbAddress = {
-  production: "mongodb://our-awesome/server/db",
+  production: "mongodb+srv://user:bEHp24AVrfijnMbw@rtr-cluster-pgojw.mongodb.net/main?retryWrites=true",
   development: "mongodb://localhost:27017/test2"
 };
 
 mongoose.connect(
-  dbAddress.development,
+  dbAddress.production,
   { useNewUrlParser: true }
 );
 mongoose.connection.on("error", () => {

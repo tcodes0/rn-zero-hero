@@ -44,4 +44,7 @@ export const getNavParams = (props: any, key?: string) => {
 
 export const capitalize = (x: string) => x[0].toUpperCase() + x.slice(1);
 
-export const lowerCase = (input: string) => String.prototype.toLowerCase.call(input);
+export const lowerCase = (input: string) =>
+  String.prototype.toLowerCase.call(input);
+
+export type NavigatableProps = { navigation: any };
