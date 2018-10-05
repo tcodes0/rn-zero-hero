@@ -8,8 +8,13 @@ import * as BookType from "./src/modules/book/BookType";
 import * as AuthorType from "./src/modules/author/AuthorType";
 import * as UserType from "./src/modules/user/UserType";
 
+const dbAddress = {
+  production: "mongodb://our-awesome/server/db",
+  development: "mongodb://localhost:27017"
+};
+
 mongoose.connect(
-  "mongodb://localhost:27017",
+  dbAddress.development,
   { useNewUrlParser: true }
 );
 mongoose.connection.on("error", () => {
