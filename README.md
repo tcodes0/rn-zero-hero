@@ -16,6 +16,7 @@
 - `cd rn-zero-hero` to enter the repo.
 - `cd server`
 - `yarn && yarn start` to install deps and lift server.
+-  On another terminal tab...
 - `cd -` To go back to the repo
 - `cd frontend`
 - `yarn && yarn start` To start Metro Bundler.
