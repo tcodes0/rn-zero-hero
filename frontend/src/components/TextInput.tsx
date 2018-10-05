@@ -5,8 +5,10 @@ const TextInput = styled.TextInput`
   font-family: Spectral;
   font-weight: 500;
   font-style: italic;
+  font-size: 17;
   min-width: 120px;
-  border-color: ${props => props.theme.colors.faded2};
+  min-height: 30px;
+  border-color: ${props => props.theme.colors.textFaded};
   border-style: solid;
   border-width: 1px;
   width: 180px;
@@ -15,7 +17,7 @@ const TextInput = styled.TextInput`
 export default (props: any) => (
   <TextInput
     autoCapitalize="none"
-    placeholderTextColor="rgba(83, 32, 0, 0.7)"
+    placeholderTextColor="rgba(33, 0, 0, 0.7)"
     {...props}
   />
 );

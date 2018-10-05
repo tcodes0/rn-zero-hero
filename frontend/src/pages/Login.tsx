@@ -5,7 +5,7 @@ import gql from "graphql-tag";
 import { formatMessage, log } from "../utils";
 import Layout from "../layouts/DefaultLayout";
 import { Mutation, MutationFn } from "react-apollo";
-import { Button, Wrapper, TextInput, Strong, ErrorText, Heading } from "../components";
+import { Button, Wrapper, TextInput, Sans, ErrorText, Heading } from "../components";
 
 export const LoginContainer = styled.View`
   justify-content: center;
@@ -13,9 +13,6 @@ export const LoginContainer = styled.View`
 `;
 
 export const InputContainer = styled.View`
-  /* border-color: black;
-  border-style: solid;
-  border-width: 1px; */
   justify-content: space-between;
   align-items: center;
   height: 65%;
@@ -25,8 +22,15 @@ export const Feedback = styled.View`
   height: 30px;
 `;
 
+export const Buttons = styled.View`
+  margin-top: 30px;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 70%;
+`;
+
 export const Title = styled(Heading)`
-  margin-top: 120px;
+  margin-top: 60px;
   margin-bottom: 20px;
 `;
 
@@ -115,16 +119,7 @@ class Login extends React.Component<{}, LoginState> {
                         }
                       />
                     </View>
-                    <View>
-                      <Button onPress={() => this.handleLogin(login)}>
-                        <Strong>Login</Strong>
-                      </Button>
-                      <Button onPress={() => navigate("Register")}>
-                        <Strong>Register</Strong>
-                      </Button>
-                    </View>
-                  </InputContainer>
-                  <Feedback>
+                    <Feedback>
                     {!data &&
                       this.state.error && (
                         <ErrorText>
@@ -133,6 +128,15 @@ class Login extends React.Component<{}, LoginState> {
                       )}
                     {loading && <ActivityIndicator size="large" />}
                   </Feedback>
+                    <Buttons>
+                      <Button onPress={() => this.handleLogin(login)}>
+                        <Sans>Login</Sans>
+                      </Button>
+                      <Button onPress={() => navigate("Register")}>
+                        <Sans>Register</Sans>
+                      </Button>
+                    </Buttons>
+                  </InputContainer>
                 </LoginContainer>
               );
             }}

@@ -27,3 +27,6 @@ export * from "./BookFlatList";
 
 export { default as Heading } from "./Heading";
 export * from "./Heading";
+
+export { default as Sans } from "./Sans";
+export * from "./Sans";

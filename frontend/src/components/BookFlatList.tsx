@@ -1,19 +1,14 @@
 import * as React from "react";
-import {
-  FlatList,
-  StyleSheet,
-  FlatListProps
-} from "react-native";
+import { FlatList, StyleSheet, FlatListProps } from "react-native";
 import styled from "styled-components/native";
 import { Touchable, Text, Strong } from ".";
 
 const Book = styled(Touchable)`
-  border-color: ${props => props.theme.colors.faded};
+  border-color: ${props => props.theme.colors.textFaded};
   border-style: solid;
   border-width: 2px;
   align-items: flex-start;
   margin-bottom: 10px;
-  background-color: ${props => props.theme.colors.faded2};
 `;
 
 const BookTitle = styled(Strong)`
@@ -33,10 +28,15 @@ export type Book = {
   author: Author;
   title: string;
 };
-export type Navigate = (...args: any[]) => void
-export type BookFlatListProps<T> = { user: string; navigate: Navigate } & Partial<FlatListProps<T>>;
+export type Navigate = (...args: any[]) => void;
+export type BookFlatListProps<T> = {
+  user: string;
+  navigate: Navigate;
+} & Partial<FlatListProps<T>>;
 
-class BookFlatList<B extends Book> extends React.Component<BookFlatListProps<B>> {
+class BookFlatList<B extends Book> extends React.Component<
+  BookFlatListProps<B>
+> {
   bookStyle = StyleSheet.create({
     book: {
       marginTop: 20,
@@ -53,7 +53,7 @@ class BookFlatList<B extends Book> extends React.Component<BookFlatListProps<B>>
     return (
       <Book onPress={() => navigate("Detail", { book, user })}>
         <BookTitle>{`${book.title}`}</BookTitle>
-        <Text>{`by ${book.author && book.author.name}`}</Text>
+        <Text>{`${book.author && book.author.name}`}</Text>
       </Book>
     );
   };

@@ -9,16 +9,17 @@ const OuterBackground = styled.ImageBackground`
   width: 100%;
 `;
 
-const InnerBackground = styled.ImageBackground`
+const InnerBackground = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
   height: 100%;
   width: 100%;
+  background-color: rgba(255,255,255,0.9);
 `;
 
 const Header = styled(Strong)`
-  font-size: 12px;
+  font-size: 16px;
   margin-bottom: 10px;
   text-align: left;
   width: 100%;
@@ -34,7 +35,7 @@ const Layout = (props: any) => {
       {...otherProps}
     >
       {user && <Header>Welcome {capitalize(user)}!</Header>}
-      <InnerBackground source={require("../../ios/Resources/paper-bg.png")}>{children}</InnerBackground>
+      <InnerBackground>{children}</InnerBackground>
     </OuterBackground>
   );
 };

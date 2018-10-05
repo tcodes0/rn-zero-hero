@@ -2,7 +2,7 @@ import * as React from "react";
 import styled from "styled-components/native";
 import Layout from "../layouts/DefaultLayout";
 import { getNavParams } from "../utils";
-import { Button, Text, Strong } from "../components";
+import { Button, Text, Strong, Sans } from "../components";
 
 const Title = styled(Strong)`
   font-family: "Crimson Text";
@@ -58,7 +58,7 @@ const Detail = (props: any) => {
           By {book.author.name}, {book.author.age} years old.
         </Description>
         <Button onPress={() => navigate("List", { user })}>
-          <Strong>Back</Strong>
+          <Sans>Back</Sans>
         </Button>
       </Wrapper>
     </Layout>

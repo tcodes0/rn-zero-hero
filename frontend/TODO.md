@@ -42,11 +42,11 @@
 ✔ get some feedback
 
 #### Expensive
-- make things pretty
+✔ make things pretty
 - CI/CD
 - unit tests
 - detox e2e
-✔  fix TS
+✔ fix TS
 
 #### Regular
 - add pagination to List using meta-data <Query> ({fetchMore})

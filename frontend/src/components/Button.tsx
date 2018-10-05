@@ -19,13 +19,13 @@ const Button = styled(Touchable)`
   border-color: ${props => props.theme.colors.text};
   border-style: solid;
   border-width: 2px;
-  padding: 13px;
+  padding: 5px;
   align-items: center;
-  font-size: 18px;
-  min-width: 100px;
+  font-size: 8px;
+  min-width: 80px;
+  min-height: 45px;
   margin: 8px;
-  background-color: ${props => props.theme.colors.faded};
+  justify-content: center;
 `;
-
 
 export default Button;

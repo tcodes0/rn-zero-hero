@@ -9,9 +9,8 @@ import {
   Button,
   Wrapper,
   Book,
-  Text,
   TextInput,
-  Strong,
+  Sans,
   ErrorText,
   Heading
 } from "../components";
@@ -20,8 +19,14 @@ const Title = styled(Heading)`
   margin-bottom: 50;
 `;
 
+const Text = styled(Sans)`
+  font-weight: 400;
+  font-size: 16px;
+  margin-bottom: 7px;
+`;
+
 const Field = styled.View`
-  margin-bottom: 20px;
+  margin-bottom: 35px;
 `;
 
 const Feedback = styled.View`
@@ -30,7 +35,7 @@ const Feedback = styled.View`
 `;
 
 const Buttons = styled.View`
-  margin-top: 70px;
+  margin-top: 30px;
   flex-direction: row;
 `;
 
@@ -139,13 +144,13 @@ class Create extends React.Component<{}, CreateState> {
                 </Feedback>
                 <Buttons>
                   <Button onPress={() => this.resetState()}>
-                    <Strong>RESET</Strong>
+                    <Sans>RESET</Sans>
                   </Button>
                   <Button onPress={() => this.handleAddBook(addBook)}>
-                    <Strong>OK</Strong>
+                    <Sans>OK</Sans>
                   </Button>
                   <Button onPress={() => navigate("List", { user })}>
-                    <Strong>BOOKS</Strong>
+                    <Sans>BOOKS</Sans>
                   </Button>
                 </Buttons>
               </View>

@@ -21,7 +21,7 @@ const NavigationWrapper = createStackNavigator(
     Login: { screen: Login },
     Register: { screen: Register }
   },
-  { initialRouteName: "Create" }
+  { initialRouteName: "Login" }
 );
 
 const theme = {
@@ -29,7 +29,8 @@ const theme = {
     main: "rgba(215, 122, 108, 1)",
     faded: "rgba(181, 76, 60, 0.4)",
     faded2: "rgba(181, 76, 60, 0.2)",
-    text: "rgba(33, 0, 0, 1)"
+    text: "rgba(33, 0, 0, 1)",
+    textFaded: "rgba(33, 0, 0, 0.3)"
   }
 };
 
