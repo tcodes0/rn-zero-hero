@@ -1,9 +1,9 @@
 import * as React from "react";
-import { AsyncStorage, ActivityIndicator } from "react-native";
+import { ActivityIndicator } from "react-native";
 import gql from "graphql-tag";
 import styled from "styled-components/native";
-import { ApolloConsumer, OperationVariables } from "react-apollo";
-import { ApolloQueryResult, ApolloClient, QueryOptions } from "apollo-client";
+import { ApolloConsumer } from "react-apollo";
+import { ApolloQueryResult, ApolloClient } from "apollo-client";
 import {
   getNumericId,
   getNavParams,
@@ -28,7 +28,7 @@ const FilterView = styled.View`
   margin: 10px 15px 0px 15px;
 `;
 
-const booksWithAuthors = gql`
+const query = gql`
   query($skip: Int, $limit: Int) {
     books(skip: $skip, limit: $limit) {
       title
@@ -44,13 +44,14 @@ type ListData = { books: Book[] };
 type ListState = {
   books: any[];
   filtered: any[];
+  fetchedAll: boolean;
 };
 
 class List extends React.Component<NavigatableProps, ListState> {
-  state: Readonly<ListState> = { filtered: [], books: [] };
-
-  queryObject: QueryOptions<OperationVariables> = {
-    query: booksWithAuthors
+  state: Readonly<ListState> = {
+    filtered: [],
+    books: [],
+    fetchedAll: false
   };
 
   showAll = () => this.setState(({ books }) => ({ filtered: books }));
@@ -61,7 +62,7 @@ class List extends React.Component<NavigatableProps, ListState> {
       return title.includes(query);
     });
 
-  handleChangeText = (text: string) => {
+  filterBooks = (text: string) => {
     if (!text) {
       return this.showAll();
     }
@@ -79,13 +80,11 @@ class List extends React.Component<NavigatableProps, ListState> {
     return booksWithId;
   };
 
-  getBooks = (client: ApolloClient<any>) =>
+  fetch = (client: ApolloClient<any>) =>
     client
-      .query<ListData>(this.queryObject)
+      .query<ListData>({ query })
       .then(packedData => {
         const data = this.unpack(packedData);
-        console.log("data", data);
-
         return this.setState({
           books: data,
           filtered: data
@@ -95,21 +94,34 @@ class List extends React.Component<NavigatableProps, ListState> {
         e && console.log(e);
       });
 
-  fetchMore = (client: ApolloClient<any>, skip: number) => {
-    this.queryObject = {
-      ...this.queryObject,
-      variables: { skip },
-      fetchPolicy: "network-only"
-    };
-
+  pagination = (
+    { distanceFromEnd }: { distanceFromEnd: number },
+    client: ApolloClient<any>
+  ) => {
+    const { filtered, books, fetchedAll } = this.state;
+    const skip = books.length;
+    if (
+      distanceFromEnd < 0 || // pagination event is positive
+      fetchedAll ||
+      String(filtered) !== String(books) // filtering blocks pagination
+    ) {
+      return;
+    }
     return client
-      .query<ListData>(this.queryObject)
+      .query<ListData>({
+        query,
+        variables: { skip },
+        fetchPolicy: "network-only"
+      })
       .then(packedData => {
         const newBooks = this.unpack(packedData);
         console.log("newBooks", newBooks);
-
+        if (!newBooks.length) {
+          return this.setState({ fetchedAll: true });
+        }
         return this.setState(state => ({
-          filtered: [...state.filtered, ...newBooks]
+          books: [...state.books, ...newBooks],
+          filtered: [...state.books, ...newBooks]
         }));
       })
       .catch(e => {
@@ -117,42 +129,29 @@ class List extends React.Component<NavigatableProps, ListState> {
       });
   };
 
-  handleEndReached = (
-    { distanceFromEnd }: { distanceFromEnd: number },
-    client: ApolloClient<any>
-  ) => {
-    if (distanceFromEnd < 0) {
-      return;
-    }
-    console.log("query in cache", client.readQuery(this.queryObject));
-    return this.fetchMore(client, this.state.filtered.length);
-  };
-
   render() {
     const user = getNavParams(this.props, "user");
     const { navigate } = this.props.navigation;
     const { books, filtered } = this.state;
-
     return (
       <Layout user={user}>
         <Wrapper>
           <ApolloConsumer>
             {client => {
               if (!books.length) {
-                this.getBooks(client);
+                this.fetch(client);
                 return <ActivityIndicator size="large" />;
               }
-
               return (
                 <View>
                   <FilterView>
-                    <Filter onChangeText={this.handleChangeText} />
+                    <Filter onChangeText={this.filterBooks} />
                   </FilterView>
                   <BookFlatList<Book>
                     data={filtered}
                     navigate={navigate}
                     user={user}
-                    onEndReached={e => this.handleEndReached(e, client)}
+                    onEndReached={e => this.pagination(e, client)}
                   />
                 </View>
               );
