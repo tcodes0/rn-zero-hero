@@ -1,6 +1,6 @@
 <br>
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/15015324/46561262-479b2180-c8cd-11e8-9b43-f5f6e59f8f48.png" alt="react native fullstack zero to hero" width="320" />
+  <img src="https://user-images.githubusercontent.com/15015324/46571121-b3b96c00-c945-11e8-82e1-a5c87ce4171d.png" alt="react native fullstack zero to hero" width="320" />
 </p>
 <p align="center">
   <a href="https://travis-ci.org/Thomazella/rn-zero-hero"><img src="https://img.shields.io/travis/Thomazella/rn-zero-hero/master.svg?style=flat-square" alt="Build Status" /></a>
