@@ -7,6 +7,7 @@ const Input = styled(TextInput)`
   font-size: 17px;
   margin-bottom: 10px;
   text-align: left;
+  width: 100%;
 `;
 
 const Filter = (props: any) => {

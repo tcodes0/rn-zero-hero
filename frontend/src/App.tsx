@@ -21,7 +21,7 @@ const NavigationWrapper = createStackNavigator(
     Login: { screen: Login },
     Register: { screen: Register }
   },
-  { initialRouteName: "Login" }
+  { initialRouteName: "List" }
 );
 
 const theme = {

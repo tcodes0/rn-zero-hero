@@ -4,7 +4,12 @@ import gql from "graphql-tag";
 import styled from "styled-components/native";
 import { ApolloConsumer } from "react-apollo";
 import { ApolloQueryResult, ApolloClient } from "apollo-client";
-import { getNumericId, getNavParams, lowerCase, NavigatableProps } from "../utils";
+import {
+  getNumericId,
+  getNavParams,
+  lowerCase,
+  NavigatableProps
+} from "../utils";
 import { Layout } from "../layouts";
 import { BookFlatList, Book, Filter } from "../components";
 
@@ -107,7 +112,7 @@ class List extends React.Component<NavigatableProps, ListState> {
               return (
                 <View>
                   <FilterView>
-                    <Filter onChangeText={this.handleChangeText} style={{width: "100%"}}/>
+                    <Filter onChangeText={this.handleChangeText} />
                   </FilterView>
                   <BookFlatList<Book>
                     data={filtered}
