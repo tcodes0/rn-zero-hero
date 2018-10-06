@@ -94,7 +94,7 @@ class List extends React.Component<NavigatableProps, ListState> {
         e && console.log(e);
       });
 
-  pagination = (
+  fetchMore = (
     { distanceFromEnd }: { distanceFromEnd: number },
     client: ApolloClient<any>
   ) => {
@@ -104,9 +104,9 @@ class List extends React.Component<NavigatableProps, ListState> {
       distanceFromEnd < 0 || // pagination event is positive
       fetchedAll ||
       String(filtered) !== String(books) // filtering blocks pagination
-    ) {
-      return;
-    }
+      ) {
+        return;
+      }
     return client
       .query<ListData>({
         query,
@@ -151,7 +151,7 @@ class List extends React.Component<NavigatableProps, ListState> {
                     data={filtered}
                     navigate={navigate}
                     user={user}
-                    onEndReached={e => this.pagination(e, client)}
+                    onEndReached={e => this.fetchMore(e, client)}
                   />
                 </View>
               );

@@ -8,20 +8,18 @@ const addressMap = {
   production: "https://nicelooking.client.domain.com",
   development: "http://localhost:4000/graphql"
 };
-
-const connectToDevTools = true;
 const uri = addressMap.development;
-const cache = new InMemoryCache();
+const connectToDevTools = true;
+const dataIdFromObject = (object: any) => object.key
+const cache = new InMemoryCache({ dataIdFromObject });
 
 const authLink = setContext(async (_, { headers }) => {
   let token;
-
   try {
     token = await AsyncStorage.getItem("token");
   } catch (e) {
     console.log("client setup token error:", e);
   }
-
   return { headers: { ...headers, token } };
 });
 
@@ -31,7 +29,7 @@ const defaultOptions = {
     errorPolicy: "ignore"
   },
   query: {
-    fetchPolicy: "network-only",
+    fetchPolicy: "cache-first",
     errorPolicy: "all"
   },
   mutate: {

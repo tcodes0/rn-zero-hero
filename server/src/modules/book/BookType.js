@@ -3,6 +3,7 @@ import { loadAllBooks, addBook } from "./BookLoader";
 
 export const typeDefs = `
   type Book {
+    id: ID!
     title: String!
     author: Author!
   }

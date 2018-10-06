@@ -32,6 +32,7 @@ const SchemaDefinition = `
     age: Int!
   }
   type Token {
+    id: ID!
     token: String!
   }
   type Query {

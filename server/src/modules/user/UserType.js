@@ -11,6 +11,7 @@ const {
 
 export const typeDefs = `
   type User {
+    id: ID!
     name: String!
     hash: String!
   }
