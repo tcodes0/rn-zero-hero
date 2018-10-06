@@ -12,10 +12,11 @@ export const addBook = ({ title, author: bookAuthor }) => {
   });
 };
 
-export const loadAllBooks = ({ skip, limit }) => {
+export const loadAllBooks = ({ skip, limit = 5 }) => {
   return BookModel.find({}, null, { skip, limit })
     .populate("author")
     .then(result => {
+      console.log("sending to client", result.map(r => r.title));
       return result;
     });
 };

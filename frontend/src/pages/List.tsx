@@ -75,24 +75,51 @@ class List extends React.Component<NavigatableProps, ListState> {
     return booksWithId.reverse();
   };
 
-  getBooks = (query: ApolloClient<any>["query"]) => {
+  getBooks = (query: ApolloClient<any>["query"], skip?: number) =>
     AsyncStorage.getItem("token")
-      .then(token =>
-        query<ListData>({
+      .then(token => {
+        const vars = { token, skip };
+        console.log("query vars", vars);
+
+        return query<ListData>({
           query: booksWithAuthors,
-          variables: { token }
+          variables: vars
         }).then(packedData => {
           const data = this.unpack(packedData);
-          console.log("got data:", data);
-          this.setState({
+          console.log("data", data);
+
+          if (skip) {
+            console.log("skip exists");
+            // this is pagination
+            return this.setState(
+              state => ({
+                books: [...state.books, ...data]
+              }),
+              () => console.log(this.state)
+            );
+          }
+
+          return this.setState({
+            // initial fetch
             books: data,
             filtered: data
           });
-        })
-      )
+        });
+      })
       .catch(e => {
         e && console.log("e");
       });
+
+  handleEndReached = (
+    { distanceFromEnd }: { distanceFromEnd: number },
+    // query: ApolloClient<any>["query"],
+    client
+  ) => {
+    if (distanceFromEnd < 0) {
+      return;
+    }
+    // console.log("reading query", client.readQuery({ query: booksWithAuthors }));
+    return this.getBooks(client.query, this.state.books.length);
   };
 
   render() {
@@ -104,9 +131,9 @@ class List extends React.Component<NavigatableProps, ListState> {
       <Layout user={user}>
         <Wrapper>
           <ApolloConsumer>
-            {({ query }) => {
+            {client => {
               if (!books.length) {
-                this.getBooks(query);
+                this.getBooks(client.query);
                 return <ActivityIndicator size="large" />;
               }
               return (
@@ -118,6 +145,7 @@ class List extends React.Component<NavigatableProps, ListState> {
                     data={filtered}
                     navigate={navigate}
                     user={user}
+                    onEndReached={e => this.handleEndReached(e, client)}
                   />
                 </View>
               );

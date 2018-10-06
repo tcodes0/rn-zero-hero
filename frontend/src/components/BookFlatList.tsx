@@ -58,15 +58,6 @@ class BookFlatList<B extends Book> extends React.Component<
     );
   };
 
-  handleEndReached = ({ distanceFromEnd }: { distanceFromEnd: number }) => {
-    if (distanceFromEnd < 0) {
-      console.log("negative distance", distanceFromEnd)
-      return
-    }
-    console.log(distanceFromEnd);
-    return
-  };
-
   render() {
     return (
       // @ts-ignore
@@ -75,7 +66,7 @@ class BookFlatList<B extends Book> extends React.Component<
         renderItem={this.renderItem}
         keyExtractor={this.extractKey}
         onEndReachedThreshold={0.25}
-        onEndReached={this.handleEndReached}
+        onEndReached={this.props.onEndReached}
         {...this.props}
       />
     );
