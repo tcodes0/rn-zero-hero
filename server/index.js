@@ -9,7 +9,8 @@ import * as AuthorType from "./src/modules/author/AuthorType";
 import * as UserType from "./src/modules/user/UserType";
 
 const dbAddress = {
-  production: "mongodb+srv://user:bEHp24AVrfijnMbw@rtr-cluster-pgojw.mongodb.net/main?retryWrites=true",
+  production:
+    "mongodb+srv://user:bEHp24AVrfijnMbw@rtr-cluster-pgojw.mongodb.net/main?retryWrites=true",
   development: "mongodb://localhost:27017/test2"
 };
 
@@ -34,13 +35,13 @@ const SchemaDefinition = `
     token: String!
   }
   type Query {
-    books(skip: Int, limit: Int, token: String): [Book]
+    books(skip: Int, limit: Int): [Book]
     dev_books(skip: Int, limit: Int): [Book]
     dev_users: [User]
   }
   type Mutation {
     login(name: String, password: String): Token!
-    addBook(title: String, author: AuthorInput, token: String): Book
+    addBook(title: String, author: AuthorInput): Book
     dev_addBook(title: String, author: AuthorInput): Book
     addUser(name: String, password: String): Token!
   }

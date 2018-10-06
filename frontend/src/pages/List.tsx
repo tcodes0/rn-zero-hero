@@ -29,8 +29,8 @@ const FilterView = styled.View`
 `;
 
 const booksWithAuthors = gql`
-  query($token: String!) {
-    books(token: $token) {
+  query {
+    books {
       title
       author {
         name
@@ -77,40 +77,39 @@ class List extends React.Component<NavigatableProps, ListState> {
     return booksWithId.reverse();
   };
 
-  getBooks = (query: ApolloClient<any>["query"], skip?: number) =>
-    AsyncStorage.getItem("token")
-      .then(token => {
-        this.queryObject = {
-          query: booksWithAuthors,
-          variables: { token, skip }
-        };
-        console.log("query object", this.queryObject);
+  getBooks = (query: ApolloClient<any>["query"], skip?: number) => {
+    this.queryObject = {
+      query: booksWithAuthors,
+      variables: { skip }
+    };
+    console.log("query object", this.queryObject);
 
-        return query<ListData>(this.queryObject).then(packedData => {
-          const data = this.unpack(packedData);
-          console.log("data", data);
+    return query<ListData>(this.queryObject)
+      .then(packedData => {
+        const data = this.unpack(packedData);
+        console.log("data", data);
 
-          if (skip) {
-            console.log("skip exists");
-            // this is pagination
-            return this.setState(
-              state => ({
-                books: [...state.books, ...data]
-              }),
-              () => console.log(this.state)
-            );
-          }
+        if (skip) {
+          console.log("skip exists");
+          // this is pagination
+          return this.setState(
+            state => ({
+              books: [...state.books, ...data]
+            }),
+            () => console.log(this.state)
+          );
+        }
 
-          return this.setState({
-            // initial fetch
-            books: data,
-            filtered: data
-          });
+        return this.setState({
+          // initial fetch
+          books: data,
+          filtered: data
         });
       })
       .catch(e => {
-        e && console.log("e");
+        e && console.log(e);
       });
+  };
 
   handleEndReached = (
     { distanceFromEnd }: { distanceFromEnd: number },

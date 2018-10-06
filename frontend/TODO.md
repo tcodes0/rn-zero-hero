@@ -56,12 +56,11 @@ dark bg gradient
 
 #### Regular
 - add pagination to List using meta-data <Query> ({fetchMore})
-    -b leverage model db methods to implement pagination. I.e:
-    ```
-    return BookModel.find({})
-          .limit(args.size)
-          .skip(args.size * args.page)
-    ```
+- Id everything in backed
+- see if dataid func on constructor works o => o.id
+V send token in headers
+- Use Query
+- sort by recent todos server-side https://stackoverflow.com/questions/47624681/sort-by-reverse-order-mongoose?rq=1
 xb add TS on server
 ✔b add MongoDB & Mongoose
 
