@@ -29,8 +29,8 @@ const FilterView = styled.View`
 `;
 
 const booksWithAuthors = gql`
-  query {
-    books {
+  query($skip: Int, $limit: Int) {
+    books(skip: $skip, limit: $limit) {
       title
       author {
         name
@@ -49,7 +49,9 @@ type ListState = {
 class List extends React.Component<NavigatableProps, ListState> {
   state: Readonly<ListState> = { filtered: [], books: [] };
 
-  queryObject: QueryOptions<OperationVariables> = {};
+  queryObject: QueryOptions<OperationVariables> = {
+    query: booksWithAuthors
+  };
 
   showAll = () => this.setState(({ books }) => ({ filtered: books }));
 
@@ -74,37 +76,41 @@ class List extends React.Component<NavigatableProps, ListState> {
       ...book,
       id: getNumericId()
     }));
-    return booksWithId.reverse();
+    return booksWithId;
   };
 
-  getBooks = (query: ApolloClient<any>["query"], skip?: number) => {
-    this.queryObject = {
-      query: booksWithAuthors,
-      variables: { skip }
-    };
-    console.log("query object", this.queryObject);
-
-    return query<ListData>(this.queryObject)
+  getBooks = (client: ApolloClient<any>) =>
+    client
+      .query<ListData>(this.queryObject)
       .then(packedData => {
         const data = this.unpack(packedData);
         console.log("data", data);
 
-        if (skip) {
-          console.log("skip exists");
-          // this is pagination
-          return this.setState(
-            state => ({
-              books: [...state.books, ...data]
-            }),
-            () => console.log(this.state)
-          );
-        }
-
         return this.setState({
-          // initial fetch
           books: data,
           filtered: data
         });
+      })
+      .catch(e => {
+        e && console.log(e);
+      });
+
+  fetchMore = (client: ApolloClient<any>, skip: number) => {
+    this.queryObject = {
+      ...this.queryObject,
+      variables: { skip },
+      fetchPolicy: "network-only"
+    };
+
+    return client
+      .query<ListData>(this.queryObject)
+      .then(packedData => {
+        const newBooks = this.unpack(packedData);
+        console.log("newBooks", newBooks);
+
+        return this.setState(state => ({
+          filtered: [...state.filtered, ...newBooks]
+        }));
       })
       .catch(e => {
         e && console.log(e);
@@ -113,14 +119,13 @@ class List extends React.Component<NavigatableProps, ListState> {
 
   handleEndReached = (
     { distanceFromEnd }: { distanceFromEnd: number },
-    // query: ApolloClient<any>["query"],
-    client
+    client: ApolloClient<any>
   ) => {
     if (distanceFromEnd < 0) {
       return;
     }
     console.log("query in cache", client.readQuery(this.queryObject));
-    return this.getBooks(client.query, this.state.books.length);
+    return this.fetchMore(client, this.state.filtered.length);
   };
 
   render() {
@@ -134,9 +139,10 @@ class List extends React.Component<NavigatableProps, ListState> {
           <ApolloConsumer>
             {client => {
               if (!books.length) {
-                this.getBooks(client.query);
+                this.getBooks(client);
                 return <ActivityIndicator size="large" />;
               }
+
               return (
                 <View>
                   <FilterView>
