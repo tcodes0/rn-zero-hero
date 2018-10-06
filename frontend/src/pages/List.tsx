@@ -2,8 +2,8 @@ import * as React from "react";
 import { AsyncStorage, ActivityIndicator } from "react-native";
 import gql from "graphql-tag";
 import styled from "styled-components/native";
-import { ApolloConsumer } from "react-apollo";
-import { ApolloQueryResult, ApolloClient } from "apollo-client";
+import { ApolloConsumer, OperationVariables } from "react-apollo";
+import { ApolloQueryResult, ApolloClient, QueryOptions } from "apollo-client";
 import {
   getNumericId,
   getNavParams,
@@ -49,6 +49,8 @@ type ListState = {
 class List extends React.Component<NavigatableProps, ListState> {
   state: Readonly<ListState> = { filtered: [], books: [] };
 
+  queryObject: QueryOptions<OperationVariables> = {};
+
   showAll = () => this.setState(({ books }) => ({ filtered: books }));
 
   filterByTitle = (sections: any[], query: string) =>
@@ -78,13 +80,13 @@ class List extends React.Component<NavigatableProps, ListState> {
   getBooks = (query: ApolloClient<any>["query"], skip?: number) =>
     AsyncStorage.getItem("token")
       .then(token => {
-        const vars = { token, skip };
-        console.log("query vars", vars);
-
-        return query<ListData>({
+        this.queryObject = {
           query: booksWithAuthors,
-          variables: vars
-        }).then(packedData => {
+          variables: { token, skip }
+        };
+        console.log("query object", this.queryObject);
+
+        return query<ListData>(this.queryObject).then(packedData => {
           const data = this.unpack(packedData);
           console.log("data", data);
 
@@ -118,7 +120,7 @@ class List extends React.Component<NavigatableProps, ListState> {
     if (distanceFromEnd < 0) {
       return;
     }
-    // console.log("reading query", client.readQuery({ query: booksWithAuthors }));
+    console.log("query in cache", client.readQuery(this.queryObject));
     return this.getBooks(client.query, this.state.books.length);
   };
 
