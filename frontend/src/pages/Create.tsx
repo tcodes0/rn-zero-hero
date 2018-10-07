@@ -16,7 +16,7 @@ import {
 } from "../components";
 
 const Title = styled(Heading)`
-  margin-bottom: 50;
+  margin-bottom: 70;
 `;
 
 const Text = styled(Sans)`
@@ -25,9 +25,7 @@ const Text = styled(Sans)`
   margin-bottom: 7px;
 `;
 
-const Field = styled.View`
-  margin-bottom: 35px;
-`;
+const Field = styled.View``;
 
 const Feedback = styled.View`
   align-items: center;
@@ -35,7 +33,7 @@ const Feedback = styled.View`
 `;
 
 const Buttons = styled.View`
-  margin-top: 30px;
+  margin-top: 70px;
   flex-direction: row;
 `;
 
@@ -119,7 +117,7 @@ class Create extends React.Component<NavigatableProps, CreateState> {
             <Text>Enter author name</Text>
             <TextInput
               value={this.state.name}
-              placeholder="name..."
+              placeholder="author name..."
               onChangeText={(input: string) => this.setState({ name: input })}
             />
           </Field>
@@ -127,7 +125,7 @@ class Create extends React.Component<NavigatableProps, CreateState> {
             <Text>How old is the author?</Text>
             <TextInput
               value={this.state.age || ""}
-              placeholder="age..."
+              placeholder="author age..."
               onChangeText={(text: string) => this.validate(text)}
             />
           </Field>
@@ -145,13 +143,13 @@ class Create extends React.Component<NavigatableProps, CreateState> {
                 </Feedback>
                 <Buttons>
                   <Button onPress={() => this.resetState()}>
-                    <Sans>RESET</Sans>
+                    <Sans>Reset</Sans>
                   </Button>
                   <Button onPress={() => this.handleAddBook(addBook)}>
-                    <Sans>OK</Sans>
+                    <Sans>Ok</Sans>
                   </Button>
                   <Button onPress={() => navigate("List", { user })}>
-                    <Sans>BOOKS</Sans>
+                    <Sans>Books</Sans>
                   </Button>
                 </Buttons>
               </View>

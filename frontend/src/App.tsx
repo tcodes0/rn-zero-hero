@@ -13,7 +13,7 @@ const NavigationWrapper = createStackNavigator(
     Login: { screen: Login },
     Register: { screen: Register }
   },
-  { initialRouteName: "Login" }
+  { initialRouteName: "Create" }
 );
 
 const theme = {
@@ -29,15 +29,13 @@ const theme = {
   border: {
     radius: 22
   },
-  gray: [
-    "rgba(245,245,245,1)", "rgba(230,230,230,1)"
-  ],
+  gray: ["rgba(245,245,245,1)", "rgba(230,230,230,1)", "rgba(200,200,200,1)"],
   primary: [
-    "rgba( 41, 82,109,1)",
-    "rgba( 74,145,191,1)",
-    "rgba( 54,108,143,1)",
-    "rgba( 27, 56, 75,1)",
-    "rgba( 14, 31, 41,1)"
+    "rgba(  7,103,160,1)",
+    "rgba( 70,159,212,1)",
+    "rgba( 59,128,169,1)",
+    "rgba( 40, 85,111,1)",
+    "rgba( 22, 55, 75,1)",
   ],
   secondary: [
     "rgba(228, 80,144,1)",
@@ -54,11 +52,11 @@ const theme = {
     "rgba( 64, 61, 20,1)"
   ],
   complement: [
-    "rgba(255,182, 89,1)",
-    "rgba(224,159, 76,1)",
-    "rgba(170,120, 57,1)",
-    "rgba(117, 82, 38,1)",
-    "rgba( 64, 45, 20,1)"
+    "rgba(251,138,  0,1)",
+    "rgba(255,173, 73,1)",
+    "rgba(255,176, 79,1)",
+    "rgba(174,121, 56,1)",
+    "rgba(118, 78, 30,1)",
   ]
 };
 
