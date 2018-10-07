@@ -7,6 +7,7 @@ const OuterBackground = styled.ImageBackground`
   padding: 15px 15px 15px 15px;
   height: 100%;
   width: 100%;
+  background-color: ${props => props.theme.colors.white};
 `;
 
 const InnerBackground = styled.View`

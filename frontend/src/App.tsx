@@ -23,8 +23,15 @@ const theme = {
     faded2: "rgba(181, 76, 60, 0.2)",
     text: "rgba(33, 0, 0, 1)",
     textFaded: "rgba(33, 0, 0, 0.3)",
-    white: "white"
+    white: "white",
+    black: "black"
   },
+  border: {
+    radius: 22
+  },
+  gray: [
+    "rgba(245,245,245,1)", "rgba(230,230,230,1)"
+  ],
   primary: [
     "rgba( 41, 82,109,1)",
     "rgba( 74,145,191,1)",
