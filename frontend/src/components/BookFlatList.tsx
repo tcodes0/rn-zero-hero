@@ -14,7 +14,7 @@ const randomColor = (props: any) => {
 }
 
 const Book = styled(Touchable)`
-  border-color: ${props => props.theme.colors.textFaded};
+  border-color: ${props => props.theme.gray[0]};
   border-radius: 10px;
   border-style: solid;
   align-items: flex-start;

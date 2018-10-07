@@ -6,7 +6,7 @@ import { Button, Sans, Heading } from "../components";
 
 const Title = styled(Heading)`
   font-size: 35px;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
   text-align: center;
   text-transform: capitalize;
 `;
@@ -16,7 +16,7 @@ const Cover = styled.Image`
   height: 220px;
   border-radius: 10px;
   margin: 25px;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
   border-color: ${props => props.theme.colors.black};
   border-style: solid;
 `;
