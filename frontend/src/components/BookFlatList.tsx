@@ -24,12 +24,12 @@ const Book = styled(Touchable)`
 `;
 
 const Author = styled(Sans)`
-  color: ${props => props.theme.colors.black};
+  color: ${props => props.theme.colors.white};
   font-style: italic;
 `;
 
 const BookTitle = styled(Strong)`
-  color: ${props => props.theme.colors.black};
+  color: ${props => props.theme.colors.white};
   font-weight: 700;
   font-size: 25px;
   text-transform: capitalize;

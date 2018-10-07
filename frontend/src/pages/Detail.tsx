@@ -2,14 +2,11 @@ import * as React from "react";
 import styled from "styled-components/native";
 import Layout from "../layouts/DefaultLayout";
 import { getNavParams } from "../utils";
-import { Button, Text, Strong, Sans } from "../components";
+import { Button, Sans, Heading } from "../components";
 
-const Title = styled(Strong)`
-  font-family: "Crimson Text";
-  font-style: italic;
+const Title = styled(Heading)`
   font-size: 35px;
-  margin-top: 25px;
-  margin-bottom: 25px;
+  margin-bottom: 60px;
   text-align: center;
   text-transform: capitalize;
 `;
@@ -17,10 +14,11 @@ const Title = styled(Strong)`
 const Cover = styled.Image`
   width: 220px;
   height: 220px;
+  border-radius: 10px;
   margin: 25px;
-  border-color: ${props => props.theme.colors.text};
+  margin-bottom: 60px;
+  border-color: ${props => props.theme.colors.black};
   border-style: solid;
-  border-width: 2px;
 `;
 
 const Wrapper = styled.View`
@@ -30,7 +28,8 @@ const Wrapper = styled.View`
   padding: 25px;
 `;
 
-const Description = styled(Text)`
+const Description = styled(Sans)`
+  color: ${props => props.theme.colors.black};
   font-size: 17px;
   margin-top: 25px;
   margin-bottom: 25px;
