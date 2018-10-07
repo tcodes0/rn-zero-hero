@@ -3,7 +3,7 @@ import { createStackNavigator } from "react-navigation";
 import { ThemeProvider } from "styled-components";
 import { ApolloProvider } from "react-apollo";
 import { Create, Detail, Login, Register, List } from "./pages";
-import client from "./services/apollo";
+import client from "./services/graphql";
 
 const NavigationWrapper = createStackNavigator(
   {

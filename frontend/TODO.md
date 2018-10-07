@@ -60,7 +60,7 @@ V Id everything in backed
 V see if dataid func on constructor works o => o.id
 V send token in headers
 X Use Query
-- sort by recent todos server-side https://stackoverflow.com/questions/47624681/sort-by-reverse-order-mongoose?rq=1
+V sort by recent todos server-side https://stackoverflow.com/questions/47624681/sort-by-reverse-order-mongoose?rq=1
 xb add TS on server
 ✔b add MongoDB & Mongoose
 
