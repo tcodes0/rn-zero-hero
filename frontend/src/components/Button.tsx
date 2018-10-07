@@ -16,9 +16,10 @@ const Touchable = (props: any) => {
 };
 
 const Button = styled(Touchable)`
-  border-color: ${props => props.theme.colors.text};
+  background-color: ${props => props.theme.secondary[0]};
+  /* border-color: ${props => props.theme.primary[1]};
   border-style: solid;
-  border-width: 2px;
+  border-width: 2px; */
   border-radius: 22;
   padding: 5px;
   align-items: center;

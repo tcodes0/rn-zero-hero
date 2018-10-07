@@ -3,7 +3,7 @@ import { Strong } from ".";
 
 const Heading = styled(Strong)`
   font-size: 28;
-  color: ${props => props.theme.colors.text};
+  color: ${props => props.theme.complement[1]};
   text-transform: capitalize;
 `;
 

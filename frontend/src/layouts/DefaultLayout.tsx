@@ -31,7 +31,7 @@ const Layout = (props: any) => {
 
   return (
     <OuterBackground
-      source={require("../../ios/Resources/wood-bg.png")}
+      // source={require("../../ios/Resources/wood-bg.png")}
       {...otherProps}
     >
       {user && <Header>Welcome {capitalize(user)}!</Header>}

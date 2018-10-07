@@ -16,7 +16,6 @@ import { BookFlatList, Book, Filter } from "../components";
 const Wrapper = styled.View`
   margin-top: 20px;
   flex: 1;
-  padding: 20px;
   width: 100%;
 `;
 
