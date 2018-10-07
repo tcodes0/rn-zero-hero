@@ -43,8 +43,8 @@ export const validateToken = ({ req }) => {
  */
 export const newToken = user =>
   jwt.sign(user, secret, {
-    expiresIn: "43200s"
-  }); // 12h
+    expiresIn: "99999s"
+  });
 
 /**
  * Checks if a provided password matches a user's hash.
