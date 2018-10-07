@@ -7,6 +7,7 @@ import { validateToken } from "./src/modules/user/UserLoader";
 import * as BookType from "./src/modules/book/BookType";
 import * as AuthorType from "./src/modules/author/AuthorType";
 import * as UserType from "./src/modules/user/UserType";
+import * as DateType from "./src/modules/date/DateType";
 
 const dbAddress = {
   production:
@@ -27,14 +28,6 @@ const SchemaDefinition = `
     query: Query
     mutation: Mutation
   }
-  input AuthorInput {
-    name: String!
-    age: Int!
-  }
-  type Token {
-    id: ID!
-    token: String!
-  }
   type Query {
     books(skip: Int, limit: Int): [Book]
     dev_books(skip: Int, limit: Int): [Book]
@@ -48,7 +41,12 @@ const SchemaDefinition = `
   }
 `;
 
-const typeDefs = [BookType.typeDefs, AuthorType.typeDefs, UserType.typeDefs];
+const typeDefs = [
+  BookType.typeDefs,
+  AuthorType.typeDefs,
+  UserType.typeDefs,
+  DateType.typeDefs
+];
 
 const resolvers = {
   Query: {
@@ -58,7 +56,8 @@ const resolvers = {
   Mutation: {
     ...BookType.mutations,
     ...UserType.mutations
-  }
+  },
+  ...DateType.resolvers
 };
 
 const server = new ApolloServer({

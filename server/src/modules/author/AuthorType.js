@@ -6,6 +6,10 @@ export const typeDefs = `
     name: String!
     age: Int!
   }
+  input AuthorInput {
+    name: String!
+    age: Int!
+  }
 `;
 
 export const resolvers = {

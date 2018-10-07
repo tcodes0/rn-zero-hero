@@ -15,6 +15,10 @@ export const typeDefs = `
     name: String!
     hash: String!
   }
+  type Token {
+    id: ID!
+    token: String!
+  }
 `;
 
 export const resolvers = {
