@@ -3,8 +3,10 @@ import { loadAllBooks, addBook } from "./BookLoader";
 
 export const typeDefs = `
   type Book {
+    id: ID!
     title: String!
     author: Author!
+    timestamp: Date!
   }
 `;
 
@@ -23,7 +25,7 @@ export const mutations = {
     if (auth) {
       return addBook(args);
     }
-    throw AuthenticationError("Please signing again.");
+    throw new AuthenticationError("Please signing again.");
   },
   dev_addBook: (root, args) => addBook(args)
 };

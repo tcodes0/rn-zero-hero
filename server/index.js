@@ -1,52 +1,38 @@
 /* eslint-disable no-console */
-import { ApolloServer } from "apollo-server-express";
 import express from "express";
-import mongoose from "mongoose";
+import { ApolloServer } from "apollo-server-express";
 import { validateToken } from "./src/modules/user/UserLoader";
+import "./src/services/database";
 
 import * as BookType from "./src/modules/book/BookType";
 import * as AuthorType from "./src/modules/author/AuthorType";
 import * as UserType from "./src/modules/user/UserType";
-
-const dbAddress = {
-  production: "mongodb+srv://user:bEHp24AVrfijnMbw@rtr-cluster-pgojw.mongodb.net/main?retryWrites=true",
-  development: "mongodb://localhost:27017/test2"
-};
-
-mongoose.connect(
-  dbAddress.production,
-  { useNewUrlParser: true }
-);
-mongoose.connection.on("error", () => {
-  console.log("database connection error");
-});
+import * as DateType from "./src/modules/date/DateType";
 
 const SchemaDefinition = `
   schema {
     query: Query
     mutation: Mutation
   }
-  input AuthorInput {
-    name: String!
-    age: Int!
-  }
-  type Token {
-    token: String!
-  }
   type Query {
-    books(skip: Int, limit: Int, token: String): [Book]
+    books(skip: Int, limit: Int): [Book]
     dev_books(skip: Int, limit: Int): [Book]
     dev_users: [User]
   }
   type Mutation {
     login(name: String, password: String): Token!
-    addBook(title: String, author: AuthorInput, token: String): Book
-    dev_addBook(title: String, author: AuthorInput): Book
+    addBook(title: String, author: AuthorInput): Book
     addUser(name: String, password: String): Token!
+    dev_addBook(title: String, author: AuthorInput): Book
   }
 `;
 
-const typeDefs = [BookType.typeDefs, AuthorType.typeDefs, UserType.typeDefs];
+const typeDefs = [
+  BookType.typeDefs,
+  AuthorType.typeDefs,
+  UserType.typeDefs,
+  DateType.typeDefs
+];
 
 const resolvers = {
   Query: {
@@ -56,7 +42,8 @@ const resolvers = {
   Mutation: {
     ...BookType.mutations,
     ...UserType.mutations
-  }
+  },
+  ...DateType.resolvers
 };
 
 const server = new ApolloServer({

@@ -42,8 +42,8 @@ const Buttons = styled.View`
 type addBookData = { data: Book };
 
 const mutationAddBook = gql`
-  mutation($title: String!, $name: String!, $age: Int!, $token: String!) {
-    addBook(title: $title, author: { name: $name, age: $age }, token: $token) {
+  mutation($title: String!, $name: String!, $age: Int!) {
+    addBook(title: $title, author: { name: $name, age: $age }) {
       title
       author {
         name

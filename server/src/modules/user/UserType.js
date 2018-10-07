@@ -11,8 +11,13 @@ const {
 
 export const typeDefs = `
   type User {
+    id: ID!
     name: String!
     hash: String!
+  }
+  type Token {
+    id: ID!
+    token: String!
   }
 `;
 

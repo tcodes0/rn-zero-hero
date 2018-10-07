@@ -1,10 +1,15 @@
 import * as React from "react";
-import { AsyncStorage, ActivityIndicator } from "react-native";
+import { ActivityIndicator } from "react-native";
 import gql from "graphql-tag";
 import styled from "styled-components/native";
 import { ApolloConsumer } from "react-apollo";
 import { ApolloQueryResult, ApolloClient } from "apollo-client";
-import { getNumericId, getNavParams, lowerCase, NavigatableProps } from "../utils";
+import {
+  getNumericId,
+  getNavParams,
+  lowerCase,
+  NavigatableProps
+} from "../utils";
 import { Layout } from "../layouts";
 import { BookFlatList, Book, Filter } from "../components";
 
@@ -23,9 +28,9 @@ const FilterView = styled.View`
   margin: 10px 15px 0px 15px;
 `;
 
-const booksWithAuthors = gql`
-  query($token: String!) {
-    books(token: $token) {
+const query = gql`
+  query($skip: Int, $limit: Int) {
+    books(skip: $skip, limit: $limit) {
       title
       author {
         name
@@ -39,10 +44,15 @@ type ListData = { books: Book[] };
 type ListState = {
   books: any[];
   filtered: any[];
+  fetchedAll: boolean;
 };
 
 class List extends React.Component<NavigatableProps, ListState> {
-  state: Readonly<ListState> = { filtered: [], books: [] };
+  state: Readonly<ListState> = {
+    filtered: [],
+    books: [],
+    fetchedAll: false
+  };
 
   showAll = () => this.setState(({ books }) => ({ filtered: books }));
 
@@ -52,7 +62,7 @@ class List extends React.Component<NavigatableProps, ListState> {
       return title.includes(query);
     });
 
-  handleChangeText = (text: string) => {
+  filterBooks = (text: string) => {
     if (!text) {
       return this.showAll();
     }
@@ -67,26 +77,55 @@ class List extends React.Component<NavigatableProps, ListState> {
       ...book,
       id: getNumericId()
     }));
-    return booksWithId.reverse();
+    return booksWithId;
   };
 
-  getBooks = (query: ApolloClient<any>["query"]) => {
-    AsyncStorage.getItem("token")
-      .then(token =>
-        query<ListData>({
-          query: booksWithAuthors,
-          variables: { token }
-        }).then(packedData => {
-          const data = this.unpack(packedData);
-          console.log("got data:", data);
-          this.setState({
-            books: data,
-            filtered: data
-          });
-        })
-      )
+  fetch = (client: ApolloClient<any>) =>
+    client
+      .query<ListData>({ query })
+      .then(packedData => {
+        const data = this.unpack(packedData);
+        return this.setState({
+          books: data,
+          filtered: data
+        });
+      })
       .catch(e => {
-        e && console.log("e");
+        e && console.log(e);
+      });
+
+  fetchMore = (
+    { distanceFromEnd }: { distanceFromEnd: number },
+    client: ApolloClient<any>
+  ) => {
+    const { filtered, books, fetchedAll } = this.state;
+    const skip = books.length;
+    if (
+      distanceFromEnd < 0 || // pagination event is positive
+      fetchedAll ||
+      String(filtered) !== String(books) // filtering blocks pagination
+      ) {
+        return;
+      }
+    return client
+      .query<ListData>({
+        query,
+        variables: { skip },
+        fetchPolicy: "network-only"
+      })
+      .then(packedData => {
+        const newBooks = this.unpack(packedData);
+        console.log("newBooks", newBooks);
+        if (!newBooks.length) {
+          return this.setState({ fetchedAll: true });
+        }
+        return this.setState(state => ({
+          books: [...state.books, ...newBooks],
+          filtered: [...state.books, ...newBooks]
+        }));
+      })
+      .catch(e => {
+        e && console.log(e);
       });
   };
 
@@ -94,25 +133,25 @@ class List extends React.Component<NavigatableProps, ListState> {
     const user = getNavParams(this.props, "user");
     const { navigate } = this.props.navigation;
     const { books, filtered } = this.state;
-
     return (
       <Layout user={user}>
         <Wrapper>
           <ApolloConsumer>
-            {({ query }) => {
+            {client => {
               if (!books.length) {
-                this.getBooks(query);
+                this.fetch(client);
                 return <ActivityIndicator size="large" />;
               }
               return (
                 <View>
                   <FilterView>
-                    <Filter onChangeText={this.handleChangeText} style={{width: "100%"}}/>
+                    <Filter onChangeText={this.filterBooks} />
                   </FilterView>
                   <BookFlatList<Book>
                     data={filtered}
                     navigate={navigate}
                     user={user}
+                    onEndReached={e => this.fetchMore(e, client)}
                   />
                 </View>
               );

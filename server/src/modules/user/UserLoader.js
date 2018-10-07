@@ -16,12 +16,12 @@ export const loadAllUsers = () => {
 };
 
 /**
- * Verify token in request is not expired. Uses graphQL variables.
+ * Verify token in request is not expired.
  * @param  req Request.
  * @returns {Promise} Promise to be fulfilled with { auth: String }.
  */
 export const validateToken = ({ req }) => {
-  const token = req.body && req.body.variables && req.body.variables.token;
+  const { token } = req.headers;
   if (!token) {
     return Promise.resolve();
   }
@@ -43,8 +43,8 @@ export const validateToken = ({ req }) => {
  */
 export const newToken = user =>
   jwt.sign(user, secret, {
-    expiresIn: "1800s"
-  }); // 30min
+    expiresIn: "43200s"
+  }); // 12h
 
 /**
  * Checks if a provided password matches a user's hash.
