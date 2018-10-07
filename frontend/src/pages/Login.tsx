@@ -50,8 +50,8 @@ export const Input = styled(TextInput)`
 type loginData = { data: { addUser: { token: string } } };
 
 const loginMutation = gql`
-  mutation($name: String!, $password: String!) {
-    login(name: $name, password: $password) {
+  mutation($name: String!, $password: String!, $noAuth: Boolean) {
+    login(name: $name, password: $password, noAuth: $noAuth) {
       token
     }
   }
@@ -77,17 +77,20 @@ class Login extends React.Component<NavigatableProps, LoginState> {
     if (!name || !password) {
       console.log("no user or password");
       return this.setState({
-        error: Error("Null input: Please fill in all fields")
+        error: Error("Please fill in all fields")
       });
     }
 
     return this.setState({ token: undefined }, () => {
       doLogin({
-        variables: { name, password }
+        variables: { name, password, noAuth: true }
       })
         // @ts-ignore
-        .then(({ data }) => {
-          console.log(data);
+        .then(({ data, errors }) => {
+          if (errors) {
+            const [error] = errors;
+            return this.setState({ error });
+          }
           return AsyncStorage.setItem("token", data.login.token).then(() =>
             navigate("Create", { user: this.state.name })
           );
@@ -132,7 +135,7 @@ class Login extends React.Component<NavigatableProps, LoginState> {
                       {!data &&
                         this.state.error && (
                           <ErrorText>
-                            {formatMessage(this.state.error.message)}
+                            {this.state.error.message}
                           </ErrorText>
                         )}
                       {loading && <ActivityIndicator size="large" />}

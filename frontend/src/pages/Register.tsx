@@ -26,8 +26,8 @@ const InputContainer = styled.View`
 type addUserData = { data: { addUser: { token: string } } };
 
 const mutationAddUser = gql`
-  mutation($name: String!, $password: String!) {
-    addUser(name: $name, password: $password) {
+  mutation($name: String!, $password: String!, $noAuth: Boolean) {
+    addUser(name: $name, password: $password, noAuth: $noAuth) {
       token
     }
   }
@@ -59,7 +59,8 @@ class Register extends React.Component<NavigatableProps, RegisterState> {
     addUser({
       variables: {
         name: this.state.name,
-        password: this.state.password
+        password: this.state.password,
+        noAuth: true
       }
     })
       // @ts-ignore

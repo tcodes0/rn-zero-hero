@@ -20,9 +20,9 @@ const SchemaDefinition = `
     dev_users: [User]
   }
   type Mutation {
-    login(name: String, password: String): Token!
+    login(name: String, password: String, noAuth: Boolean): Token!
     addBook(title: String, author: AuthorInput): Book
-    addUser(name: String, password: String): Token!
+    addUser(name: String, password: String, noAuth: Boolean): Token!
     dev_addBook(title: String, author: AuthorInput): Book
   }
 `;

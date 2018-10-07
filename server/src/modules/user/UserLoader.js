@@ -23,7 +23,9 @@ export const loadAllUsers = () => {
  */
 export const validateToken = ({ req }) => {
   const { token } = req.headers;
-  if (!token) {
+  const { noAuth } = req.body.variables;
+
+  if (!token || noAuth) {
     return Promise.resolve();
   }
 
@@ -34,7 +36,9 @@ export const validateToken = ({ req }) => {
       }
       res({ auth: token });
     });
-  }).catch(e => e && console.log(e));
+  }).catch(e => {
+    throw e;
+  });
 };
 
 /**
