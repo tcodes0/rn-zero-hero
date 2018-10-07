@@ -1,7 +1,7 @@
 import styled from "styled-components/native";
-import { Text } from ".";
+import Sans from "./Sans";
 
-const Strong = styled(Text)`
+const Strong = styled(Sans)`
   font-weight: 700;
   font-size: 16;
 `;

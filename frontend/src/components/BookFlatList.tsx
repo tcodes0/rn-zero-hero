@@ -1,7 +1,7 @@
 import * as React from "react";
 import { FlatList, StyleSheet, FlatListProps } from "react-native";
 import styled from "styled-components/native";
-import { Touchable, Text, Strong } from ".";
+import { Touchable, Sans, Strong } from ".";
 
 const Book = styled(Touchable)`
   border-color: ${props => props.theme.colors.textFaded};
@@ -12,7 +12,7 @@ const Book = styled(Touchable)`
 `;
 
 const BookTitle = styled(Strong)`
-  font-family: "Crimson Text";
+  font-weight: 700;
   font-style: italic;
   font-size: 25px;
   text-transform: capitalize;
@@ -53,7 +53,7 @@ class BookFlatList<B extends Book> extends React.Component<
     return (
       <Book onPress={() => navigate("Detail", { book, user })}>
         <BookTitle>{`${book.title}`}</BookTitle>
-        <Text>{`${book.author && book.author.name}`}</Text>
+        <Sans>{`${book.author && book.author.name}`}</Sans>
       </Book>
     );
   };

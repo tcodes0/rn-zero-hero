@@ -54,6 +54,16 @@
 		<string>Spectral-MediumItalic.ttf</string>
 		<string>Spectral-SemiBold.ttf</string>
 		<string>Spectral-SemiBoldItalic.ttf</string>
+		<string>Nunito-Bold.ttf</string>
+		<string>Nunito-BoldItalic.ttf</string>
+		<string>Nunito-ExtraBold.ttf</string>
+		<string>Nunito-ExtraBoldItalic.ttf</string>
+		<string>Nunito-Italic.ttf</string>
+		<string>Nunito-Light.ttf</string>
+		<string>Nunito-LightItalic.ttf</string>
+		<string>Nunito-Regular.ttf</string>
+		<string>Nunito-SemiBold.ttf</string>
+		<string>Nunito-SemiBoldItalic.ttf</string>
 	</array>
 	<key>NSAppTransportSecurity</key>
 	<dict>

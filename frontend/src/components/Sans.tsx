@@ -1,9 +1,9 @@
 import styled from "styled-components/native";
 
 const Sans = styled.Text`
-  font-family: "Helvetica Neue";
+  font-family: "Nunito";
   font-size: 15;
-  font-weight: 500;
+  font-weight: 400;
   color: rgba(33, 0, 0, 1);
 `;
 

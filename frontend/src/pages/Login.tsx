@@ -86,11 +86,12 @@ class Login extends React.Component<NavigatableProps, LoginState> {
         variables: { name, password }
       })
         // @ts-ignore
-        .then(({ data: { login: { token } } }) =>
-          AsyncStorage.setItem("token", token).then(() =>
+        .then(({ data }) => {
+          console.log(data);
+          return AsyncStorage.setItem("token", data.login.token).then(() =>
             navigate("Create", { user: this.state.name })
-          )
-        )
+          );
+        })
         .catch((error: Error) => {
           console.log(error);
           this.setState({ error });
