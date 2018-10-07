@@ -3,7 +3,7 @@ import { AsyncStorage, ActivityIndicator, View } from "react-native";
 import styled from "styled-components/native";
 import gql from "graphql-tag";
 import { Mutation, MutationFn } from "react-apollo";
-import { formatMessage, log, NavigatableProps } from "../utils";
+import { log, NavigatableProps } from "../utils";
 import Layout from "../layouts/DefaultLayout";
 import {
   Button,

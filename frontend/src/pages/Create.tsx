@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AsyncStorage, View, ActivityIndicator } from "react-native";
+import { View, ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
 import gql from "graphql-tag";
 import { Mutation, MutationFn } from "react-apollo";
@@ -58,7 +58,6 @@ type CreateState = Readonly<{
   error?: Error;
 }>;
 
-
 class Create extends React.Component<NavigatableProps, CreateState> {
   initialState: Readonly<CreateState> = {
     name: "",
@@ -87,14 +86,11 @@ class Create extends React.Component<NavigatableProps, CreateState> {
         error: Error("Null input: Please fill in all fields")
       });
     }
-
-    AsyncStorage.getItem("token").then(token =>
-      doAddBook({
-        variables: { name, title, token, age: Number(age) }
-      })
-        .then(() => navigate("List", { user }))
-        .catch(e => log(e))
-    );
+    doAddBook({
+      variables: { name, title, age: Number(age) }
+    })
+      .then(() => navigate("List", { user }))
+      .catch(e => log(e));
   };
 
   render() {
