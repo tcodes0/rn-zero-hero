@@ -65,7 +65,7 @@ class BookFlatList<B extends Book> extends React.Component<
         style={this.bookStyle.book}
         renderItem={this.renderItem}
         keyExtractor={this.extractKey}
-        onEndReachedThreshold={0.25}
+        onEndReachedThreshold={0.1}
         onEndReached={this.props.onEndReached}
         {...this.props}
       />
