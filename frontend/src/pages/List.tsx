@@ -16,7 +16,6 @@ import { BookFlatList, Book, Filter } from "../components";
 const Wrapper = styled.View`
   margin-top: 20px;
   flex: 1;
-  padding: 20px;
   width: 100%;
 `;
 
@@ -85,6 +84,7 @@ class List extends React.Component<NavigatableProps, ListState> {
       .query<ListData>({ query })
       .then(packedData => {
         const data = this.unpack(packedData);
+        console.log("Books", data);
         return this.setState({
           books: data,
           filtered: data
@@ -98,10 +98,11 @@ class List extends React.Component<NavigatableProps, ListState> {
     { distanceFromEnd }: { distanceFromEnd: number },
     client: ApolloClient<any>
   ) => {
+    console.log("fetchmore", distanceFromEnd)
     const { filtered, books, fetchedAll } = this.state;
     const skip = books.length;
     if (
-      distanceFromEnd < 0 || // pagination event is positive
+      Math.floor(distanceFromEnd) <= 0 || // pagination event is positive
       fetchedAll ||
       String(filtered) !== String(books) // filtering blocks pagination
       ) {

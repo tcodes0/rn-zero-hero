@@ -1,19 +1,36 @@
 import * as React from "react";
 import { FlatList, StyleSheet, FlatListProps } from "react-native";
 import styled from "styled-components/native";
-import { Touchable, Text, Strong } from ".";
+import { Touchable, Strong } from ".";
+import Sans from "./Sans";
+
+// development hack
+const random = () => Math.floor(Math.random() * 3)
+const color = ["complement", "primary", "secondary"]
+const randomColor = (props: any) => {
+  const name = color[random()];
+  const value = props.theme[name][random()]
+  return value
+}
 
 const Book = styled(Touchable)`
   border-color: ${props => props.theme.colors.textFaded};
+  border-radius: 10px;
   border-style: solid;
-  border-width: 2px;
   align-items: flex-start;
   margin-bottom: 10px;
+  box-shadow: 10px 3px 4px ${props => props.theme.gray[2]};
+  background-color: ${props => randomColor(props)};
+`;
+
+const Author = styled(Sans)`
+  color: ${props => props.theme.colors.white};
+  font-style: italic;
 `;
 
 const BookTitle = styled(Strong)`
-  font-family: "Crimson Text";
-  font-style: italic;
+  color: ${props => props.theme.colors.white};
+  font-weight: 700;
   font-size: 25px;
   text-transform: capitalize;
   margin-bottom: 13px;
@@ -53,7 +70,7 @@ class BookFlatList<B extends Book> extends React.Component<
     return (
       <Book onPress={() => navigate("Detail", { book, user })}>
         <BookTitle>{`${book.title}`}</BookTitle>
-        <Text>{`${book.author && book.author.name}`}</Text>
+        <Author>{`${book.author && book.author.name}`}</Author>
       </Book>
     );
   };
@@ -65,7 +82,7 @@ class BookFlatList<B extends Book> extends React.Component<
         style={this.bookStyle.book}
         renderItem={this.renderItem}
         keyExtractor={this.extractKey}
-        onEndReachedThreshold={0.25}
+        onEndReachedThreshold={0.1}
         onEndReached={this.props.onEndReached}
         {...this.props}
       />

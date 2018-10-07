@@ -13,7 +13,7 @@ export const addBook = ({ title, author: bookAuthor }) => {
   });
 };
 
-export const loadAllBooks = ({ skip, limit = 5 }) => {
+export const loadAllBooks = ({ skip, limit = 6 }) => {
   return BookModel.find({}, null, { skip, limit })
     .sort({ timestamp: "descending" })
     .populate("author")
