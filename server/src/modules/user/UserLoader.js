@@ -33,7 +33,7 @@ export const validateToken = ({ req }) => {
       }
       res({ auth: token });
     });
-  });
+  }).catch(e => e && console.log(e));
 };
 
 /**
