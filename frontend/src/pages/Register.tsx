@@ -64,9 +64,14 @@ class Register extends React.Component<NavigatableProps, RegisterState> {
       }
     })
       // @ts-ignore
-      .then(({ data: { addUser: { token } } }) => {
+      .then(({ data, errors }) => {
+        console.log("data and errors ->,", data, errors);
+        if (errors) {
+          const [error] = errors;
+          return this.setState({ error });
+        }
         navigate("Create", { user: this.state.name });
-        return AsyncStorage.setItem("token", token);
+        return AsyncStorage.setItem("token", data.addUser.token);
       })
       .catch(error => this.setState({ error }));
   };
