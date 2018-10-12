@@ -2,6 +2,50 @@
 
 We'll be focusing on getting the ins and outs of iOS apps because that's what we do better.
 
+## Styling
+
+#### Styling
+
+React native supports styling natively through an export called `StyleSheet`
+
+```jsx
+import { StyleSheet } from "react-native";
+```
+
+It's used like this
+
+```jsx
+const styles = StyleSheet({
+  heading: {
+    marginBottom: 15,
+    color: "pink"
+  },
+  footer: {
+    padding: 25
+  }
+})
+
+// later on...
+
+<Text style={styles.heading}> React Native! </Text>
+```
+
+- Rn uses style objects, like React prop styles.
+- The styles need to be wrapped in a property, like `heading` or `footer`, not doing so crashes.
+- Wrong css values crash the app, like `textAlign: "flex-start"`
+
+#### Styling is less developed in React native. :(
+
+Keep that in mind.
+Animations and transitions require a lot of manual work to get done.
+Some units like `vh` or `vw` don't work.
+Some RN exports, like `Button` on iOS, will not accept any styling.
+
+### Styled components
+
+If you're already used to styled components this will make your RN experience a lot smoother.
+If you're not, no problem.
+
 ## The simulator
 
 The simulator is the development tool we use to simulate an iPhone.
@@ -75,3 +119,8 @@ Hard clean: `shift+cmd+k`
 
 This is often a good troubleshooting step.
 When facing a random error, clean it.
+
+### Clicking the stack trace in simulator
+
+If you click the stack trace, one of the entries actually, it will jump your text editor to the file where the crash happened.
+Most of the time it helps to understand better what is going on.
